@@ -6,8 +6,8 @@
         <title>${title}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         
-        <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon">
-        <link rel="icon" href="/assets/img/favicon.ico" type="image/x-icon">        
+        <link rel="shortcut icon" href="/assets/img/inteligenciaseo.png" type="image/png">
+        <link rel="icon" href="/assets/img/inteligenciaseo.png" type="image/png">        
 
         <link rel="stylesheet" href="/assets/lib/bootstrap/dist/css/bootstrap.css?v=${global.version}">
         <link rel="stylesheet" href="/assets/lib/font-awesome/css/font-awesome.css?v=${global.version}">
@@ -36,9 +36,7 @@
                         <span class="icon-bar"></span>
                     </button>
                     <a class="navbar-brand" href="/">
-                        SERPOSCOPE 
-                        <span class="version" data-toggle="tooltip" title="${global.version}" data-placement="bottom"
-                            >${global.version.shortString()}</span>
+		        <img src="/assets/img/inteligenciaseo-brain.png" alt="Logo"><span>inteligenciaseo.com</span>
                     </a>
                 </div>
 
@@ -55,6 +53,8 @@
                            ${i18n("label.checkRanks")}
                         </a>
                     </li>
+		    <li><a href="http://seo-posicionamiento.es/">INTELIGENCIA SEO</a></li>
+		    <li><a href="http://analytics.google.com/analytics">ANALYTICS</a></li>
                     <#if global.update.hasNewVersion() >
                     <li>
                         <a href="https://serposcope.serphacker.com/?pk_campaign=serposcope" id="btn-new-version" target="_blank"
@@ -96,9 +96,6 @@
                                     Feel free to remove this add, but please, consider making a donation : 
                                     https://www.paypal.com/cgi-bin/webscr?hosted_button_id=3YGPEJUYC96RL&cmd=_s-xclick
                                 -->
-                                <a id="side-banner" href="https://stats.serphacker.com/serposcope/${global.version}/" >
-                                    <img src="https://stats.serphacker.com/serposcope/${global.version}/banner.jpg" />
-                                </a>
                             </li>
                             <#noescape>${sideMenu}</#noescape>
                         </ul>
