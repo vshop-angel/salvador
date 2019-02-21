@@ -8,10 +8,10 @@
     
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.serphacker.serposcope</groupId>
-    <artifactId>serposcope</artifactId>
+    <artifactId>serposcope-inteligenciaseo</artifactId>
     <version>2.10.0</version>
     <packaging>pom</packaging>
-    <name>serposcope</name>
+    <name>serposcope-inteligenciaseo</name>
     <description>serposcope SEO rank checker</description>
     <url>https://serposcope.serphacker.com/</url>
     <modules>
