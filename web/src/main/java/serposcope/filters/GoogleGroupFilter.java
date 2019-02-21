@@ -12,16 +12,16 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.db.google.GoogleDB;
+import com.serphacker.serposcope.inteligenciaseo.Report;
+import com.serphacker.serposcope.inteligenciaseo.ReportsDB;
 import com.serphacker.serposcope.models.base.Group;
 import com.serphacker.serposcope.models.base.Group.Module;
-import com.serphacker.serposcope.models.base.User;
 import com.serphacker.serposcope.models.google.GoogleSearch;
 import com.serphacker.serposcope.models.google.GoogleTarget;
-import freemarker.template.utility.StringUtil;
+
 import java.util.Arrays;
 import java.util.List;
 import ninja.Context;
-import ninja.Filter;
 import ninja.FilterChain;
 import ninja.Result;
 import ninja.Results;
@@ -42,7 +42,10 @@ public class GoogleGroupFilter extends AbstractFilter {
     
     @Inject
     GoogleDB googleDB;
-    
+
+    @Inject
+    ReportsDB reportsDB;
+
     @Inject
     BaseDB baseDB;
     
@@ -67,10 +70,11 @@ public class GoogleGroupFilter extends AbstractFilter {
         
         List<GoogleSearch> searches = googleDB.search.listByGroup(Arrays.asList(group.getId()));
         context.setAttribute("searches", searches);
-        
-        Result result = filterChain.next(context);
-        
-        return result;
+
+        List<Report> reports = reportsDB.listReports();
+        context.setAttribute("reports", reports);
+
+        return filterChain.next(context);
     }
     
     public String serializeTargets(Group group, List<GoogleTarget> targets){

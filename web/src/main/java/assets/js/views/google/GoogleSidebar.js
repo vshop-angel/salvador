@@ -27,12 +27,24 @@ serposcope.googleSidebar = function () {
     };
     
     var targetSelected = function(target){
-        window.location = "/google/" + target.group + "/target/" + target.id;
+        window.location = "/inteligenciaseo/" + target.group + "/target/" + target.id;
     };
-    
+
+    var reportHighlighter = function(report) {
+        return report.name;
+    };
+
+    var reportSelected = function(report) {
+        window.location = "/inteligenciaseo/report/" + report.id;
+    };
+
     var targetSuggest = function(query, cb){
         $.getJSON('/google/' + $('#csp-vars').data('group-id') + '/target/suggest?query=' + encodeURIComponent(query)).success(cb);
-    };    
+    };
+
+    var reportSuggest = function(query, cb) {
+        $.getJSON('/inteligenciaseo/' + $('#csp-vars').data('group-id') + '/report/suggest?query=' + encodeURIComponent(query)).success(cb);
+    };
     
     var render = function(){
         $('#sidebar-group-search').typeahead({
@@ -55,7 +67,14 @@ serposcope.googleSidebar = function () {
             showHintOnFocus: true,
             highlighter: targetHighlighter,
             afterSelect: targetSelected
-        });        
+        });
+        $('#sidebar-report-search').typeahead({
+            source: reportSuggest,
+            minLength: 0,
+            showHintOnFocus: true,
+            highlighter: reportHighlighter,
+            afterSelect: reportSelected
+        });
     };
     
     var oPublic = {

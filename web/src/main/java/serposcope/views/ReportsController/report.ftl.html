@@ -1,0 +1,27 @@
+<#-- @ftlvariable name="serp" type="com.serphacker.serposcope.models.google.GoogleSerp" -->
+<#import "../google/google.ftl.html" as layout>
+<@layout.googleLayout report.getName() >
+    <h2>${report.getName()}</h2>
+    <div id="${report.getName()}-iframe-container"></div>
+    <#assign options=report.getIframeAttributes()>
+    <#noescape>
+    <script>
+        var loadIframe = function(attrs) {
+            var container = document.getElementById('${report.getName()}-iframe-container');
+            var iframe = document.createElement('iframe');
+            for (var attr in attrs) {
+                if (!attrs.hasOwnProperty(attr)) {
+                    continue;
+                }
+                iframe.setAttribute(attr, attrs[attr]);
+            }
+            // We must enforce this
+            iframe.width = '100%';
+            container.appendChild(iframe);
+        };
+        loadIframe(${options});
+    </script>
+    </#noescape>
+    <div id="csp-vars" data-group-id="${report.getGroupId()}"></div>
+</@>
+

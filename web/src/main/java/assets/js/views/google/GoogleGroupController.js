@@ -39,7 +39,14 @@ serposcope.googleGroupController = function () {
         $('#new-target').modal();
         return false;
     };
-    
+
+    var showNewReportModal = function(){
+        $('.modal').modal('hide');
+        console.log($('#new-report')[0]);
+        $('#new-report').modal();
+        return false;
+    };
+
     var showNewBulkTargetModal = function(){
         $('.modal').modal('hide');
         $('#new-target-bulk').modal();
@@ -445,6 +452,7 @@ serposcope.googleGroupController = function () {
         
         $('.btn-delete-group').click(deleteGroup);
         $('.btn-add-target').click(showNewTargetModal);
+        $('.btn-add-report').click(showNewReportModal);
         $('.btn-add-target-bulk').click(showNewBulkTargetModal);
         $('.btn-add-search').click(showNewSearchModal);
         $('.btn-add-search-bulk').click(showNewBulkSearchModal);
@@ -470,5 +478,4 @@ serposcope.googleGroupController = function () {
     };
     
     return oPublic;
-
 }();

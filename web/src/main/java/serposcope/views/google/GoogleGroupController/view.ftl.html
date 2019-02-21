@@ -45,9 +45,14 @@
             </li>
             <li>
                 <a href="#tab-searches" data-toggle="tab">${i18n("label.searches")} (${searchesSize})</a>
-            </li>            
+            </li>
+            <#if user.isAdmin()>
             <li>
                 <a href="#tab-calendar" data-toggle="tab">${i18n("label.calendar")}</a>
+            </li>
+            </#if>
+            <li>
+                <a href="#tab-reports" data-toggle="tab">${i18n("label.reports")} (${reports?size})</a>
             </li>            
         </ul>
 
@@ -63,6 +68,10 @@
 
             <div class="tab-pane" id="tab-calendar">
                 <#include "tab-calendar.ftl.html" />
+            </div>            
+
+            <div class="tab-pane" id="tab-reports">
+                <#include "tab-reports.ftl.html" />
             </div>            
         </div>
     </div>
@@ -259,6 +268,7 @@
     </div>
 </div>
 <#include "../../helpers/add-event-modal.ftl.html" >
+<#include "../../helpers/new-report.flt.html" >
 
 <!--<script type="text/javascript" src="/assets/js/canonical-location.js"></script>-->
 <div class="csp-script" data-src="googleGroupController.view" ></div>

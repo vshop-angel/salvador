@@ -32,6 +32,17 @@
             </li>
         </ul>
     </li>
+    <li>
+        <span class="first-level"><i class="fa fa-line-chart"></i> ${i18n("label.reports")}</span>
+        <ul class="nav nav-second-level">
+            <li>
+                <div class="form-search form-report has-feedback has-feedback">
+                    <input id="sidebar-report-search" type="text" class="form-control" placeholder="${i18n("label.searchReport")} ..." />
+                    <i class="form-control-feedback glyphicon glyphicon-search"></i>
+                </div>
+            </li>
+        </ul>
+    </li>
 </#assign>
 <#macro googleLayout title="" >
 <#import "../layout/root.ftl.html" as layout> 

@@ -7,6 +7,7 @@
  */
 package serposcope.controllers.google;
 
+import com.serphacker.serposcope.inteligenciaseo.Report;
 import com.serphacker.serposcope.models.google.GoogleSearch;
 import com.serphacker.serposcope.models.google.GoogleTarget;
 import java.util.List;
@@ -26,6 +27,10 @@ public abstract class GoogleController extends BaseController {
     
     protected List<GoogleTarget> getTargets(Context context){
         return context.getAttribute("targets", List.class);
+    }
+
+    protected List<Report> getReports(Context context) {
+        return context.getAttribute("reports", List.class);
     }
     
     protected List<GoogleSearch> getSearches(Context context){

@@ -26,6 +26,7 @@ import serposcope.controllers.admin.TaskController;
 import serposcope.controllers.google.GoogleGroupController;
 import serposcope.controllers.google.GoogleSearchController;
 import serposcope.controllers.google.GoogleTargetController;
+import serposcope.controllers.inteligenciaseo.ReportsController;
 
 public class Routes implements ApplicationRoutes {
 
@@ -108,10 +109,14 @@ public class Routes implements ApplicationRoutes {
         router.GET().route("/google/{groupId: [0-9]+}/search/list").with(GoogleGroupController.class, "jsonSearches");
         
         router.POST().route("/google/{groupId: [0-9]+}/target/add").with(GoogleGroupController.class, "addTarget");
+        router.POST().route("/google/{groupId: [0-9]+}/report/add").with(GoogleGroupController.class, "addReport");
         router.POST().route("/google/{groupId: [0-9]+}/target/delete").with(GoogleGroupController.class, "delTarget");
+        router.POST().route("/google/{groupId: [0-9]+}/report/delete").with(GoogleGroupController.class, "delReport");
         router.POST().route("/google/{groupId: [0-9]+}/target/rename").with(GoogleGroupController.class, "renameTarget");
         router.GET().route("/google/{groupId: [0-9]+}/target/suggest").with(GoogleGroupController.class, "jsonTargetSuggest");
-        
+        router.GET().route("/inteligenciaseo/{groupId: [0-9]+}/report/suggest").with(GoogleGroupController.class, "jsonReportSuggest");
+        router.GET().route("/inteligenciaseo/report/{reportId: [0-9]+}").with(ReportsController.class, "get");
+
         router.POST().route("/google/{groupId: [0-9]+}/event/add").with(GoogleGroupController.class, "addEvent");
         router.POST().route("/google/{groupId: [0-9]+}/event/delete").with(GoogleGroupController.class, "delEvent");   
         
