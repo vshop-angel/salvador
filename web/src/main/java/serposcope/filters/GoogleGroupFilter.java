@@ -91,7 +91,7 @@ public class GoogleGroupFilter extends AbstractFilter {
         }
         context.setAttribute("searches", filtered);
 
-        List<Report> reports = reportsDB.listReports();
+        List<Report> reports = reportsDB.listReports(group.getId());
         context.setAttribute("reports", reports);
 
         return filterChain.next(context);

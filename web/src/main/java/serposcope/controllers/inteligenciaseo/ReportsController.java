@@ -33,13 +33,7 @@ public class ReportsController extends BaseController {
         if (reportId == null) {
             return null;
         }
-        List<Report> reports = reportsDB.listReports();
-        for (Report report : reports) {
-            if (report.getId() == reportId){
-                return report;
-            }
-        }
-        return null;
+        return reportsDB.getReport(reportId);
     }
 
     public Result get(@PathParam("reportId") Integer reportId) {

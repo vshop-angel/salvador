@@ -62,11 +62,30 @@ public class ReportsDB extends AbstractDB {
         return 0;
     }
 
-    public List<Report> listReports() {
+    public Report getReport(int id) {
+        try (Connection con = ds.getConnection()) {
+            SQLQuery<Tuple> query = new SQLQuery<>(con, dbTplConf)
+                    .select(t_report.all())
+                    .where(t_report.id.eq(id))
+                    .from(t_report);
+            List<Tuple> tuples = query.fetch();
+            if (tuples.size() > 1) {
+                return null;
+            }
+            return fromTuple(tuples.get(0));
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            LOG.error("SQLError ex", ex);
+        }
+        return null;
+    }
+
+    public List<Report> listReports(int groupId) {
         List<Report> reports = new ArrayList<>();
         try (Connection con = ds.getConnection()) {
             SQLQuery<Tuple> query = new SQLQuery<>(con, dbTplConf)
                 .select(t_report.all())
+                .where(t_report.groupId.eq(groupId))
                 .from(t_report)
             ;
             List<Tuple> tuples = query.fetch();
