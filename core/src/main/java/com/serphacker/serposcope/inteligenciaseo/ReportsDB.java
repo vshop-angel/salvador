@@ -3,6 +3,7 @@ package com.serphacker.serposcope.inteligenciaseo;
 import com.google.inject.Singleton;
 import com.querydsl.core.Tuple;
 import com.querydsl.sql.SQLQuery;
+import com.querydsl.sql.dml.SQLDeleteClause;
 import com.querydsl.sql.dml.SQLInsertClause;
 import com.serphacker.serposcope.db.AbstractDB;
 
@@ -47,6 +48,18 @@ public class ReportsDB extends AbstractDB {
         if (id == null)
             return null;
         return new Report(id, groupId, tuple.get(t_report.name), tuple.get(t_report.iframe));
+    }
+
+    public long delete(Integer[] ids) {
+        try (Connection con = ds.getConnection()) {
+            return new SQLDeleteClause(con, dbTplConf, t_report)
+                    .where(t_report.id.in(ids))
+                    .execute();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            LOG.error("SQLError ex", ex);
+        }
+        return 0;
     }
 
     public List<Report> listReports() {

@@ -24,9 +24,9 @@ public class QReport extends RelationalPathBase<QReport> {
     }
 
     public void addMetadata() {
-        addMetadata(groupId, ColumnMetadata.named("GROUP_ID").withIndex(2).ofType(Types.INTEGER).withSize(10));
         addMetadata(id, ColumnMetadata.named("ID").withIndex(1).ofType(Types.INTEGER).withSize(10).notNull());
-        addMetadata(name, ColumnMetadata.named("NAME").withIndex(3).ofType(Types.VARCHAR).withSize(255));
-        addMetadata(iframe, ColumnMetadata.named("IFRAME").withIndex(3).ofType(Types.VARCHAR).withSize(255));
+        addMetadata(groupId, ColumnMetadata.named("GROUP_ID").withIndex(2).ofType(Types.INTEGER).notNull());
+        addMetadata(name, ColumnMetadata.named("NAME").withIndex(3).ofType(Types.VARCHAR).withSize(100).notNull());
+        addMetadata(iframe, ColumnMetadata.named("IFRAME").withIndex(4).ofType(Types.VARCHAR).withSize(300).notNull());
     }
 }

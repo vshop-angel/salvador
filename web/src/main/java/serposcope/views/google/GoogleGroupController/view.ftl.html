@@ -21,6 +21,9 @@
             <a href="#" class="btn btn-primary btn-add-event" title="${i18n("label.addEvent")}" data-toggle="tooltip"  >
                <i class="fa fa-fw fa-calendar hidden-lg" ></i><span class="hidden-xs hidden-sm hidden-md" > ${i18n("label.addEvent")}</span>
             </a>
+            <a href="#" class="btn btn-primary btn-add-report" title="${i18n("label.addReport")}" data-toggle="tooltip"  >
+                <i class="fa fa-fw fa-calendar hidden-lg" ></i><span class="hidden-xs hidden-sm hidden-md" > ${i18n("label.addReport")}</span>
+            </a>
             <a href="${reverseRoute("google.GoogleGroupController","rename","groupId",group.getId())}" 
                class="btn btn-primary btn-rename" title="${i18n("label.rename")}" data-toggle="tooltip"  >
                <i class="fa fa-fw fa-pencil hidden-lg" ></i><span class="hidden-xs hidden-sm hidden-md" >  ${i18n("label.rename")}</span>
@@ -145,8 +148,23 @@
                         <input id="searchCustomParameters" class="form-control" name="custom[]"
                                value="${default.getDefaultCustomParameters()!""}"  >
                         <span class="help-block">${i18n("admin.google.customHelp")}</span>
-                    </div>                      
-
+                    </div>
+                    <!-- extra fields for inteligencia seo -->
+                    <div class="form-group" >
+                        <label for="searchCategory" >${i18n("label.searchCategory")}</label>
+                        <input id="searchCategory" class="form-control search-category" name="categories[]" autocomplete="off" >
+                    </div>
+                    <div class="form-group" >
+                        <label for="searchVolume" >${i18n("label.searchVolume")}</label>
+                        <input id="searchVolume" class="form-control search-category" name="volumes[]" autocomplete="off" >
+                    </div>
+                    <div class="form-group" >
+                        <label class="control-label">${i18n("label.readAccess")}</label>
+                        <div>
+                            <label class="radio-inline" style="line-height: 2em;"><input name="onlyAdmin[]" value="true" type="radio" checked> ${i18n("label.adminOnly")}</label>
+                            <label class="radio-inline" style="line-height: 2em;"><input name="onlyAdmin[]" value="false" type="radio"> ${i18n("label.adminAndUser")}</label>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <div class="pull-left">

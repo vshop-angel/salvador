@@ -11,6 +11,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Functions;
 import com.google.inject.Inject;
+import com.serphacker.serposcope.inteligenciaseo.SearchSettings;
+import com.serphacker.serposcope.inteligenciaseo.SearchSettingsDB;
 import ninja.Result;
 import ninja.Results;
 
@@ -64,6 +66,9 @@ public class GoogleTargetController extends GoogleController {
 
     @Inject
     GoogleDB googleDB;
+
+    @Inject
+    SearchSettingsDB settingsDB;
 
     @Inject
     Router router;
@@ -171,7 +176,8 @@ public class GoogleTargetController extends GoogleController {
                 .render("startDate", "")
                 .render("endDate", "")
                 .render("display", fallbackDisplay)
-                .render("target", target);
+                .render("target", target)
+                .render("categories", settingsDB.getCategories());
         }
 
         LocalDate minDay = minRun.getDay();
@@ -216,7 +222,8 @@ public class GoogleTargetController extends GoogleController {
                     .render("endDate", endDate.toString())
                     .render("minDate", minDay)
                     .render("maxDate", maxDay)
-                    .render("display", display); 
+                    .render("display", display)
+                    .render("categories", settingsDB.getCategories());
             case "chart":
                 return renderChart(group, target, searches, runs, minDay, maxDay, startDate, endDate);
             case "export":
@@ -619,6 +626,7 @@ public class GoogleTargetController extends GoogleController {
             builders.put(search.getId(), builder = new StringBuilder("["));
             GoogleBest best = googleDB.rank.getBest(target.getGroupId(), target.getId(), search.getId());
 
+            final String category  = settingsDB.getCategory(search.getId());
             builder
                 .append(search.getId())
                 .append(",[\"").append(StringEscapeUtils.escapeJson(search.getKeyword()))
@@ -627,6 +635,7 @@ public class GoogleTargetController extends GoogleController {
                 .append("\",\"").append(search.getLocal() == null ? "" : StringEscapeUtils.escapeJson(search.getLocal()))
                 .append("\",\"").append(search.getDatacenter() == null ? "" : StringEscapeUtils.escapeJson(search.getDatacenter()))
                 .append("\",\"").append(search.getCustomParameters() == null ? "" : StringEscapeUtils.escapeJson(search.getCustomParameters()))
+                .append("\",\"").append(category == null ? "" : StringEscapeUtils.escapeJson(category))
                 .append("\"],");
 
             if (best == null) {
@@ -643,10 +652,8 @@ public class GoogleTargetController extends GoogleController {
 
         for (int i = 0; i < runs.size(); i++) {
             Run run = runs.get(i);
-
             Map<Integer, GoogleRank> ranks = googleDB.rank.list0(run.getId(), group.getId(), target.getId())
                 .stream().collect(Collectors.toMap((r) -> r.googleSearchId, Function.identity()));
-
             for (GoogleSearch search : searches) {
                 StringBuilder builder = builders.get(search.getId());
                 GoogleRank fullRank = ranks.get(search.getId());
@@ -661,6 +668,8 @@ public class GoogleTargetController extends GoogleController {
 
                 if (i == runs.size() - 1) {
                     builder.deleteCharAt(builder.length() - 1);
+                    builder.append("],[");
+                    builder.append(settingsDB.getVolume(search.getId()));
                     builder.append("]]");
                 }
             }

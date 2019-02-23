@@ -15,6 +15,7 @@ import com.querydsl.sql.dml.SQLDeleteClause;
 import com.querydsl.sql.dml.SQLInsertClause;
 import com.querydsl.sql.dml.SQLMergeClause;
 import com.serphacker.serposcope.db.AbstractDB;
+import com.serphacker.serposcope.inteligenciaseo.QSearchSettings;
 import com.serphacker.serposcope.models.google.GoogleSearch;
 import com.serphacker.serposcope.querybuilder.QGoogleSearch;
 import com.serphacker.serposcope.querybuilder.QGoogleSearchGroup;
@@ -118,7 +119,7 @@ public class GoogleSearchDB extends AbstractDB {
         GoogleSearch search = null;
         
         try(Connection con = ds.getConnection()){
-            
+
             Tuple tuple = new SQLQuery<Void>(con, dbTplConf)
                 .select(t_gsearch.all())
                 .from(t_gsearch)
@@ -130,42 +131,42 @@ public class GoogleSearchDB extends AbstractDB {
         } catch(Exception ex){
             LOG.error("SQL error", ex);
         }
-        
+
         return search;
     }    
     
     public boolean deleteFromGroup(GoogleSearch search, int groupId){
         boolean deleted = false;
-        
+
         try(Connection con = ds.getConnection()){
-            
+
             deleted = new SQLDeleteClause(con, dbTplConf, t_ggroup)
                 .where(t_ggroup.googleSearchId.eq(search.getId()))
                 .where(t_ggroup.groupId.eq(groupId))
                 .execute() == 1;
-            
+
         } catch(Exception ex){
             LOG.error("SQL error", ex);
         }
-        
+
         return deleted;
     }       
     
     public boolean hasGroup(GoogleSearch search){
         boolean hasGroup = false;
-        
+
         try(Connection con = ds.getConnection()){
-            
+
             hasGroup = new SQLQuery<Void>(con, dbTplConf)
                 .select(Expressions.ONE)
                 .from(t_ggroup)
                 .where(t_ggroup.googleSearchId.eq(search.getId()))
                 .fetchOne() != null;
-            
+
         } catch(Exception ex){
             LOG.error("SQL error", ex);
         }
-        
+
         return hasGroup;
     }
     
@@ -240,13 +241,13 @@ public class GoogleSearchDB extends AbstractDB {
     public List<GoogleSearch> listByGroup(Collection<Integer> groups){
         List<GoogleSearch> searches = new ArrayList<>();
         
-        try(Connection con = ds.getConnection()){
+        try (Connection con = ds.getConnection()){
             
             SQLQuery<Tuple> query = new SQLQuery<Void>(con, dbTplConf)
                 .select(t_gsearch.all())
                 .from(t_gsearch);
             
-            if(groups != null){
+            if (groups != null){
                 query.join(t_ggroup).on(t_gsearch.id.eq(t_ggroup.googleSearchId));
                 query.where(t_ggroup.groupId.in(groups));
             }
@@ -270,7 +271,7 @@ public class GoogleSearchDB extends AbstractDB {
         List<GoogleSearch> searches = new ArrayList<>();
         
         try(Connection con = ds.getConnection()){
-            
+
             SQLQuery<Tuple> query = new SQLQuery<Void>(con, dbTplConf)
                 .select(t_gsearch.all())
                 .from(t_gsearch)
@@ -313,7 +314,6 @@ public class GoogleSearchDB extends AbstractDB {
                     searches.put(tuple.get(t_gsearch.id), fromTuple(tuple));
                 }
             }
-            
         } catch(Exception ex){
             LOG.error("SQL error", ex);
         }
@@ -360,5 +360,4 @@ public class GoogleSearchDB extends AbstractDB {
         
         return search;
     }
-    
 }

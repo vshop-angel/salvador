@@ -103,13 +103,25 @@ create table `GOOGLE_TARGET_SUMMARY` (
 
 drop table if exists `IS_REPORTS`;
 create table `IS_REPORTS` (
-    id int AUTO_INCREMENT NOT NULL,
-    group_id int NOT NULL,
-    name varchar(100) NOT NULL,
-    iframe varchar(300) NOT NULL,
+    id int auto_increment not null,
+    group_id int not null,
+    name varchar(100) not null,
+    iframe varchar(300) not null,
 
     primary key(id),
     foreign key (group_id) references `GROUP`(id)
 ) engine = innodb default charset=utf8 /*! collate utf8_bin */;
 
+drop table if exists `IS_SEARCH_SETTINGS`;
+create table `IS_SEARCH_SETTINGS` (
+      id int auto_increment not null,
+      group_id int not null,
+      search_id int not null,
+      category varchar(100) not null,
+      volume varchar(100) not null,
+      admins_only boolean not null default true,
+      primary key(id),
+      foreign key (search_id) references `GOOGLE_SEARCH`(id),
+      foreign key (group_id) references `GROUP`(id)
+) engine = innodb default charset=utf8 /*! collate utf8_bin */;
 SET FOREIGN_KEY_CHECKS=1;

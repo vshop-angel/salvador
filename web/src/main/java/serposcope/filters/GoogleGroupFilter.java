@@ -14,19 +14,25 @@ import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.db.google.GoogleDB;
 import com.serphacker.serposcope.inteligenciaseo.Report;
 import com.serphacker.serposcope.inteligenciaseo.ReportsDB;
+import com.serphacker.serposcope.inteligenciaseo.SearchSettingsDB;
 import com.serphacker.serposcope.models.base.Group;
 import com.serphacker.serposcope.models.base.Group.Module;
+import com.serphacker.serposcope.models.base.User;
 import com.serphacker.serposcope.models.google.GoogleSearch;
 import com.serphacker.serposcope.models.google.GoogleTarget;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+
 import ninja.Context;
 import ninja.FilterChain;
 import ninja.Result;
 import ninja.Results;
 import ninja.Router;
 import ninja.session.FlashScope;
+import ninja.session.Session;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,10 +58,11 @@ public class GoogleGroupFilter extends AbstractFilter {
     @Inject
     Router router;
 
+    @Inject
+    SearchSettingsDB settingsDB;
+
     @Override
     public Result filter(FilterChain filterChain, Context context) {
-//        LOG.trace("filter");
-        
         FlashScope flash = context.getFlashScope();
         
         Group group = context.getAttribute("group", Group.class);
@@ -69,7 +76,20 @@ public class GoogleGroupFilter extends AbstractFilter {
         context.setAttribute("targets", targets);
         
         List<GoogleSearch> searches = googleDB.search.listByGroup(Arrays.asList(group.getId()));
-        context.setAttribute("searches", searches);
+        // We are filtering the searches here
+        List<GoogleSearch> filtered = new ArrayList<>();
+        // Get current user
+        User user = (User) context.getAttribute("user");
+        // For every search, copy only those that are
+        // visible by the user
+        for (GoogleSearch search : searches) {
+            boolean onlyAdmins = settingsDB.getIsOnlyAdmins(search.getId());
+            if (onlyAdmins && !user.isAdmin()) {
+                continue;
+            }
+            filtered.add(search);
+        }
+        context.setAttribute("searches", filtered);
 
         List<Report> reports = reportsDB.listReports();
         context.setAttribute("reports", reports);

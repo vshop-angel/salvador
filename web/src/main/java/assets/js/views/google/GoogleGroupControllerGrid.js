@@ -19,7 +19,8 @@ serposcope.googleGroupControllerGrid = function () {
         device: '',
         local: '',
         datacenter: '',
-        custom: ''
+        custom: '',
+        category: -1
     };
 
     // provided by API
@@ -72,9 +73,11 @@ serposcope.googleGroupControllerGrid = function () {
         },{
             id: "datacenter", field: "datacenter", minWidth: 100, sortable: true, name: 'Datacenter'/*, formatter: formatDatacenter,*/
         },{
-            id: "local", field: "local", minWidth: 250, sortable: true, name: 'Local'/*, formatter: formatLocal,*/
+            id: "local", field: "local", minWidth: 200, sortable: true, name: 'Local'/*, formatter: formatLocal,*/
         },{
-            id: "custom", field: "custom", minWidth: 250, sortable: true, name: 'Custom'/*, formatter: formatCustom*/
+            id: "custom", field: "custom", minWidth: 200, sortable: true, name: 'Custom'/*, formatter: formatCustom*/
+        },{
+            id: "category", field: "category", minWidth: 150, sortable: true, name: 'Category'/*, formatter: formatCustom*/
         }];
 
         
@@ -109,12 +112,16 @@ serposcope.googleGroupControllerGrid = function () {
     };
 
     var applyFilter = function () {
+        var category = $('#filter-category').val() || '-1';
+
         filter.keyword = $('#filter-keyword').val().toLowerCase();
         filter.country = $('#filter-country').val().toLowerCase();
         filter.device = $('#filter-device').val();
         filter.local = $('#filter-local').val().toLowerCase();
         filter.datacenter = $('#filter-datacenter').val().toLowerCase();
         filter.custom = $('#filter-custom').val().toLowerCase();
+        filter.category = category.toLowerCase();
+
         dataView.refresh();
     };
 
@@ -125,6 +132,7 @@ serposcope.googleGroupControllerGrid = function () {
         $('#filter-local').val('');
         $('#filter-datacenter').val('');
         $('#filter-custom').val('');
+        $('#filter-category').val(-1);
         applyFilter();
     };
 
@@ -153,7 +161,7 @@ serposcope.googleGroupControllerGrid = function () {
             return false;
         }
 
-        return true;
+        return !(filter.category != -1 && item.category.toLowerCase().indexOf(filter.category) === -1);
     };
     
     formatKeyword = function (row, col, unk, colDef, rowData) {

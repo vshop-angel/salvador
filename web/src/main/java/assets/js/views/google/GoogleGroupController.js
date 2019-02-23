@@ -56,8 +56,52 @@ serposcope.googleGroupController = function () {
     var showNewEventModal = function(elt){
         $('#modal-add-event').modal();
         return false;
-    };    
-    
+    };
+
+    var deleteReport = function(elt){
+        var id = $(elt.currentTarget).attr("data-id");
+        var name = $("#report-" + id +" .report-name").html();
+        var href= $(elt.currentTarget).attr("href");
+
+        if(!confirm("Delete report \"" + name + "\"?")){
+            return false;
+        }
+        $('<form>', {
+            'action': href,
+            'method': 'post',
+            'target': '_top'
+        }).append($('<input>', {
+            'name': '_xsrf',
+            'value': $('#_xsrf').attr("data-value"),
+            'type': 'hidden'
+        })).append($('<input>', {
+            'name': 'id[]',
+            'value': id,
+            'type': 'hidden'
+        })).appendTo(document.body).submit();
+
+        return false;
+    };
+
+    var deleteReports = function(elt){
+        if(!confirm("Delete reports?")){
+            return false;
+        }
+
+        $('<form>', {
+            'action': $(elt.currentTarget).attr("data-action"),
+            'method': 'post',
+            'target': '_top'
+        }).append($('<input>', {
+            'name': '_xsrf',
+            'value': $('#_xsrf').attr("data-value"),
+            'type': 'hidden'
+        })).append($('.chk-report'))
+            .appendTo(document.body).submit();
+
+        return false;
+    };
+
     var deleteTarget = function(elt){
         var id = $(elt.currentTarget).attr("data-id");
         var name = $("#target-" + id +" .target-name").html();
@@ -83,8 +127,7 @@ serposcope.googleGroupController = function () {
         
         return false;
     };
-    
-    
+
     var deleteTargets = function(elt){
         if(!confirm("Delete targets ?\nAll history will be erased.")){
             return false;
@@ -460,12 +503,14 @@ serposcope.googleGroupController = function () {
         $('#bulk-target-import').click(bulkTargetSubmit);
         
         $('.btn-delete-target').click(deleteTarget);
-        
+        $('.btn-delete-report').click(deleteReport);
+
         $('#btn-chk-search').click(checksearch);
         $('#btn-chk-target').click(checkTarget);
         $('#btn-export-searches').click(exportSearches);
         $('#btn-delete-searches').click(deleteSearches);
         $('#btn-delete-targets').click(deleteTargets);
+        $('#btn-delete-reports').click(deleteReports);
         $('#table-target').stupidtable();
         renderScoreHistory();
         configureTabs();

@@ -21,6 +21,7 @@ serposcope.googleTargetControllerGrid = function () {
     var COL_SEARCH_LOCAL = 3;
     var COL_SEARCH_DATACENTER = 4;
     var COL_SEARCH_CUSTOM = 5;
+    var COL_SEARCH_CATEGORY = 6;
     var COL_BEST = 2;
     var COL_BEST_RANK = 0;
     var COL_BEST_DAY = 1;
@@ -32,6 +33,7 @@ serposcope.googleTargetControllerGrid = function () {
     var COL_RANK_CURRENT = 0;
     var COL_RANK_PREVIOUS = 1;
     var COL_RANK_URL = 2;
+    var COL_VOLUME = 4;
 
     var grid = null;
     var dataView = null;
@@ -42,7 +44,8 @@ serposcope.googleTargetControllerGrid = function () {
         device: '',
         local: '',
         datacenter: '',
-        custom: ''
+        custom: '',
+        category: -1
     };
 
     // provided by API
@@ -103,6 +106,10 @@ serposcope.googleTargetControllerGrid = function () {
                 id: "search",
                 name: '<div class="header-search" >&nbsp;&nbsp;Searches <i class="glyphicon glyphicon-sort" ></i></div>',
                 field: "id", width: 250, formatter: formatSearchCell, sortable: true
+            }, {
+                id: "volume",
+                name: '<div class="header-search" >&nbsp;&nbsp;Volume</i></div>',
+                field: "volume", width: 90, formatter: formatVolumeCell
             }];
         for (var i = 0; i < days.length; i++) {
             var day = days[i];
@@ -165,12 +172,15 @@ serposcope.googleTargetControllerGrid = function () {
     };
 
     var applyFilter = function () {
+        var category = $('#filter-category').val() || '-1';
+
         filter.keyword = $('#filter-keyword').val().toLowerCase();
         filter.country = $('#filter-country').val().toLowerCase();
         filter.device = $('#filter-device').val();
         filter.local = $('#filter-local').val().toLowerCase();
         filter.datacenter = $('#filter-datacenter').val().toLowerCase();
         filter.custom = $('#filter-custom').val().toLowerCase();
+        filter.category = category.toLowerCase();
         dataView.refresh();
     };
 
@@ -181,6 +191,7 @@ serposcope.googleTargetControllerGrid = function () {
         $('#filter-local').val('');
         $('#filter-datacenter').val('');
         $('#filter-custom').val('');
+        $('#filter-category').val(-1);
         applyFilter();
     };
 
@@ -214,7 +225,16 @@ serposcope.googleTargetControllerGrid = function () {
             return false;
         }
 
-        return true;
+        return !(filter.category != -1 && search[COL_SEARCH_CATEGORY].toLowerCase().indexOf(filter.category) === -1);
+    };
+
+    var formatVolumeCell = function (row, col, unk, colDef, rowData) {
+        if (row === 0) {
+            return '-';
+        } else {
+            return rowData[COL_VOLUME][col - 1];
+        }
+        return 0;
     };
 
     var formatSearchCell = function (row, col, unk, colDef, rowData) {
@@ -244,9 +264,9 @@ serposcope.googleTargetControllerGrid = function () {
 
     var formatGridCell = function (row, col, unk, colDef, rowData) {
         if (row == 0) {
-            return formatCalendarCell(row, col, unk, colDef, rowData);
+            return formatCalendarCell(row, col - 1, unk, colDef, rowData);
         } else {
-            return formatRankCell(row, col, unk, colDef, rowData);
+            return formatRankCell(row, col - 1, unk, colDef, rowData);
         }
     };
 

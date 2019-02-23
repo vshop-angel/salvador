@@ -11,6 +11,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
 import com.google.inject.Inject;
+import com.serphacker.serposcope.inteligenciaseo.SearchSettingsDB;
 import ninja.Result;
 import ninja.Results;
 
@@ -49,6 +50,9 @@ public class GoogleSearchController extends GoogleController {
     
     @Inject
     GoogleDB googleDB;
+
+    @Inject
+    SearchSettingsDB settingsDB;
     
     @Inject
     BaseDB baseDB;
@@ -109,7 +113,9 @@ public class GoogleSearchController extends GoogleController {
                 .render("endDate", endDate)
                 .render("minDate", minDay)
                 .render("maxDate", maxDay)                        
-                .render("search", search);            
+                .render("search", search)
+                .render("categories", settingsDB.getCategories())
+            ;
         }
         
         startDate = firstRun.getDay();
@@ -139,7 +145,8 @@ public class GoogleSearchController extends GoogleController {
         
         String jsonRanks = getJsonRanks(group, targets, firstRun, lastRun, searchId);
         Config config = baseDB.config.getConfig();
-        
+
+        List<String> categories = settingsDB.getCategories();
         return Results.ok()
             .render("displayMode", config.getDisplayGoogleSearch())
             .render("events", jsonEvents)
@@ -152,7 +159,8 @@ public class GoogleSearchController extends GoogleController {
             .render("minDate", minDay)
             .render("maxDate", maxDay)
             .render("bestRankings", bestRankings)
-            ;
+            .render("categories", categories)
+        ;
     }
 
     

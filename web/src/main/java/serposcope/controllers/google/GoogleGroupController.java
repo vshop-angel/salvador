@@ -11,6 +11,8 @@ import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.serphacker.serposcope.inteligenciaseo.Report;
 import com.serphacker.serposcope.inteligenciaseo.ReportsDB;
+import com.serphacker.serposcope.inteligenciaseo.SearchSettings;
+import com.serphacker.serposcope.inteligenciaseo.SearchSettingsDB;
 import ninja.Result;
 import ninja.Results;
 
@@ -84,6 +86,9 @@ public class GoogleGroupController extends GoogleController {
     ReportsDB reportsDB;
 
     @Inject
+    SearchSettingsDB settingsDB;
+
+    @Inject
     Messages msg;
 
     @Inject
@@ -121,7 +126,8 @@ public class GoogleGroupController extends GoogleController {
                 .render("reports", context.getAttribute("reports"))
                 .render("targets", context.getAttribute("targets"))
                 .render("summaries", summaryByTagetId)
-                .render("histories", scoreHistoryByTagetId);
+                .render("histories", scoreHistoryByTagetId)
+                .render("categories", settingsDB.getCategories());
     }
 
     public Result jsonSearches(Context context) {
@@ -152,6 +158,7 @@ public class GoogleGroupController extends GoogleController {
                         writer.append("[");
                         for (int i = 0; i < searches.size(); i++) {
                             GoogleSearch search = searches.get(i);
+                            String category = settingsDB.getCategory(search.getId());
                             writer.append("{");
                             writer.append("\"id\":")
                                     .append(Integer.toString(search.getId()))
@@ -173,6 +180,9 @@ public class GoogleGroupController extends GoogleController {
                                     .append("\",");
                             writer.append("\"custom\":\"")
                                     .append(search.getCustomParameters() == null ? "" : StringEscapeUtils.escapeJson(search.getCustomParameters()))
+                                    .append("\",");
+                            writer.append("\"category\":\"")
+                                    .append(category == null ? "" : StringEscapeUtils.escapeJson(category))
                                     .append("\"");
                             writer.append("}");
                             if (i != searches.size() - 1) {
@@ -180,7 +190,6 @@ public class GoogleGroupController extends GoogleController {
                             }
                         }
                         writer.append("]");
-
                     } catch (Exception ex) {
                         LOG.warn("HTTP error", ex);
                     } finally {
@@ -205,7 +214,9 @@ public class GoogleGroupController extends GoogleController {
             @Params("keyword[]") String[] keywords,
             @Params("country[]") String country[], @Params("datacenter[]") String[] datacenters,
             @Params("device[]") Integer[] devices,
-            @Params("local[]") String[] locals, @Params("custom[]") String[] customs
+            @Params("local[]") String[] locals, @Params("custom[]") String[] customs,
+            @Params("categories[]") String[] categories, @Params("volumes[]") String[] volumes,
+            @Params("onlyAdmin[]") Boolean[] onlyAdmin
     ) {
         FlashScope flash = context.getFlashScope();
         Group group = context.getAttribute("group", Group.class);
@@ -217,8 +228,8 @@ public class GoogleGroupController extends GoogleController {
             return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()));
         }
 
+        Set<SearchSettings> settings = new HashSet<>();
         Set<GoogleSearch> searches = new HashSet<>();
-
         for (int i = 0; i < keywords.length; i++) {
             GoogleSearch search = new GoogleSearch();
 
@@ -262,7 +273,6 @@ public class GoogleGroupController extends GoogleController {
             if (!Validator.isEmpty(customs[i])) {
                 search.setCustomParameters(customs[i]);
             }
-
             searches.add(search);
         }
 
@@ -276,13 +286,26 @@ public class GoogleGroupController extends GoogleController {
                 }
             }
             googleDB.search.insert(searches, group.getId());
+
+            int i = 0;
+            // Go through all searches and create associated settings
+            for (GoogleSearch search : searches) {
+                // Create the settings
+                settings.add(new SearchSettings(group.getId(), search.getId(), categories[i], volumes[i], onlyAdmin[i]));
+                i++;
+            }
         }
         googleDB.serpRescan.rescan(null, getTargets(context), knownSearches, false);
-
         flash.success("google.group.searchInserted");
+
+        settingsDB.insert(settings);
+
         return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()) + "#tab-searches");
     }
 
+    @FilterWith({
+            AdminFilter.class
+    })
     public Result addReport(
             Context context,
             @Params("name[]") String[] names,
@@ -311,16 +334,16 @@ public class GoogleGroupController extends GoogleController {
 
             if (Validator.isEmpty(name)) {
                 flash.error("error.invalidName");
-                return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()));
+                return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()) + "#tab-reports");
             }
             reports.add(new Report(group.getId(), name, iframe));
         }
 
         if (reportsDB.insertReports(reports) != reports.size()) {
             flash.error("error.internalError");
-            return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()));
+            return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()) + "#tab-reports");
         }
-        return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()));
+        return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()) + "#tab-reports");
     }
 
     @FilterWith({
@@ -483,16 +506,21 @@ public class GoogleGroupController extends GoogleController {
         return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()) + "#tab-searches");
     }
 
-    @FilterWith({
-            XSRFFilter.class,
-            AdminFilter.class
-    })
-    public Result delReport(
+    public Result deleteReport(
             Context context,
-            @Params("id[]") String[] ids
+            @Params("id[]") Integer[] ids
     ) {
+        FlashScope flash = context.getFlashScope();
         Group group = context.getAttribute("group", Group.class);
-        return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()));
+        if (ids == null || ids.length == 0) {
+            flash.error("error.noSearchSelected");
+            return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()) + "#tab-reports");
+        }
+        if (reportsDB.delete(ids) == 0) {
+            flash.error("error.internalError");
+            return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()) + "#tab-reports");
+        }
+        return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()) + "#tab-reports");
     }
 
     @FilterWith({

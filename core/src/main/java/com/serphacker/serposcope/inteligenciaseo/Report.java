@@ -9,16 +9,10 @@ import org.jsoup.select.Elements;
 import java.util.Iterator;
 
 public class Report {
-    private int id = -1;
-    private int groupId;
-    private String name;
-    private String iframe;
-
-    public class Iframe {
-        public String src;
-        public String height;
-        public String width;
-    }
+    private final int id;
+    private final int groupId;
+    private final String name;
+    private final String iframe;
 
     public Report(int id, int groupId, String name, String iframe) {
         this.id = id;
@@ -28,6 +22,7 @@ public class Report {
     }
 
     public Report(int groupId, String name, String iframe) {
+        this.id = -1;
         this.groupId = groupId;
         this.name = name;
         this.iframe = iframe;
