@@ -228,7 +228,6 @@ public class GoogleGroupController extends GoogleController {
             return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()));
         }
 
-        Set<SearchSettings> settings = new HashSet<>();
         Set<GoogleSearch> searches = new HashSet<>();
         for (int i = 0; i < keywords.length; i++) {
             GoogleSearch search = new GoogleSearch();
@@ -286,14 +285,14 @@ public class GoogleGroupController extends GoogleController {
                 }
             }
             googleDB.search.insert(searches, group.getId());
-
-            int i = 0;
-            // Go through all searches and create associated settings
-            for (GoogleSearch search : searches) {
-                // Create the settings
-                settings.add(new SearchSettings(group.getId(), search.getId(), categories[i], volumes[i], onlyAdmin[i]));
-                i++;
-            }
+        }
+        int i = 0;
+        Set<SearchSettings> settings = new HashSet<>();
+        // Go through all searches and create associated settings
+        for (GoogleSearch search : searches) {
+            // Create the settings
+            settings.add(new SearchSettings(group.getId(), search.getId(), categories[i], volumes[i], onlyAdmin[i]));
+            i++;
         }
         googleDB.serpRescan.rescan(null, getTargets(context), knownSearches, false);
         flash.success("google.group.searchInserted");
@@ -343,6 +342,7 @@ public class GoogleGroupController extends GoogleController {
             flash.error("error.internalError");
             return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()) + "#tab-reports");
         }
+        flash.success("inteligenciaseo.reportCreated");
         return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()) + "#tab-reports");
     }
 
