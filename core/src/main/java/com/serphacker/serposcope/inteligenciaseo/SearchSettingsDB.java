@@ -98,7 +98,7 @@ public class SearchSettingsDB extends AbstractDB {
                     .where(t_search_settings.searchId.eq(id))
             ;
             List<Boolean> list = query.fetch();
-            if (list == null)
+            if ((list == null) || (list.size() == 0))
                 return false;
             // We just want the firs element
             return list.get(0);
