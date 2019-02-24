@@ -8,6 +8,35 @@
 
 /* global serposcope, Slick */
 
+var inteligenciaSEOEditKeyword = function(event, id, category, volume, isAdminOnly) {
+    var content = $('#edit-keyword');
+    // Hide the modal if visible
+    $('.modal').modal('hide');
+    // Build the new modal
+    $(content).find('#searchEditCategory').val(category);
+    $(content).find('#searchEditVolume').val(volume);
+    $(content).find('#searchEditId').val(id);
+    if (isAdminOnly === false) {
+        $(content).find('input[name="onlyAdmin"][value="false"]').attr('checked', 'checked');
+    } else {
+        $(content).find('input[name="onlyAdmin"][value="true"]').attr('checked', 'checked');
+    }
+    content.modal();
+    return false;
+};
+
+var inteligenciaSEOScanKeyword = function(event) {
+    $.ajax({
+        url: $(event.currentTarget).attr('href'),
+        method: 'POST',
+        data: {
+            id: $(event.currentTarget).attr('data-id'),
+            _xsrf: $('#csp-vars').attr('data-xsrf')
+        }
+    });
+    return false;
+};
+
 serposcope.googleGroupControllerGrid = function () {
 
     var grid = null;
@@ -63,9 +92,23 @@ serposcope.googleGroupControllerGrid = function () {
             forceFitColumns: true
         };
 
+        var toString = function(value) {
+            return '\'' + value + '\'';
+        };
+
+        var searchesTableOptions = function(row, col, unk, colDef, rowData) {
+            var args = [rowData.id, toString(rowData.category), rowData.volume, rowData.isAdminOnly].join(',');
+            return '<span class="search-options">' +
+                '<a onclick="return inteligenciaSEOEditKeyword(event, ' + args + ')" data-id="' + rowData.id + '" id="btn-edit-keyword" class="edit" title="Edit"><i class="glyphicon glyphicon-edit"></i></a>' +
+                '<a onclick="return inteligenciaSEOScanKeyword(event)" data-id="' + rowData.id + '" id="btn-scan-keyword" href="/tasks/' + rowData.id + '/start" class="refresh" title="Scan"><i class="fa fa-refresh"></i></a>' +
+                '</span>';
+        };
+
         var checkboxSelector = new Slick.CheckboxSelectColumn({cssClass: "slick-cell-checkboxsel"});
         var columns = [checkboxSelector.getColumnDefinition(), {
-            id: "keyword", field: "keyword", minWidth: 300, sortable: true, name: 'Keyword', formatter: formatKeyword
+            id: "options", width: 45, sortable: false, name: '', formatter: searchesTableOptions
+        }, {
+            id: "keyword", field: "keyword", minWidth: 200, sortable: true, name: 'Keyword', formatter: formatKeyword
         },{
             id: "device", field: "device", minWidth: 100, sortable: true, name: 'Device', formatter: formatDevice
         },{
@@ -78,8 +121,9 @@ serposcope.googleGroupControllerGrid = function () {
             id: "custom", field: "custom", minWidth: 200, sortable: true, name: 'Custom'/*, formatter: formatCustom*/
         },{
             id: "category", field: "category", minWidth: 150, sortable: true, name: 'Category'/*, formatter: formatCustom*/
+        },{
+            id: "volume", field: "volume", minWidth: 50, sortable: true, name: 'Volume'/*, formatter: formatCustom*/
         }];
-
         
         dataView = new Slick.Data.DataView();
         grid = new Slick.Grid("#group-searches-grid", dataView, columns, options);
@@ -97,6 +141,7 @@ serposcope.googleGroupControllerGrid = function () {
         });
 
         grid.init();
+
         dataView.beginUpdate();
         dataView.setItems(data);
         dataView.setFilter(filterGrid);

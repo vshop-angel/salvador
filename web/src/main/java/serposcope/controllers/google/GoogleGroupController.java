@@ -159,32 +159,42 @@ public class GoogleGroupController extends GoogleController {
                         for (int i = 0; i < searches.size(); i++) {
                             GoogleSearch search = searches.get(i);
                             String category = settingsDB.getCategory(search.getId());
-                            writer.append("{");
-                            writer.append("\"id\":")
+                            boolean isAdminOnly = settingsDB.getIsOnlyAdmins(search.getId());
+                            String volume = settingsDB.getVolume(search.getId());
+                            writer
+                                    .append("{")
+                                    .append("\"id\":")
                                     .append(Integer.toString(search.getId()))
-                                    .append(",");
-                            writer.append("\"keyword\":\"")
+                                    .append(",")
+                                    .append("\"keyword\":\"")
                                     .append(StringEscapeUtils.escapeJson(search.getKeyword()))
-                                    .append("\",");
-                            writer.append("\"country\":\"")
+                                    .append("\",")
+                                    .append("\"country\":\"")
                                     .append(search.getCountry().name())
-                                    .append("\",");
-                            writer.append("\"device\":\"")
+                                    .append("\",")
+                                    .append("\"device\":\"")
                                     .append(SMARTPHONE.equals(search.getDevice()) ? 'M' : 'D')
-                                    .append("\",");
-                            writer.append("\"local\":\"")
+                                    .append("\",")
+                                    .append("\"local\":\"")
                                     .append(search.getLocal() == null ? "" : StringEscapeUtils.escapeJson(search.getLocal()))
-                                    .append("\",");
-                            writer.append("\"datacenter\":\"")
+                                    .append("\",")
+                                    .append("\"datacenter\":\"")
                                     .append(search.getDatacenter() == null ? "" : StringEscapeUtils.escapeJson(search.getDatacenter()))
-                                    .append("\",");
-                            writer.append("\"custom\":\"")
+                                    .append("\",")
+                                    .append("\"custom\":\"")
                                     .append(search.getCustomParameters() == null ? "" : StringEscapeUtils.escapeJson(search.getCustomParameters()))
-                                    .append("\",");
-                            writer.append("\"category\":\"")
+                                    .append("\",")
+                                    .append("\"volume\":")
+                                    .append(volume == null ? "" : StringEscapeUtils.escapeJson(volume))
+                                    .append(",")
+                                    .append("\"isAdminOnly\":")
+                                    .append(isAdminOnly ? "true" : "false")
+                                    .append(",")
+                                    .append("\"category\":\"")
                                     .append(category == null ? "" : StringEscapeUtils.escapeJson(category))
-                                    .append("\"");
-                            writer.append("}");
+                                    .append("\"")
+                                    .append("}")
+                            ;
                             if (i != searches.size() - 1) {
                                 writer.append(",");
                             }
@@ -203,6 +213,27 @@ public class GoogleGroupController extends GoogleController {
                     }
                 });
 
+    }
+
+    @FilterWith({
+            XSRFFilter.class,
+            AdminFilter.class
+    })
+    public Result editSearch(Context context,
+                             @Param("id") Integer id,
+                             @Param("categories") String category,
+                             @Param("volumes") String volume,
+                             @Param("onlyAdmin") Boolean onlyAdmin) {
+        FlashScope flash = context.getFlashScope();
+        Group group = context.getAttribute("group", Group.class);
+
+        if (settingsDB.update(id, category, volume, onlyAdmin) == true) {
+            flash.success("inteligenciaseo.searchEdited");
+        } else {
+            flash.error("error.searchEditError");
+        }
+        System.out.printf("%d -- %s -- %s -- %b\n", id, category, volume, onlyAdmin);
+        return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()) + "#tab-searches");
     }
 
     @FilterWith({
@@ -298,7 +329,6 @@ public class GoogleGroupController extends GoogleController {
         flash.success("google.group.searchInserted");
 
         settingsDB.insert(settings);
-
         return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()) + "#tab-searches");
     }
 

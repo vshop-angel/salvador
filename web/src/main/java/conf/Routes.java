@@ -73,9 +73,11 @@ public class Routes implements ApplicationRoutes {
         
         router.GET().route("/admin/tasks").with(TaskController.class, "tasks");
         router.GET().route("/admin/tasks/start").with(TaskController.class, "startTask");
-        router.GET().route("/admin/tasks/stop").with(TaskController.class, "abortTask"); 
+        router.GET().route("/admin/tasks/stop").with(TaskController.class, "abortTask");
         router.POST().route("/admin/tasks/{runId: [0-9]+}/delete").with(TaskController.class, "deleteRun");
         router.POST().route("/admin/tasks/{runId: [0-9]+}/rescan-serp").with(TaskController.class, "rescanSerp");
+        // Execute task for a single keyword
+        router.POST().route("/tasks/{searchId: [0-9]+}/start").with(TaskController.class, "startTaskForKeyword");
         
         router.GET().route("/admin/logs").with(LogController.class, "logs");
         router.GET().route("/admin/logs/view").with(LogController.class, "viewLog");
@@ -103,7 +105,8 @@ public class Routes implements ApplicationRoutes {
         router.POST().route("/google/{groupId: [0-9]+}/rename").with(GoogleGroupController.class, "rename");
         router.POST().route("/google/{groupId: [0-9]+}/delete").with(GoogleGroupController.class, "delete");        
         router.POST().route("/google/{groupId: [0-9]+}/search/add").with(GoogleGroupController.class, "addSearch");
-        router.POST().route("/google/{groupId: [0-9]+}/search/delete").with(GoogleGroupController.class, "delSearch");        
+        router.POST().route("/google/{groupId: [0-9]+}/search/edit").with(GoogleGroupController.class, "editSearch");
+        router.POST().route("/google/{groupId: [0-9]+}/search/delete").with(GoogleGroupController.class, "delSearch");
         router.POST().route("/google/{groupId: [0-9]+}/search/export-searches").with(GoogleGroupController.class, "exportSearches");
         router.GET().route("/google/{groupId: [0-9]+}/search/suggest").with(GoogleGroupController.class, "jsonSearchSuggest");
         router.GET().route("/google/{groupId: [0-9]+}/search/list").with(GoogleGroupController.class, "jsonSearches");

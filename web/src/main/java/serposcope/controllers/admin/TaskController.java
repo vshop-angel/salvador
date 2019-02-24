@@ -86,6 +86,18 @@ public class TaskController extends BaseController {
     }
 
     @FilterWith(XSRFFilter.class)
+    public Result startTaskForKeyword(
+            Context context,
+            @Param("keyword") Integer searchId
+    ) {
+        System.out.printf("%d\n", searchId);
+        return Results
+                .ok()
+                .contentType("text/plain")
+                .render("Ok");
+    }
+
+    @FilterWith(XSRFFilter.class)
     public Result startTask(
         Context context,
         @Param("module") Integer moduleId,

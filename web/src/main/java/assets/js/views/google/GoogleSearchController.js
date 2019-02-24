@@ -277,8 +277,8 @@ serposcope.googleSearchController = function () {
                 format: 'YYYY-MM-DD'
             }
         });        
-        $('#btn-add-event').click(eventCalendarClick);        
-        
+        $('#btn-add-event').click(eventCalendarClick);
+
         $('.btn-draw-top10').click(drawTop10Click);
         $('.btn-draw-chart').click(drawDomainClick);
         $('#new-target').on('shown.bs.modal', function(){ $('#targetName').focus(); });

@@ -4,6 +4,7 @@ import com.google.inject.Singleton;
 import com.querydsl.core.Tuple;
 import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.dml.SQLInsertClause;
+import com.querydsl.sql.dml.SQLUpdateClause;
 import com.serphacker.serposcope.db.AbstractDB;
 
 import java.sql.Connection;
@@ -63,6 +64,8 @@ public class SearchSettingsDB extends AbstractDB {
                     .where(t_search_settings.searchId.eq(id))
             ;
             List<String> list = query.fetch();
+            if ((list == null) || (list.size() == 0))
+                return null;
             // We just want the firs element
             return list.get(0);
         } catch (Exception ex) {
@@ -81,6 +84,8 @@ public class SearchSettingsDB extends AbstractDB {
                     .where(t_search_settings.searchId.eq(id))
                     ;
             List<String> list = query.fetch();
+            if ((list == null) || (list.size() == 0))
+                return null;
             // We just want the firs element
             return list.get(0);
         } catch (Exception ex) {
@@ -102,6 +107,22 @@ public class SearchSettingsDB extends AbstractDB {
                 return false;
             // We just want the firs element
             return list.get(0);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            LOG.error("SQLError ex", ex);
+        }
+        return false;
+    }
+
+    public boolean update(Integer id, String category, String volume, Boolean onlyAdmin) {
+        try (Connection con = ds.getConnection()) {
+            long result = new SQLUpdateClause(con, dbTplConf, t_search_settings)
+                    .set(t_search_settings.category, category)
+                    .set(t_search_settings.volume, volume)
+                    .set(t_search_settings.adminsOnly, onlyAdmin)
+                    .where(t_search_settings.id.eq(id))
+                    .execute();
+            return result == 1L;
         } catch (Exception ex) {
             ex.printStackTrace();
             LOG.error("SQLError ex", ex);

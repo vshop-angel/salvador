@@ -97,7 +97,6 @@ public class GoogleTask extends AbstractTask {
         httpTimeoutMS = ScrapClient.DEFAULT_TIMEOUT_MS;
     }    
     
-
     @Override
     public Run.Status doRun() {
         solver = initializeCaptchaSolver();
@@ -106,7 +105,6 @@ public class GoogleTask extends AbstractTask {
         initializeSearches();
         initializePreviousRuns();
         initializeTargets();
-        
         
         int nThread = googleOptions.getMaxThreads();
         List<ScrapProxy> proxies = baseDB.proxy.list().stream().map(Proxy::toScrapProxy).collect(Collectors.toList());

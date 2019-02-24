@@ -286,3 +286,23 @@ MIT License (MIT) - Copyright (c) 2015 SERP Hacker https://serphacker.com/
 .toggle-event{
     cursor: pointer;
 }
+
+.search-options {
+    display: block;
+    text-align: center;
+}
+
+.search-options a {
+    display: inline-block;
+    vertical-align: middle;
+    width: 50%;
+    line-height: 25px;
+}
+
+.search-options a.edit {
+    cursor: pointer;
+}
+
+.search-options a.refresh {
+    color: #00aa00;
+}
