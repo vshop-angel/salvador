@@ -232,7 +232,6 @@ public class GoogleGroupController extends GoogleController {
         } else {
             flash.error("error.searchEditError");
         }
-        System.out.printf("%d -- %s -- %s -- %b\n", id, category, volume, onlyAdmin);
         return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()) + "#tab-searches");
     }
 

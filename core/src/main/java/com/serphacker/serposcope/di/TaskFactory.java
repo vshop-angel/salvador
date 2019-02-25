@@ -9,9 +9,6 @@ package com.serphacker.serposcope.di;
 
 import com.serphacker.serposcope.models.base.Run;
 import com.serphacker.serposcope.task.google.GoogleTask;
-import java.time.LocalDateTime;
-import java.util.List;
-import javax.annotation.Nullable;
 
 
 public interface TaskFactory {

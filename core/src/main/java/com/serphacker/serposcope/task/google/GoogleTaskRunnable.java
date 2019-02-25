@@ -27,7 +27,6 @@ public class GoogleTaskRunnable implements Runnable {
 //    public final static int MAX_FETCH_TRY = 3;
 
     GoogleTask controller;
-    
     GoogleScraper scraper;
 
     public GoogleTaskRunnable(GoogleTask controller) {

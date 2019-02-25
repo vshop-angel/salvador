@@ -290,13 +290,18 @@ MIT License (MIT) - Copyright (c) 2015 SERP Hacker https://serphacker.com/
 .search-options {
     display: block;
     text-align: center;
+    width: 50px;
 }
 
 .search-options a {
     display: inline-block;
     vertical-align: middle;
-    width: 50%;
+
+    width: 22px;
     line-height: 25px;
+    height: 22px;
+
+    box-sizing: border-box;
 }
 
 .search-options a.edit {

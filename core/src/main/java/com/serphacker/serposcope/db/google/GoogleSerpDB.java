@@ -13,6 +13,7 @@ import com.querydsl.core.Tuple;
 import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.dml.SQLDeleteClause;
 import com.querydsl.sql.dml.SQLInsertClause;
+import com.querydsl.sql.dml.SQLUpdateClause;
 import com.serphacker.serposcope.db.AbstractDB;
 import com.serphacker.serposcope.models.google.GoogleSerp;
 import com.serphacker.serposcope.querybuilder.QGoogleSerp;
@@ -197,8 +198,20 @@ public class GoogleSerpDB extends AbstractDB {
         decompressor.decompress(compressed, 4, decompressed, 0, decompressedLength);
         
         return decompressed;
-    }    
-    
-    
-    
+    }
+
+
+    public boolean update(GoogleSerp serp) {
+        boolean inserted = false;
+        try (Connection con = ds.getConnection()) {
+            inserted = new SQLUpdateClause(con, dbTplConf, t_serp)
+                    .where(t_serp.runId.eq(serp.getRunId()).and(t_serp.googleSearchId.eq(serp.getGoogleSearchId())))
+                    .set(t_serp.runDay, Timestamp.valueOf(serp.getRunDay()))
+                    .set(t_serp.serp, new SerialBlob(compress(serp.getSerializedEntries())))
+                    .execute() == 1;
+        } catch (Exception ex) {
+            LOG.error("SQL error", ex);
+        }
+        return inserted;
+    }
 }

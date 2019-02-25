@@ -26,12 +26,27 @@ var inteligenciaSEOEditKeyword = function(event, id, category, volume, isAdminOn
 };
 
 var inteligenciaSEOScanKeyword = function(event) {
+    var icon = $(event.currentTarget);
+    var now = function() {
+        return (new Date()).getTime();
+    };
+    var start = now();
+    icon.addClass('fa-spin');
     $.ajax({
         url: $(event.currentTarget).attr('href'),
         method: 'POST',
         data: {
-            id: $(event.currentTarget).attr('data-id'),
+            keyword: $(event.currentTarget).attr('data-id'),
             _xsrf: $('#csp-vars').attr('data-xsrf')
+        }
+    })
+    .done(function(result) {
+        if (now() - start < 3000) {
+            setTimeout(function () {
+                icon.removeClass('fa-spin');
+            }, 1500 - (now() - start));
+        } else {
+            icon.removeClass('fa-spin');
         }
     });
     return false;
@@ -106,7 +121,7 @@ serposcope.googleGroupControllerGrid = function () {
 
         var checkboxSelector = new Slick.CheckboxSelectColumn({cssClass: "slick-cell-checkboxsel"});
         var columns = [checkboxSelector.getColumnDefinition(), {
-            id: "options", width: 45, sortable: false, name: '', formatter: searchesTableOptions
+            id: "options", width: 50, sortable: false, name: '', formatter: searchesTableOptions
         }, {
             id: "keyword", field: "keyword", minWidth: 200, sortable: true, name: 'Keyword', formatter: formatKeyword
         },{

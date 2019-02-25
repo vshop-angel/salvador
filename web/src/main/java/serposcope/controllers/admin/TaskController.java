@@ -12,6 +12,7 @@ import com.google.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.db.base.RunDB;
 import com.serphacker.serposcope.db.google.GoogleDB;
+import com.serphacker.serposcope.di.GoogleScraperFactory;
 import com.serphacker.serposcope.models.base.Group;
 import static com.serphacker.serposcope.models.base.Group.Module.GOOGLE;
 import com.serphacker.serposcope.models.base.Run;
@@ -19,6 +20,10 @@ import com.serphacker.serposcope.models.google.GoogleSearch;
 import com.serphacker.serposcope.models.google.GoogleTarget;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import com.serphacker.serposcope.scraper.captcha.solver.CaptchaSolver;
+import com.serphacker.serposcope.scraper.google.scraper.GoogleScraper;
+import com.serphacker.serposcope.scraper.http.ScrapClient;
 import ninja.Context;
 import ninja.FilterWith;
 import ninja.Result;
@@ -90,11 +95,30 @@ public class TaskController extends BaseController {
             Context context,
             @Param("keyword") Integer searchId
     ) {
-        System.out.printf("%d\n", searchId);
+        FlashScope flash = context.getFlashScope();
+        if (searchId == null) {
+            flash.error("error.invalidSearch");
+            return Results.badRequest();
+        }
+        Run run = baseDB.run.findLast(GOOGLE, null, null);
+        if (run == null) {
+            return Results
+                    .notFound()
+                    .contentType("text/plain")
+                    .render("there are no previous runs to refresh");
+        }
+        System.out.printf("run: %d\n", run.getId());
+        if (!taskManager.scrapeSingleKeyword(run, searchId)) {
+            flash.error("error.internalError");
+            return Results
+                    .internalServerError()
+                    .contentType("text/plain")
+                    .render("error running scrapper");
+        }
         return Results
                 .ok()
                 .contentType("text/plain")
-                .render("Ok");
+                .render("done");
     }
 
     @FilterWith(XSRFFilter.class)
