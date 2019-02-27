@@ -185,7 +185,7 @@ public class GoogleGroupController extends GoogleController {
                                     .append(search.getCustomParameters() == null ? "" : StringEscapeUtils.escapeJson(search.getCustomParameters()))
                                     .append("\",")
                                     .append("\"volume\":")
-                                    .append(volume == null ? "" : StringEscapeUtils.escapeJson(volume))
+                                    .append(volume == null ? "0" : StringEscapeUtils.escapeJson(volume))
                                     .append(",")
                                     .append("\"isAdminOnly\":")
                                     .append(isAdminOnly ? "true" : "false")
@@ -220,14 +220,14 @@ public class GoogleGroupController extends GoogleController {
             AdminFilter.class
     })
     public Result editSearch(Context context,
-                             @Param("id") Integer id,
+                             @Param("id") Integer searchId,
                              @Param("categories") String category,
                              @Param("volumes") String volume,
                              @Param("onlyAdmin") Boolean onlyAdmin) {
         FlashScope flash = context.getFlashScope();
         Group group = context.getAttribute("group", Group.class);
 
-        if (settingsDB.update(id, category, volume, onlyAdmin) == true) {
+        if (settingsDB.update(searchId, group.getId(), category, volume, onlyAdmin) == true) {
             flash.success("inteligenciaseo.searchEdited");
         } else {
             flash.error("error.searchEditError");

@@ -114,13 +114,53 @@ public class SearchSettingsDB extends AbstractDB {
         return false;
     }
 
-    public boolean update(Integer id, String category, String volume, Boolean onlyAdmin) {
+    private boolean exists(Integer search_id) {
+        try (Connection con = ds.getConnection()) {
+            SQLQuery<Integer> query = new SQLQuery<>(con, dbTplConf)
+                    .select(t_search_settings.searchId)
+                    .from(t_search_settings)
+                    .where(t_search_settings.searchId.eq(search_id))
+                ;
+            return query.fetchCount() == 1;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            LOG.error("SQLError ex", ex);
+        }
+        return false;
+    }
+
+    public boolean update(Integer search_id, Integer group_id, String category, String volume, Boolean onlyAdmin) {
+        if (exists(search_id)) {
+            return doUpdate(search_id, group_id, category, volume, onlyAdmin);
+        } else {
+            return insertOne(search_id, group_id, category, volume, onlyAdmin);
+        }
+    }
+
+    private boolean insertOne(Integer searchId, Integer groupId, String category, String volume, Boolean onlyAdmin) {
+        try (Connection con = ds.getConnection()) {
+            long result = new SQLInsertClause(con, dbTplConf, t_search_settings)
+                    .set(t_search_settings.category, category)
+                    .set(t_search_settings.volume, volume)
+                    .set(t_search_settings.adminsOnly, onlyAdmin)
+                    .set(t_search_settings.searchId, searchId)
+                    .set(t_search_settings.groupId, groupId)
+                    .execute();
+            return result == 1L;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            LOG.error("SQLError ex", ex);
+        }
+        return false;
+    }
+
+    private boolean doUpdate(Integer searchId, Integer groupId, String category, String volume, Boolean onlyAdmin) {
         try (Connection con = ds.getConnection()) {
             long result = new SQLUpdateClause(con, dbTplConf, t_search_settings)
                     .set(t_search_settings.category, category)
                     .set(t_search_settings.volume, volume)
                     .set(t_search_settings.adminsOnly, onlyAdmin)
-                    .where(t_search_settings.id.eq(id))
+                    .where(t_search_settings.searchId.eq(searchId).and(t_search_settings.groupId.eq(groupId)))
                     .execute();
             return result == 1L;
         } catch (Exception ex) {

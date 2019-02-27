@@ -9,13 +9,14 @@
 /* global serposcope, Slick */
 
 var inteligenciaSEOEditKeyword = function(event, id, category, volume, isAdminOnly) {
+    var target = $(event.currentTarget);
     var content = $('#edit-keyword');
     // Hide the modal if visible
     $('.modal').modal('hide');
     // Build the new modal
+    $(content).find('#searchEditId').val(target.attr('data-id'));
     $(content).find('#searchEditCategory').val(category);
     $(content).find('#searchEditVolume').val(volume);
-    $(content).find('#searchEditId').val(id);
     if (isAdminOnly === false) {
         $(content).find('input[name="onlyAdmin"][value="false"]').attr('checked', 'checked');
     } else {
@@ -121,7 +122,7 @@ serposcope.googleGroupControllerGrid = function () {
 
         var checkboxSelector = new Slick.CheckboxSelectColumn({cssClass: "slick-cell-checkboxsel"});
         var columns = [checkboxSelector.getColumnDefinition(), {
-            id: "options", width: 50, sortable: false, name: '', formatter: searchesTableOptions
+            id: "options", minWidth: 50, name: '', formatter: searchesTableOptions
         }, {
             id: "keyword", field: "keyword", minWidth: 200, sortable: true, name: 'Keyword', formatter: formatKeyword
         },{
