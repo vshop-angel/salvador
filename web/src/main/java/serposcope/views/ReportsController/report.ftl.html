@@ -15,9 +15,27 @@
                 }
                 iframe.setAttribute(attr, attrs[attr]);
             }
+            var originalHeight = iframe.height;
+            var originalWidth = iframe.width;
             // We must enforce this
-            iframe.width = '100%';
-            iframe.height = '100%';
+            // iframe.width = '100%';
+            var style = iframe.style;
+
+            style.width = '100%';
+
+            iframe.width = undefined;
+            iframe.height = undefined;
+
+            var currentWidth = 0;
+            var update = function() {
+                var rectangle = iframe.getBoundingClientRect();
+                if (currentWidth !== rectangle.width) {
+                    currentWidth = rectangle.width;
+                    style.height = currentWidth * (originalHeight / originalWidth) + 'px';
+                }
+                setTimeout(update, 1000);
+            };
+            setTimeout(update, 0);
             container.appendChild(iframe);
         };
         loadIframe(${options});

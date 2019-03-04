@@ -79,7 +79,7 @@ public class GoogleGroupFilter extends AbstractFilter {
         // We are filtering the searches here
         List<GoogleSearch> filtered = new ArrayList<>();
         // Get current user
-        User user = (User) context.getAttribute("user");
+        User user = context.getAttribute("user", User.class);
         // For every search, copy only those that are
         // visible by the user
         for (GoogleSearch search : searches) {

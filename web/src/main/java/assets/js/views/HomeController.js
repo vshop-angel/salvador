@@ -93,7 +93,7 @@ serposcope.HomeController = function () {
             });            
         }
     };
-    
+
     var home = function() {
         $(window).bind("load resize", function () {
             resizeTabContent();
@@ -105,7 +105,7 @@ serposcope.HomeController = function () {
             highlighter: serposcope.sidebar.groupHighlighted,
             afterSelect: serposcope.sidebar.groupSelected
         });
-        
+
         renderCharts();
         $('.table-summary').stupidtable();
         $('#summary-filter').bind("keyup paste change", onFilterChange);

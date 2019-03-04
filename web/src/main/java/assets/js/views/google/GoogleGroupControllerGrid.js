@@ -128,7 +128,7 @@ serposcope.googleGroupControllerGrid = function () {
         },{
             id: "device", field: "device", minWidth: 100, sortable: true, name: 'Device', formatter: formatDevice
         },{
-            id: "country", field: "country", minWidth: 60, sortable: true, name: 'Country', formatter: formatCountry,
+            id: "country", field: "country", minWidth: 60, sortable: true, name: 'Country', formatter: formatCountry
         },{
             id: "datacenter", field: "datacenter", minWidth: 100, sortable: true, name: 'Datacenter'/*, formatter: formatDatacenter,*/
         },{
@@ -138,7 +138,7 @@ serposcope.googleGroupControllerGrid = function () {
         },{
             id: "category", field: "category", minWidth: 150, sortable: true, name: 'Category'/*, formatter: formatCustom*/
         },{
-            id: "volume", field: "volume", minWidth: 50, sortable: true, name: 'Volume'/*, formatter: formatCustom*/
+            id: "volume", field: "volume", minWidth: 50, sortable: true, name: 'Volume', formatter: formatNumber
         }];
         
         dataView = new Slick.Data.DataView();
@@ -243,7 +243,11 @@ serposcope.googleGroupControllerGrid = function () {
         } else {
             return rowData.country;
         }
-    };    
+    };
+
+    formatNumber = function (row, col, unk, colDef, rowData) {
+        return Number(rowData.volume);
+    };
     
     var getSelection = function() {
         return grid.getSelectedRows().map(dataView.getItem).map(function(x){ return x.id; });

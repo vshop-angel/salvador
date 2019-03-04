@@ -182,6 +182,7 @@ public class GoogleTargetSummaryDB extends AbstractDB {
                     List<Integer> topLostsIds = unserializeIds(tuple.get(t_summary.topLosts));
 
                     Set<Integer> searchIds = new HashSet<>();
+
                     searchIds.addAll(topRanksIds);
                     searchIds.addAll(topImprovementsIds);
                     searchIds.addAll(topLostsIds);

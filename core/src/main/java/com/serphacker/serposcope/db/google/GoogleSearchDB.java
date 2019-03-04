@@ -299,16 +299,16 @@ public class GoogleSearchDB extends AbstractDB {
     
     public Map<Integer, GoogleSearch> mapBySearchId(Collection<Integer> searchId){
         Map<Integer, GoogleSearch> searches = new HashMap<>();
-        
+
         try(Connection con = ds.getConnection()){
             
             SQLQuery<Tuple> query = new SQLQuery<Void>(con, dbTplConf)
                 .select(t_gsearch.all())
                 .from(t_gsearch)
                 .where(t_gsearch.id.in(searchId));
-            
+
             List<Tuple> tuples = query.fetch();
-            
+
             if(tuples != null){
                 for (Tuple tuple : tuples) {
                     searches.put(tuple.get(t_gsearch.id), fromTuple(tuple));
@@ -317,7 +317,7 @@ public class GoogleSearchDB extends AbstractDB {
         } catch(Exception ex){
             LOG.error("SQL error", ex);
         }
-        
+
         return searches;
     }
     

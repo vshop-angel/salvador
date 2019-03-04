@@ -9,13 +9,10 @@
 package com.serphacker.serposcope.models.google;
 
 import com.google.common.collect.MinMaxPriorityQueue;
-import com.serphacker.serposcope.models.google.GoogleTargetSummary.RankComparator;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
+import com.serphacker.serposcope.inteligenciaseo.SearchSettingsDB;
+import com.serphacker.serposcope.models.base.User;
+
+import java.util.*;
 
 
 public class GoogleTargetSummary {
@@ -67,7 +64,7 @@ public class GoogleTargetSummary {
     int scoreRaw;
     int scoreBP;
     int previousScoreBP;
-    
+
     Queue<GoogleRank> topRanks = MinMaxPriorityQueue.orderedBy(RANK_COMPARATOR).maximumSize(TOP_SIZE).create();
     Queue<GoogleRank> topImprovements = MinMaxPriorityQueue.orderedBy(IMPROVEMENT_COMPARATOR).maximumSize(TOP_SIZE).create();
     Queue<GoogleRank> topLosts = MinMaxPriorityQueue.orderedBy(TOP_LOST_COMPARATOR).maximumSize(TOP_SIZE).create();
@@ -269,18 +266,25 @@ public class GoogleTargetSummary {
 
     public int getDiffBP() {
         return scoreBP-previousScoreBP;
-    }    
+    }
+
+    private Queue<GoogleRank> scanAndFilterSearchIds(User user, SearchSettingsDB db, Set<Integer> searchIds, Queue<GoogleRank> ranks, Comparator<GoogleRank> comparator) {
+        PriorityQueue<GoogleRank> copy = new PriorityQueue<>(comparator);
+        for (GoogleRank rank : ranks) {
+            boolean onlyAdmins = db.getIsOnlyAdmins(rank.googleSearchId);
+            if (onlyAdmins && !user.isAdmin()) {
+                continue;
+            }
+            searchIds.add(rank.googleSearchId);
+            copy.add(rank);
+        }
+        return copy;
+    }
     
-    public void visitReferencedSearchId(Set<Integer> searchIds){
-        for (GoogleRank rank : topRanks) {
-            searchIds.add(rank.googleSearchId);
-        }
-        for (GoogleRank rank : topImprovements) {
-            searchIds.add(rank.googleSearchId);
-        }
-        for (GoogleRank rank : topLosts) {
-            searchIds.add(rank.googleSearchId);
-        }        
+    public void visitReferencedSearchId(User user, SearchSettingsDB db, Set<Integer> searchIds) {
+        topRanks = scanAndFilterSearchIds(user, db, searchIds, topRanks, new RankComparator());
+        topImprovements = scanAndFilterSearchIds(user, db, searchIds, topImprovements, new ImprovementComparator());
+        topLosts = scanAndFilterSearchIds(user, db, searchIds, topLosts, new TopLostComparator());
     }
     
 }

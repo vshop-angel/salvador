@@ -27,7 +27,7 @@ serposcope.googleSidebar = function () {
     };
     
     var targetSelected = function(target){
-        window.location = "/inteligenciaseo/" + target.group + "/target/" + target.id;
+        window.location = "/google/" + target.group + "/target/" + target.id;
     };
 
     var reportHighlighter = function(report) {
@@ -35,7 +35,7 @@ serposcope.googleSidebar = function () {
     };
 
     var reportSelected = function(report) {
-        window.location = "/inteligenciaseo/report/" + report.id;
+        window.location = "/google/report/" + report.id;
     };
 
     var targetSuggest = function(query, cb){
@@ -43,7 +43,7 @@ serposcope.googleSidebar = function () {
     };
 
     var reportSuggest = function(query, cb) {
-        $.getJSON('/inteligenciaseo/' + $('#csp-vars').data('group-id') + '/report/suggest?query=' + encodeURIComponent(query)).success(cb);
+        $.getJSON('/google/' + $('#csp-vars').data('group-id') + '/report/suggest?query=' + encodeURIComponent(query)).success(cb);
     };
     
     var render = function(){

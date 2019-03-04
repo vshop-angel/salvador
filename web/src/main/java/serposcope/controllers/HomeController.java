@@ -12,10 +12,13 @@ import com.google.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.db.base.RunDB;
 import com.serphacker.serposcope.db.google.GoogleDB;
+import com.serphacker.serposcope.inteligenciaseo.SearchSettingsDB;
 import com.serphacker.serposcope.models.base.Config;
 import com.serphacker.serposcope.models.base.Group;
 import com.serphacker.serposcope.models.base.Group.Module;
 import com.serphacker.serposcope.models.base.Run;
+import com.serphacker.serposcope.models.base.User;
+import com.serphacker.serposcope.models.google.GoogleSearch;
 import com.serphacker.serposcope.models.google.GoogleTarget;
 import com.serphacker.serposcope.models.google.GoogleTargetSummary;
 import java.time.LocalDate;
@@ -55,6 +58,9 @@ public class HomeController extends BaseController {
     
     @Inject
     DBSizeUtils dbSizeUtils;
+
+    @Inject
+    SearchSettingsDB settingsDB;
     
     public static class TargetHomeEntry {
 
@@ -103,14 +109,14 @@ public class HomeController extends BaseController {
         
         Map<Integer, GoogleTargetSummary> summariesByTarget = googleDB.targetSummary.list(
             lastRun.getId(), "table".equals(display)).stream().collect(
-                Collectors.toMap(GoogleTargetSummary::getTargetId,Function.identity())
+                Collectors.toMap(GoogleTargetSummary::getTargetId, Function.identity())
             );
-        
+
         List<GoogleTarget> targets = googleDB.target.list(groups.stream().map(Group::getId).collect(Collectors.toList()));
-        
+
         Map<Integer, Group> groupById = groups.stream().collect(Collectors.toMap(Group::getId, Function.identity()));
-        
-        
+
+
         for (GoogleTarget target : targets) {
             GoogleTargetSummary summary = summariesByTarget.get(target.getId());
             if(summary != null){
@@ -124,10 +130,13 @@ public class HomeController extends BaseController {
         }
         
         Set<Integer> searchIds = new HashSet<>();
+
+        User user = context.getAttribute("user", User.class);
         for (TargetHomeEntry homeEntry : summaries) {
-            homeEntry.summary.visitReferencedSearchId(searchIds);
+            GoogleTargetSummary summary = homeEntry.summary;
+            summary.visitReferencedSearchId(user, settingsDB, searchIds);
         }
-        
+
         return Results
             .ok()
             .template("/serposcope/views/HomeController/" + display + ".ftl.html")

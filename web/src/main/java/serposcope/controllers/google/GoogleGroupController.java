@@ -13,6 +13,7 @@ import com.serphacker.serposcope.inteligenciaseo.Report;
 import com.serphacker.serposcope.inteligenciaseo.ReportsDB;
 import com.serphacker.serposcope.inteligenciaseo.SearchSettings;
 import com.serphacker.serposcope.inteligenciaseo.SearchSettingsDB;
+import com.serphacker.serposcope.models.base.User;
 import ninja.Result;
 import ninja.Results;
 
@@ -843,15 +844,18 @@ public class GoogleGroupController extends GoogleController {
             Context context,
             @Param("query") String query
     ) {
-
         StringBuilder builder = new StringBuilder("[");
+        Group group = context.getAttribute("group", Group.class);
+        User user = context.getAttribute("user", User.class);
         getSearches(context).stream()
                 .filter((g) -> query == null ? true : g.getKeyword().contains(query))
+                .filter((g) -> user.isAdmin() || !settingsDB.getIsOnlyAdmins(g.getId()))
                 .sorted((o1, o2) -> o1.getId() - o2.getId())
                 .limit(10)
                 .forEach((g) -> {
                     builder.append("{")
                             .append("\"id\":").append(g.getId()).append(",")
+                            .append("\"group\":").append(group.getId()).append(",")
                             .append("\"name\":\"").append(StringEscapeUtils.escapeJson(g.getKeyword())).append("\"")
                             .append("},");
                 });
