@@ -47,6 +47,7 @@
 
 <#include "../../helpers/add-event-modal.ftl.html" >
 <div class="csp-script" data-src="googleTargetController.render" ></div>
+<#if user.isAdmin()>
 <div id="csp-vars"
      data-display="${display}"
      data-group-id="${group.getId()}"
@@ -59,6 +60,18 @@
      data-events="${eventsJson!"[]"}"
      data-xsrf="${session.___AT}"
      ></div>
-
+<#else>
+<div id="csp-vars"
+     data-display="${display}"
+     data-group-id="${group.getId()}"
+     data-target-id="${target.getId()}"
+     data-start-date="${startDate!""}"
+     data-end-date="${endDate!""}"
+     data-min-date="${minDate!""}"
+     data-max-date="${maxDate!""}"
+     data-chart="${ranksJson!"{}"}"
+     data-xsrf="${session.___AT}"
+     ></div>
+</#if>
 </@>
 </#macro>

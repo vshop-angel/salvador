@@ -33,6 +33,9 @@ import java.util.List;
 import java.util.Properties;
 import java.util.zip.GZIPOutputStream;
 import javax.sql.DataSource;
+
+import net.sourceforge.htmlunit.corejs.javascript.ContextFactory;
+import ninja.Context;
 import ninja.NinjaTest;
 import ninja.Result;
 import org.apache.commons.lang3.time.DurationFormatUtils;
@@ -90,7 +93,6 @@ public class GoogleTargetControllerIT {
 
         Run firstRun = runs.get(0);
         Run lastRun = runs.get(runs.size() - 1);
-
         for (int i = 0; i < 3; i++) {
             {
                 long _start = System.currentTimeMillis();

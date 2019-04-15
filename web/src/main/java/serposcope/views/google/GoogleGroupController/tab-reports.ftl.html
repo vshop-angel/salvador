@@ -3,8 +3,10 @@
         <table class="table table-condensed table-bordered table-striped" id="table-report" >
             <thead>
             <tr>
+                <#if user.isAdmin()>
                 <th class="compact-col" ></th>
                 <th>#</th>
+                </#if>
                 <th data-sort="string" >${i18n("label.name")} <i class="fa fa-sort" ></i></th>
                 <th>iframe</th>
             </tr>
@@ -15,6 +17,7 @@
                 <#assign summary = summaries?api.get(report.getId()) >
             </#if>
             <tr id="report-${report.getId()}">
+                <#if user.isAdmin()>
                 <td><input class="chk-report" type="checkbox" name="id[]" value="${report.getId()}" /></td>
                 <td  class="compact-col">
                     <#if user.isAdmin()>
@@ -25,6 +28,7 @@
                         </a>
                     </#if>
                 </td>
+                </#if>
                 <td><a class="report-name" href="${reverseRoute("inteligenciaseo.ReportsController","get","reportId",report.getId())}">${report.getName()}</a></td>
         		<td><span>${report.getIframe()}</span></td>
             </tr>

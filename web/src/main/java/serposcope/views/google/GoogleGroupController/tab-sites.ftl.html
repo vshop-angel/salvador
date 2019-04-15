@@ -3,8 +3,10 @@
         <table class="table table-condensed table-bordered table-striped" id="table-target" >
             <thead>
             <tr>
+                <#if user.isAdmin()>
                 <th class="compact-col text-center" ><a href="#" id="btn-chk-target">#</a></th>
                 <th class="compact-col" ></th>
+                </#if>
                 <!--<th style="width:120px;"></th>-->
                 <th data-sort="string" >${i18n("label.name")} <i class="fa fa-sort" ></i></th>
                 <th class="compact-col" >${i18n("label.type")}</th>
@@ -23,20 +25,20 @@
                 <#assign summary = summaries?api.get(target.getId()) >
             </#if>
             <tr id="target-${target.getId()}">
+                <#if user.isAdmin()>
                 <td><input class="chk-target" type="checkbox" name="id[]" value="${target.getId()}" /></td>
                 <td  class="compact-col">
-                    <#if user.isAdmin()>
-                    <a  href="${reverseRoute("google.GoogleGroupController","delTarget","groupId",group.getId())}" 
+                    <a  href="${reverseRoute("google.GoogleGroupController","delTarget","groupId",group.getId())}"
                         data-toggle="tooltip" title="${i18n("label.delete")}" 
                         class="btn-delete-target" data-id="${target.getId()}" >
                         <i class="glyphicon glyphicon-remove text-danger"></i></a>
                     <a  href="${reverseRoute("google.GoogleGroupController","renameTarget","groupId",group.getId())}" 
                         data-toggle="tooltip" title="${i18n("label.rename")}" 
                         class="btn-rename-target" data-id="${target.getId()}" >
-                        <i class="glyphicon glyphicon-edit"></i></a>                                        
-                    </#if>
+                        <i class="glyphicon glyphicon-edit"></i></a>
                 </td>
-                <!--<td></td>-->                                
+                </#if>
+                <!--<td></td>-->
                 <td><a class="target-name" href="${reverseRoute("google.GoogleTargetController", "target", 
                        "groupId", group.getId(), "targetId", target.getId())}" >${target.getName()}</a>
                     <a href="${reverseRoute("google.GoogleTargetController","target","groupId",group.getId(), "targetId", target.getId(), "display", "variation")}" data-toggle="tooltip" title="${i18n("google.target.variations")}" ><span class="fa fa-random"></span></a>                    
