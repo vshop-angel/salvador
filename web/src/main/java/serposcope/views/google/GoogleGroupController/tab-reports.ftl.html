@@ -31,6 +31,7 @@
             </#list>
             </tbody>
         </table>
+        <#if user.isAdmin()>
         <div style="margin-bottom: 20px;">
             <a href="#" class="btn btn-primary btn-add-report" title="${i18n("label.addReport")}" data-toggle="tooltip" >
                <i class="glyphicon glyphicon-star hidden-lg" ></i><span class="hidden-xs hidden-sm hidden-md" >${i18n("label.addReport")}</span>
@@ -38,5 +39,6 @@
             <input id="btn-delete-reports" type="button" class="btn btn-danger" value="${i18n("label.delReport")}"
                 data-action="${reverseRoute("google.GoogleGroupController","deleteReport","groupId",group.getId())}" />
         </div>
+        </#if>
     </div>
 </div>

@@ -1,7 +1,6 @@
 package com.serphacker.serposcope.inteligenciaseo;
 
 import com.google.inject.Singleton;
-import com.querydsl.core.Tuple;
 import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.dml.SQLInsertClause;
 import com.querydsl.sql.dml.SQLUpdateClause;
@@ -15,7 +14,7 @@ import java.util.List;
 
 @Singleton
 public class SearchSettingsDB extends AbstractDB {
-    QSearchSettings t_search_settings = QSearchSettings.t_search_settings;
+    QSearchSettings t_search_settings = QSearchSettings.searchSettings;
     SearchSettingsDB() {
     }
 
@@ -162,6 +161,29 @@ public class SearchSettingsDB extends AbstractDB {
                     .set(t_search_settings.adminsOnly, onlyAdmin)
                     .where(t_search_settings.searchId.eq(searchId).and(t_search_settings.groupId.eq(groupId)))
                     .execute();
+            return result == 1L;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            LOG.error("SQLError ex", ex);
+        }
+        return false;
+    }
+
+    public boolean setVisibleForAll(Integer searchId, Integer groupId, Boolean visible) {
+        try (Connection con = ds.getConnection()) {
+            long result;
+            if (exists(searchId)) {
+                result = new SQLUpdateClause(con, dbTplConf, t_search_settings)
+                        .set(t_search_settings.adminsOnly, !visible)
+                        .where(t_search_settings.searchId.eq(searchId).and(t_search_settings.groupId.eq(groupId)))
+                        .execute();
+            } else {
+                result = new SQLInsertClause(con, dbTplConf, t_search_settings)
+                        .set(t_search_settings.searchId, searchId)
+                        .set(t_search_settings.groupId, groupId)
+                        .set(t_search_settings.adminsOnly, true)
+                        .execute();
+            }
             return result == 1L;
         } catch (Exception ex) {
             ex.printStackTrace();

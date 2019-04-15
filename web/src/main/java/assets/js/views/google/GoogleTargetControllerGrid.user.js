@@ -85,7 +85,7 @@ serposcope.googleTargetControllerGrid = function () {
         $.getJSON(url)
             .done(function (json) {
                 $(".ajax-loader").remove();
-                data = json[0];
+                data = json[0].slice(1);
                 days = json[1];
                 renderGrid();
             }).fail(function (err) {
@@ -103,13 +103,6 @@ serposcope.googleTargetControllerGrid = function () {
         };
 
         var columns = [{
-            id: "visibility",
-            name: '<i class="fa fa-eye"></i>',
-            width: COL_WIDTH,
-            formatter: formatVisibilityCell,
-            sortable: false,
-            toolTip: 'Visible only to administrators?'
-        }, {
             id: "search",
             name: '<div class="header-search" >&nbsp;&nbsp;Searches <i class="glyphicon glyphicon-sort" ></i></div>',
             field: "id",
@@ -256,57 +249,9 @@ serposcope.googleTargetControllerGrid = function () {
         return !(filter.category != -1 && search[COL_SEARCH_CATEGORY].toLowerCase().indexOf(filter.category) === -1);
     };
 
-    window.setKeywordVisibility = function (checkbox, id) {
-        var toQueryString = function(obj) {
-            var params = [];
-            for (var key in obj) {
-                if (obj.hasOwnProperty(key)) {
-                    params.push(key + '=' + obj[key])
-                }
-            }
-            return params.join('&');
-        };
-        var variables = $('#csp-vars');
-        var request = {
-            id: id,
-            visible: checkbox.checked,
-            _xsrf: variables.attr('data-xsrf')
-        };
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', "/google/" + variables.attr('data-group-id') + "/search/set-visibility", true);
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState !== 4)
-                return;
-            if (xhr.status !== 200) {
-                checkbox.checked = !checkbox.checked;
-                alert("Unexpected Error");
-            }
-        };
-        xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
-        xhr.send(toQueryString(request))
-    };
-
-    var formatVisibilityCell = function (row, col, unk, colDef, rowData) {
-        if (row == 0) {
-            return null;
-        }
-        var cell = rowData[COL_SEARCH_SETTINGS];
-        if (!cell)
-            return null;
-        if (!cell.is_admins_only) {
-            return '<input type="checkbox" checked onchange="setKeywordVisibility(this, ' + rowData[COL_ID] + ')">'
-        } else {
-            return '<input type="checkbox" onchange="setKeywordVisibility(this, '  + rowData[COL_ID] +  ')">'
-        }
-    };
-
     var formatVolumeCell = function (row, col, unk, colDef, rowData) {
-        if (row === 0) {
-            return '-';
-        } else {
-            var value = parseInt(rowData[COL_SEARCH_SETTINGS].volume);
-            return isNaN(value) ? '-' : value;
-        }
+        var value = parseInt(rowData[COL_SEARCH_SETTINGS].volume);
+        return isNaN(value) ? '-' : value;
     };
 
     var formatSearchCell = function (row, col, unk, colDef, rowData) {
@@ -335,23 +280,7 @@ serposcope.googleTargetControllerGrid = function () {
     };
 
     var formatGridCell = function (row, col, unk, colDef, rowData) {
-        if (row === 0) {
-            return formatCalendarCell(row, col - 2, unk, colDef, rowData);
-        } else {
-            return formatRankCell(row, col - 2, unk, colDef, rowData);
-        }
-    };
-
-    var formatCalendarCell = function (row, col, unk, colDef, rowData) {
-        var event = rowData[COL_EVENTS][col - 1];
-        if (event === 0) {
-            return null;
-        }
-        return '<div class="text-center pointer" rel="popover" data-toggle="tooltip" ' +
-            'title="' + serposcope.utils.escapeHTMLQuotes(event[COL_EVENTS_TITLE]) + '" ' +
-            'data-content="' + serposcope.utils.escapeHTMLQuotes(event[COL_EVENTS_DESCRIPTION]) + '" >' +
-            '<i class="fa fa-calendar" ></i>' +
-            '</div>';
+        return formatRankCell(row, col - 1, unk, colDef, rowData);
     };
 
     var formatRankCell = function (row, col, unk, colDef, rowData) {

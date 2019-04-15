@@ -12,8 +12,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
 import com.google.inject.Inject;
 import com.serphacker.serposcope.inteligenciaseo.SearchSettingsDB;
-import ninja.Result;
-import ninja.Results;
+import com.serphacker.serposcope.models.base.User;
+import ninja.*;
 
 import com.google.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
@@ -37,12 +37,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import ninja.Context;
-import ninja.Router;
+
 import ninja.i18n.Messages;
 import ninja.params.Param;
 import ninja.params.PathParam;
+import ninja.session.FlashScope;
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.hibernate.annotations.Filter;
+import serposcope.filters.AdminFilter;
+import serposcope.filters.XSRFFilter;
 
 
 @Singleton
@@ -64,8 +67,12 @@ public class GoogleSearchController extends GoogleController {
     Messages msg;
     
     @Inject
-    ObjectMapper objectMapper;    
-    
+    ObjectMapper objectMapper;
+
+    @Inject
+    SearchSettingsDB searchSettingsDB;
+
+
     public Result search(Context context, 
         @PathParam("searchId") Integer searchId,
         @Param("startDate") String startDateStr,
@@ -140,16 +147,15 @@ public class GoogleSearchController extends GoogleController {
                 bestRankings.put(best.getGoogleTargetId(), best);
             }
         }
-        
-        
-        
+
         String jsonRanks = getJsonRanks(group, targets, firstRun, lastRun, searchId);
         Config config = baseDB.config.getConfig();
 
         List<String> categories = settingsDB.getCategories();
+        User user = context.getAttribute("user", User.class);
         return Results.ok()
             .render("displayMode", config.getDisplayGoogleSearch())
-            .render("events", jsonEvents)
+            .render("events", user.isAdmin() ? jsonEvents : "[]")
             .render("targets", targets)
             .render("chart", jsonRanks)
             .render("search", search)
@@ -339,6 +345,24 @@ public class GoogleSearchController extends GoogleController {
             .addHeader("Content-Disposition", "attachment; filename=\"" + serp.getRunDay().toLocalDate() + ".csv\"")
             .renderRaw(builder.toString());
     }    
-    
-    
+
+    @FilterWith({
+            XSRFFilter.class,
+            AdminFilter.class
+    })
+     public Result setVisibility(Context context,
+                                @Param("id") Integer searchId,
+                                @Param("visible") Boolean visible)
+    {
+        FlashScope flash = context.getFlashScope();
+        Group group = context.getAttribute("group", Group.class);
+        if (searchSettingsDB.setVisibleForAll(searchId, group.getId(), visible)) {
+            flash.success("inteligenciaseo.visibilityChanged");
+            return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()) + "#tab-searches");
+        } else {
+            flash.error("error.changeVisibilityFailed");
+            return Results.text();
+        }
+    }
+
 }

@@ -16,6 +16,7 @@
 <@layout.rootLayout i18n("home.title") "${sideMenu}" >
 <div class="home" >
     <div class="row" >
+        <#if user.isAdmin()>
         <div class="col-xs-6" >
             <div>
                 ${i18n("label.dbSize")} : <#if diskUsage?? >${diskUsage}<#else>${i18n("label.unavailableOnMySQL")}</#if> 
@@ -25,8 +26,12 @@
                 ${i18n("label.diskFree")} : <#if diskFree?? >${diskFree}<#else>${i18n("label.unavailable")}</#if>
             </div>
         </div>
+        </#if>
+        <#if user.isAdmin()>
         <div class="col-xs-6" >
-            
+        <#else>
+        <div>
+        </#if>
             <div class="home-right-links" >
                 <div class="input-group">
                     <div class="input-group-btn" >
@@ -37,7 +42,8 @@
                     </div>
                 </div>    
             </div>            
-            
+
+            <#if user.isAdmin()>
             <div class="home-task-summary">
                 <div>
                     <span style="padding-right: 5px;">${i18n("home.lastTasks")} : </span>
@@ -96,7 +102,7 @@
                 </div>
                 </#if>
             </div>
-            
+             </#if>
         </div>
     </div>
 

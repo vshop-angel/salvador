@@ -106,9 +106,10 @@ public class HomeController extends BaseController {
         }
         
         List<TargetHomeEntry> summaries = new ArrayList<>();
-        
-        Map<Integer, GoogleTargetSummary> summariesByTarget = googleDB.targetSummary.list(
-            lastRun.getId(), "table".equals(display)).stream().collect(
+
+        User user = context.getAttribute("user", User.class);
+        Map<Integer, GoogleTargetSummary> summariesByTarget = googleDB.targetSummary.listForUser(
+            lastRun.getId(), user).stream().collect(
                 Collectors.toMap(GoogleTargetSummary::getTargetId, Function.identity())
             );
 
@@ -131,7 +132,6 @@ public class HomeController extends BaseController {
         
         Set<Integer> searchIds = new HashSet<>();
 
-        User user = context.getAttribute("user", User.class);
         for (TargetHomeEntry homeEntry : summaries) {
             GoogleTargetSummary summary = homeEntry.summary;
             summary.visitReferencedSearchId(user, settingsDB, searchIds);

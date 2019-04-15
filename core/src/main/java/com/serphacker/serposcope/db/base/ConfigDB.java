@@ -43,6 +43,8 @@ public class ConfigDB extends AbstractDB {
     public final static String APP_DISPLAY_HOME = "app.display.home";
     public final static String APP_DISPLAY_GOOGLE_TARGET = "app.display.google.target";
     public final static String APP_DISPLAY_GOOGLE_SEARCH = "app.display.google.search";
+
+    public final static String APP_BACKUP_TIME = "app.backup-time";
     
     public final static String APP_PRUNE_RUNS = "app.prune.runs";
     
@@ -133,6 +135,7 @@ public class ConfigDB extends AbstractDB {
         Config config = new Config();
 
         config.setCronTime(get(APP_CRON_TIME, null));
+        config.setBackupTime(get(APP_BACKUP_TIME, null));
         
         config.setDbcUser(get(APP_DBC_USER,null));
         config.setDbcPass(get(APP_DBC_PASS,null));
@@ -157,7 +160,8 @@ public class ConfigDB extends AbstractDB {
     
     public void updateConfig(Config config){
         update(APP_CRON_TIME, config.getCronTime() == null ? null : config.getCronTime().toString());
-        
+        update(APP_BACKUP_TIME, config.getBackupTime() == null ? null : config.getBackupTime().toString());
+
         update(APP_DBC_USER, config.getDbcUser());
         update(APP_DBC_PASS, config.getDbcPass());
 

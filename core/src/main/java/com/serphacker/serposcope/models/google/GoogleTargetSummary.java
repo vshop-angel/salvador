@@ -52,18 +52,21 @@ public class GoogleTargetSummary {
     
     public final static int TOP_SIZE = 5;
     
-    int groupId;
-    int targetId;
-    int runId;
+    private int groupId;
+    private int targetId;
+    private int runId;
     
-    int totalTop3;
-    int totalTop10;
-    int totalTop100;
-    int totalOut;
+    private int totalTop3;
+    private int totalTop10;
+    private int totalTop100;
+    private int totalOut;
     
-    int scoreRaw;
-    int scoreBP;
-    int previousScoreBP;
+    private int scoreRaw;
+    private int scoreBP;
+
+    private int previousScoreRaw;
+    private int previousScoreBP;
+    private int searchesCount;
 
     Queue<GoogleRank> topRanks = MinMaxPriorityQueue.orderedBy(RANK_COMPARATOR).maximumSize(TOP_SIZE).create();
     Queue<GoogleRank> topImprovements = MinMaxPriorityQueue.orderedBy(IMPROVEMENT_COMPARATOR).maximumSize(TOP_SIZE).create();
@@ -80,6 +83,8 @@ public class GoogleTargetSummary {
     }
     
     public synchronized void addRankCandidat(GoogleRank rank){
+        searchesCount += 1;
+        previousScoreRaw += getRankScore(rank.previousRank);
         scoreRaw += getRankScore(rank.rank);
         
         if(rank.rank <=3 ){
@@ -249,7 +254,9 @@ public class GoogleTargetSummary {
     }
 
     public int getScoreBP() {
-        return scoreBP;
+        if (searchesCount == 0)
+            return 0;
+        return 100 * scoreRaw / searchesCount;
     }
 
     public void setScoreBP(int scoreBP) {
@@ -257,7 +264,9 @@ public class GoogleTargetSummary {
     }
 
     public int getPreviousScoreBP() {
-        return previousScoreBP;
+        if (searchesCount == 0)
+            return 0;
+        return 100 * previousScoreRaw / searchesCount;
     }
 
     public void setPreviousScoreBP(int previousScoreBP) {
@@ -265,7 +274,7 @@ public class GoogleTargetSummary {
     }
 
     public int getDiffBP() {
-        return scoreBP-previousScoreBP;
+        return getScoreBP() - getPreviousScoreBP();
     }
 
     private Queue<GoogleRank> scanAndFilterSearchIds(User user, SearchSettingsDB db, Set<Integer> searchIds, Queue<GoogleRank> ranks, Comparator<GoogleRank> comparator) {

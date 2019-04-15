@@ -8,24 +8,6 @@
 
 /* global serposcope, Slick */
 
-var inteligenciaSEOEditKeyword = function(event, id, category, volume, isAdminOnly) {
-    var target = $(event.currentTarget);
-    var content = $('#edit-keyword');
-    // Hide the modal if visible
-    $('.modal').modal('hide');
-    // Build the new modal
-    $(content).find('#searchEditId').val(target.attr('data-id'));
-    $(content).find('#searchEditCategory').val(category);
-    $(content).find('#searchEditVolume').val(volume);
-    if (isAdminOnly === false) {
-        $(content).find('input[name="onlyAdmin"][value="false"]').attr('checked', 'checked');
-    } else {
-        $(content).find('input[name="onlyAdmin"][value="true"]').attr('checked', 'checked');
-    }
-    content.modal();
-    return false;
-};
-
 serposcope.googleGroupControllerGrid = function () {
 
     var grid = null;
@@ -68,6 +50,7 @@ serposcope.googleGroupControllerGrid = function () {
             renderGrid();
         }).fail(function (err) {
             $(".ajax-loader").remove();
+            console.log("error", err);
             $("#group-searches-grid").html("error");
         });        
     };
@@ -92,22 +75,8 @@ serposcope.googleGroupControllerGrid = function () {
             }
         };
 
-        var searchesTableOptions = function(row, col, unk, colDef, rowData) {
-            var args = [rowData.id, toString(rowData.category), rowData.volume, rowData.isAdminOnly].join(',');
-            return '<span class="search-options">' +
-                '<a onclick="return inteligenciaSEOEditKeyword(event, ' + args + ')" data-id="' + rowData.id + '" id="btn-edit-keyword" class="edit" title="Edit"><i class="glyphicon glyphicon-edit"></i></a>' +
-                '</span>';
-        };
-
         var checkboxSelector = new Slick.CheckboxSelectColumn({cssClass: "slick-cell-checkboxsel"});
-        var columns = [checkboxSelector.getColumnDefinition(), {
-            id: "options",
-            width: 22,
-            name: '<i class="fa fa-cogs"></i>',
-            formatter: searchesTableOptions
-        }, {
-            id: "visibility", width: 22, name: '<i class="fa fa-eye"></i>', formatter: visibilityTableOption, cssClass: 'slick-cell-checkboxsel'
-        }, {
+        var columns = [{
             id: "keyword", field: "keyword", minWidth: 200, sortable: true, name: 'Keyword', formatter: formatKeyword
         },{
             id: "device", field: "device", minWidth: 100, sortable: true, name: 'Device', formatter: formatDevice

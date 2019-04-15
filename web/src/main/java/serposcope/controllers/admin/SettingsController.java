@@ -91,7 +91,8 @@ public class SettingsController extends BaseController {
         @Param("anticaptchaApiKey") String anticaptchaApiKey,
         @Param("twoCaptchaKey") String twoCaptchaKey,
         @Param("imageTyperzKey") String imageTyperzKey,
-        @Param("pruneRuns") Integer pruneRuns
+        @Param("pruneRuns") Integer pruneRuns,
+        @Param("backupTime") String backupTime
     ){
         FlashScope flash = context.getFlashScope();
         
@@ -106,12 +107,17 @@ public class SettingsController extends BaseController {
                 flash.error("admin.settings.cronTimeError");
                 return Results.redirect(router.getReverseRoute(SettingsController.class, "settings"));                
             }
-//            Matcher matcher = PATTERN_CRONTIME.matcher(cronTime);
-//            if(!matcher.find()){
-//                flash.error("admin.settings.cronTimeError");
-//                return Results.redirect(router.getReverseRoute(SettingsController.class, "settings"));
-//            }
-//            config.setCronTime(LocalTime.of(Integer.parseInt(matcher.group(0)), Integer.parseInt(matcher.group(1))));
+        }
+
+        if ((backupTime == null) || backupTime.isEmpty()) {
+            config.setBackupTime("");
+        } else {
+            try {
+                config.setBackupTime(LocalTime.parse(backupTime));
+            } catch(Exception ex){
+                flash.error("admin.settings.cronTimeError");
+                return Results.redirect(router.getReverseRoute(SettingsController.class, "settings"));
+            }
         }
         
         if(!Validator.isEmpty(dbcUser) && !Validator.isEmpty(dbcPass)){

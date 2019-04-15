@@ -19,7 +19,15 @@
                     >
                     <span class="help-block">${i18n("admin.settings.cronTimeHelp")}</span>
                 </div>
-                
+
+                <div class="form-group" >
+                    <label for="backupTime" >${i18n("admin.settings.backupTime")} (${i18n("label.serverTime")} = ${serverTime})</label>
+                    <input id="backupTime" class="form-control" name="backupTime" placeholder="${i18n("admin.settings.cronTimeExample")}"
+                        value="<#if config.getBackupTime()??><#if config.getBackupTime().getHour() < 10>0</#if>${config.getBackupTime().getHour()}:<#if config.getBackupTime().getMinute() < 10>0</#if>${config.getBackupTime().getMinute()}</#if>"
+                    >
+                    <span class="help-block">${i18n("admin.settings.cronTimeHelp")}</span>
+                </div>
+
                 <hr/>
                 <div class="form-group" >
                     <label for="pruneRuns" >${i18n("admin.settings.historyLimit")}</label>

@@ -118,9 +118,10 @@ public class GoogleGroupController extends GoogleController {
             }
         }
 
+        User user = context.getAttribute("user", User.class);
         return Results
                 .ok()
-                .render("events", baseDB.event.list(group, null, null))
+                .render("events", user.isAdmin() ? baseDB.event.list(group, null, null) : "[]")
                 .render("default", googleDB.options.get())
                 .render("searchesSize", context.getAttribute("searches", List.class).size())
                 .render("reportsCount", 0)
@@ -186,7 +187,7 @@ public class GoogleGroupController extends GoogleController {
                                     .append(search.getCustomParameters() == null ? "" : StringEscapeUtils.escapeJson(search.getCustomParameters()))
                                     .append("\",")
                                     .append("\"volume\":")
-                                    .append(volume == null ? "0" : StringEscapeUtils.escapeJson(volume))
+                                    .append(getAsInteger(volume))
                                     .append(",")
                                     .append("\"isAdminOnly\":")
                                     .append(isAdminOnly ? "true" : "false")
@@ -216,6 +217,14 @@ public class GoogleGroupController extends GoogleController {
 
     }
 
+    private String getAsInteger(String volume) {
+        if ((volume == null) || (volume.isEmpty())) {
+            return "0";
+        }
+        Integer value = Integer.valueOf(volume);
+        return value.toString();
+    }
+
     @FilterWith({
             XSRFFilter.class,
             AdminFilter.class
@@ -227,8 +236,7 @@ public class GoogleGroupController extends GoogleController {
                              @Param("onlyAdmin") Boolean onlyAdmin) {
         FlashScope flash = context.getFlashScope();
         Group group = context.getAttribute("group", Group.class);
-
-        if (settingsDB.update(searchId, group.getId(), category, volume, onlyAdmin) == true) {
+        if (settingsDB.update(searchId, group.getId(), category, volume, onlyAdmin)) {
             flash.success("inteligenciaseo.searchEdited");
         } else {
             flash.error("error.searchEditError");

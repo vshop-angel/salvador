@@ -1,3 +1,4 @@
+<#if user.isAdmin()>
 <table class="table table-bordered table-striped">
     <tr>
         <th style="width:40px;">#</th>
@@ -29,3 +30,4 @@
        <i class="fa fa-fw fa-calendar hidden-lg" ></i><span class="hidden-xs hidden-sm hidden-md" > ${i18n("label.addEvent")}</span>
     </a>
 </div>
+</#if>

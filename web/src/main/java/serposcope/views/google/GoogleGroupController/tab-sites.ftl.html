@@ -105,12 +105,14 @@
             </#list>
             </tbody>
         </table>
+        <#if user.isAdmin()>
         <div style="margin-bottom: 20px;">
             <a href="#" class="btn btn-primary btn-add-target" title="${i18n("label.addWebsite")}" data-toggle="tooltip" >
                <i class="glyphicon glyphicon-star hidden-lg" ></i><span class="hidden-xs hidden-sm hidden-md" > ${i18n("label.addWebsite")}</span>
             </a>
             <input id="btn-delete-targets" type="button" class="btn btn-danger" value="${i18n("google.group.deleteWebsites")}" 
                 data-action="${reverseRoute("google.GoogleGroupController","delTarget","groupId",group.getId())}" />
-        </div>                        
+        </div>
+        </#if>
     </div>
 </div>

@@ -9,10 +9,14 @@ package com.serphacker.serposcope.db.google;
 
 import com.google.inject.Singleton;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.dml.SQLDeleteClause;
 import com.querydsl.sql.dml.SQLMergeClause;
 import com.serphacker.serposcope.db.AbstractDB;
+import com.serphacker.serposcope.inteligenciaseo.QSearchSettings;
+import com.serphacker.serposcope.models.base.User;
+import com.serphacker.serposcope.models.google.GoogleRank;
 import com.serphacker.serposcope.models.google.GoogleTargetSummary;
 import com.serphacker.serposcope.querybuilder.QGoogleRank;
 import com.serphacker.serposcope.querybuilder.QGoogleTargetSummary;
@@ -31,6 +35,7 @@ public class GoogleTargetSummaryDB extends AbstractDB {
 
     QGoogleTargetSummary t_summary = QGoogleTargetSummary.googleTargetSummary;
     QGoogleRank t_rank = QGoogleRank.googleRank;
+    QSearchSettings t_search_settings = QSearchSettings.searchSettings;
 
     public int insert(Collection<GoogleTargetSummary> summaries){
         int inserted = 0;
@@ -147,6 +152,42 @@ public class GoogleTargetSummaryDB extends AbstractDB {
     
     public List<GoogleTargetSummary> list(int runId){
         return list(runId, false);
+    }
+
+    public List<GoogleTargetSummary> listForUser(int runId, User user) {
+        try (Connection con =  ds.getConnection()){
+            Map<Integer, GoogleTargetSummary> map = new HashMap<>();
+            BooleanExpression predicate = t_rank.runId.eq(runId);
+            if (!user.isAdmin()) {
+                predicate = predicate.and(
+                        t_search_settings.adminsOnly.eq(false).or(t_search_settings.adminsOnly.isNull())
+                );
+            }
+            List<Tuple> rankTuples = new SQLQuery<Void>(con, dbTplConf)
+                    .select(t_rank.all())
+                    .from(t_rank)
+                    .leftJoin(t_search_settings)
+                    .on(t_search_settings.searchId.eq(t_rank.googleSearchId))
+                    .where(predicate)
+                    .fetch()
+            ;
+            for (Tuple tuple: rankTuples) {
+                GoogleTargetSummary summary;
+                GoogleRank rank = GoogleRankDB.fromTuple(tuple);
+                if (map.containsKey(rank.googleTargetId)) {
+                    summary = map.get(rank.googleTargetId);
+                } else {
+                    summary = new GoogleTargetSummary(rank.groupId, rank.googleTargetId, rank.runId, 0);
+                    map.put(rank.googleTargetId, summary);
+                }
+                summary.addRankCandidat(rank);
+            }
+            List<GoogleTargetSummary> summaries = new ArrayList<>(map.values());
+            return summaries;
+        } catch (Exception ex) {
+            LOG.error("SQLError", ex);
+        }
+        return new ArrayList<>();
     }
     
     public List<GoogleTargetSummary> list(int runId, boolean skipTop){

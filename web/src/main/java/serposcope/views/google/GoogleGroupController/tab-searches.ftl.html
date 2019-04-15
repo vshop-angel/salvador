@@ -4,6 +4,7 @@
         <div id="group-searches-grid" style="height: 100%;" >
             <img class="ajax-loader" src="/assets/img/loader.gif" />
         </div>
+        <#if user.isAdmin()>
         <div>
             <a href="#" class="btn btn-primary btn-add-search" title="${i18n("label.addSearch")}" data-toggle="tooltip" >
                <i class="glyphicon glyphicon-search hidden-lg" ></i><span class="hidden-xs hidden-sm hidden-md" > ${i18n("label.addSearch")}</span>
@@ -13,6 +14,7 @@
             <input id="btn-delete-searches" type="button" class="btn btn-danger" value="${i18n("google.group.deleteKeywords")}" 
                 data-action="${reverseRoute("google.GoogleGroupController","delSearch","groupId",group.getId())}" />
         </div>
+        </#if>
     </div>
 </div>
 <div id="grid-vars" data-data="${searchesJson!"[]"}" ></div>

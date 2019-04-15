@@ -221,20 +221,19 @@ serposcope.googleGroupController = function () {
     };
     
     var bulkSearchSubmit = function(){
-        var keyword = [], country = [], datacenter = [], device = [], local = [], custom = [];
+        var keyword = [], country = [], datacenter = [], device = [], local = [], custom = [], category = [], visibility = [], volume = [];
         if($('#bulk-search').val() == ""){
             alert("no search specified");
             return false;
         }
         
         var lines = $('#bulk-search').val().split(/\r?\n/);
-        
         for(var i = 0; i< lines.length; i++){
             lines[i] = lines[i].replace(/(^\s+)|(\s+$)/g,"");
             if(lines[i].length == 0){
                 continue;
             }
-            
+
             var params = Papa.parse(lines[i]);
             if(params.data.length != 1){
                 alert("error at line " + i + " : " + lines[i]);
@@ -242,10 +241,30 @@ serposcope.googleGroupController = function () {
             }
             params = params.data[0];
             keyword[i] = params[0];
-            country[i] = params.length > 1 ? params[1] : $('#csp-vars').attr('data-default-country');
-            datacenter[i] = params.length > 2 ? params[2]  : $('#csp-vars').attr('data-default-datacenter');
-            if(params.length > 3){
-                switch(params[3].toLowerCase()){
+
+            category[i] = params[1];
+            volume[i] = parseInt(params[2]);
+            if (isNaN(volume[i])) {
+                alert("`volume' must be a number");
+                return false;
+            }
+            switch (params[3]) {
+                case 'only-admin':
+                    visibility[i] = true;
+                    break;
+                case 'all':
+                    visibility[i] = false;
+                    break;
+                default:
+                    alert("`visibility' is not recognized, valid values are: only-admin or all");
+                    return false;
+            }
+
+
+            country[i] = params[4] || $('#csp-vars').attr('data-default-country');
+            datacenter[i] = params[5] || $('#csp-vars').attr('data-default-datacenter');
+            if (params[6]) {
+                switch(params[6].toLowerCase()){
                     case "desktop":
                         device[i] = 0;
                         break;
@@ -259,8 +278,8 @@ serposcope.googleGroupController = function () {
             } else {
                 device[i] = parseInt($('#csp-vars').attr('data-default-device'));
             }
-            local[i] = params.length > 4 ? params[4]  : $('#csp-vars').attr('data-default-local');
-            custom[i] = params.length > 5 ? params[5]  : $('#csp-vars').attr('data-default-custom');
+            local[i] = params[7] || $('#csp-vars').attr('data-default-local');
+            custom[i] = params[8] || $('#csp-vars').attr('data-default-custom');
         }
         
         var form = $('<form>', {
@@ -284,6 +303,9 @@ serposcope.googleGroupController = function () {
             inputs.push($('<input>', {'name': 'device[]','value': device[i],'type': 'hidden'})[0]);
             inputs.push($('<input>', {'name': 'local[]','value': local[i],'type': 'hidden'})[0]);
             inputs.push($('<input>', {'name': 'custom[]','value': custom[i],'type': 'hidden'})[0]);
+            inputs.push($('<input>', {'name': 'categories[]','value': category[i],'type': 'hidden'})[0]);
+            inputs.push($('<input>', {'name': 'volumes[]','value': volume[i],'type': 'hidden'})[0]);
+            inputs.push($('<input>', {'name': 'onlyAdmin[]','value': visibility[i],'type': 'hidden'})[0]);
         }
         form.append(inputs);
         form.appendTo(document.body).submit();

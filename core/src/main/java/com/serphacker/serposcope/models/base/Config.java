@@ -31,6 +31,7 @@ public class Config {
     String twoCaptchaKey;
     
     String imageTyperzKey;
+    LocalTime backupTime;
     
     public final static String DEFAULT_DISPLAY_HOME = "summary";
     public final static List<String> VALID_DISPLAY_HOME = Arrays.asList("summary","table");
@@ -118,6 +119,24 @@ public class Config {
             this.cronTime = LocalTime.parse(dateTime);
         } catch(Exception ex){
             this.cronTime = null;
+        }
+    }
+    public LocalTime getBackupTime() {
+        return backupTime;
+    }
+
+    public void setBackupTime(LocalTime backupTime) {
+        this.backupTime = backupTime;
+    }
+
+    public void setBackupTime(String dateTime){
+        if(dateTime == null || dateTime.isEmpty()){
+            this.backupTime = null;
+        }
+        try{
+            this.backupTime = LocalTime.parse(dateTime);
+        } catch(Exception ex){
+            this.backupTime = null;
         }
     }
 

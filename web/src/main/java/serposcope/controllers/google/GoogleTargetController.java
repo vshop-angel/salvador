@@ -668,9 +668,13 @@ public class GoogleTargetController extends GoogleController {
 
                 if (i == runs.size() - 1) {
                     builder.deleteCharAt(builder.length() - 1);
-                    builder.append("],[");
-                    builder.append(settingsDB.getVolume(search.getId()));
-                    builder.append("]]");
+                    builder.append("],{");
+                    builder.append("\"volume\":");
+                    builder.append(getVolume(search.getId()));
+                    builder.append(",");
+                    builder.append("\"is_admins_only\":");
+                    builder.append(settingsDB.getIsOnlyAdmins(search.getId()) ? "true" : "false");
+                    builder.append("}]");
                 }
             }
         }
@@ -691,6 +695,15 @@ public class GoogleTargetController extends GoogleController {
             }
         }
         writer.append("]]");
+    }
+
+    private String getVolume(int id) {
+        String volume = settingsDB.getVolume(id);
+        if ((volume == null) || volume.isEmpty()) {
+            return "0";
+        }
+        Integer value = Integer.valueOf(volume);
+        return value.toString();
     }
 
     protected String getTableJsonData0(

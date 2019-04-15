@@ -130,6 +130,7 @@ public class Routes implements ApplicationRoutes {
         router.GET().route("/google/{groupId: [0-9]+}/target/{targetId: [0-9]+}/ranks").with(GoogleTargetController.class, "jsonRanks");
         router.GET().route("/google/{groupId: [0-9]+}/target/{targetId: [0-9]+}/variation").with(GoogleTargetController.class, "jsonVariation");
         router.GET().route("/google/{groupId: [0-9]+}/target/{targetId: [0-9]+}").with(GoogleTargetController.class, "target");
+        router.POST().route("/google/{groupId: [0-9]+}/search/set-visibility").with(GoogleSearchController.class, "setVisibility");
         
         router.GET().route("/assets/{fileName: .*}").with(AssetsController.class, "serveStatic");
     }

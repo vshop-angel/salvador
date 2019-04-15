@@ -12,7 +12,7 @@ import java.sql.Types;
 @Generated("com.querydsl.sql.codegen.MetaDataSerializer")
 public class QSearchSettings extends RelationalPathBase<QSearchSettings> {
     private static final long serialVersionUID = -1996639245;
-    public static final QSearchSettings t_search_settings = new QSearchSettings("IS_SEARCH_SETTINGS");
+    public static final QSearchSettings searchSettings = new QSearchSettings("IS_SEARCH_SETTINGS");
 
     public NumberPath<Integer> id = createNumber("ID", Integer.class);
     public NumberPath<Integer> groupId = createNumber("GROUP_ID", Integer.class);
