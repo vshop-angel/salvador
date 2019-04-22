@@ -34,8 +34,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
-
-import org.omg.CORBA.INTERNAL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.serphacker.serposcope.scraper.http.proxy.ScrapProxy;
@@ -57,7 +55,6 @@ public class GoogleTask extends AbstractTask {
     
     GoogleDB googleDB;
     ProxyRotator rotator;
-    boolean single;
 
     Run previousRun;
     final Map<Short,Integer> previousRunsByDay = new ConcurrentHashMap<>();
@@ -96,69 +93,55 @@ public class GoogleTask extends AbstractTask {
         
         httpUserAgent = ScrapClient.DEFAULT_USER_AGENT;
         httpTimeoutMS = ScrapClient.DEFAULT_TIMEOUT_MS;
-    }
+    }    
+    
 
-    public Run.Status perform() {
+    @Override
+    public Run.Status doRun() {
+        solver = initializeCaptchaSolver();
+        googleOptions = googleDB.options.get();
+
+        initializeSearches();
+        initializePreviousRuns();
+        initializeTargets();
+        
+        
         int nThread = googleOptions.getMaxThreads();
         List<ScrapProxy> proxies = baseDB.proxy.list().stream().map(Proxy::toScrapProxy).collect(Collectors.toList());
-
+        
         if(proxies.isEmpty()){
             LOG.warn("no proxy configured, using direct connection");
             proxies.add(new DirectNoProxy());
         }
-
+        
         if( proxies.size() < nThread ){
-            LOG.info("less proxy ({}) than max thread ({}), setting thread number to {}",
-                    new Object[]{proxies.size(), nThread, nThread});
+            LOG.info("less proxy ({}) than max thread ({}), setting thread number to {}", 
+                new Object[]{proxies.size(), nThread, nThread});
             nThread = proxies.size();
         }
-
+        
         rotator = new ProxyRotator(proxies);
         totalSearch = searches.size();
-
+        
         startThreads(nThread);
         waitForThreads();
-
+        
         finalizeSummaries();
-
+        
         if(solver != null){
             try {solver.close();} catch (IOException ex) {}
         }
-
+        
         LOG.warn("{} proxies failed during the task", proxies.size() - rotator.list().size());
-
+        
         int remainingSearch = totalSearch - searchDone.get();
         if(remainingSearch > 0){
             run.setErrors(remainingSearch);
             LOG.warn("{} searches have not been checked", remainingSearch);
             return Run.Status.DONE_WITH_ERROR;
         }
+        
         return Run.Status.DONE_SUCCESS;
-    }
-    
-    @Override
-    public Run.Status doRun() {
-        solver = initializeCaptchaSolver();
-        googleOptions = googleDB.options.get();
-        single = true;
-
-        initializeSearches();
-        initializePreviousRuns();
-        initializeTargets();
-
-        return perform();
-    }
-
-    public Run.Status scrapeSingleKeyword(Integer id) {
-        solver = initializeCaptchaSolver();
-        googleOptions = googleDB.options.get();
-        single = true;
-
-        initializeSingleSearch(id);
-        initializePreviousRuns();
-        initializeTargets();
-
-        return perform();
     }
     
     protected void startThreads(int nThread){
@@ -225,11 +208,7 @@ public class GoogleTask extends AbstractTask {
             entry.fillPreviousPosition(history);
             serp.addEntry(entry);
         }
-        if (single) {
-            googleDB.serp.update(serp);
-        } else {
-            googleDB.serp.insert(serp);
-        }
+        googleDB.serp.insert(serp);
 
         List<Integer> groups = googleDB.search.listGroups(search);
         for (Integer group : groups) {
@@ -265,17 +244,7 @@ public class GoogleTask extends AbstractTask {
                 }
             }
         }
-    }
-
-    protected void initializeSingleSearch(Integer id) {
-        List<GoogleSearch> searchList = new ArrayList<>();
-        GoogleSearch search = googleDB.search.find(id);
-        if (search != null) {
-            searchList.add(search);
-        }
-        searches = new LinkedBlockingQueue<>(searchList);
-        LOG.info("{} searches to do", searches.size());
-    }
+    }    
     
     protected void initializeSearches() {
         List<GoogleSearch> searchList;

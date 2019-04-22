@@ -67,14 +67,6 @@ serposcope.googleGroupControllerGrid = function () {
             return '\'' + value + '\'';
         };
 
-        var visibilityTableOption = function(row, col, unk, colDef, rowData) {
-            if (!rowData.isAdminOnly) {
-                return '<input type="checkbox" checked onchange="setKeywordVisibility(this, ' + rowData.id + ')">'
-            } else {
-                return '<input type="checkbox" onchange="setKeywordVisibility(this, '  + rowData.id +  ')">'
-            }
-        };
-
         var checkboxSelector = new Slick.CheckboxSelectColumn({cssClass: "slick-cell-checkboxsel"});
         var columns = [{
             id: "keyword", field: "keyword", minWidth: 200, sortable: true, name: 'Keyword', formatter: formatKeyword

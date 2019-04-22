@@ -11,13 +11,14 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.di.TaskFactory;
+import com.serphacker.serposcope.models.base.Group;
+import com.serphacker.serposcope.models.base.Group.Module;
 import com.serphacker.serposcope.models.base.Run;
+import com.serphacker.serposcope.models.base.Run.Mode;
 import com.serphacker.serposcope.task.google.GoogleTask;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,31 +35,23 @@ public class TaskManager {
     
     final Object googleTaskLock = new Object();
     GoogleTask googleTask;
-
+    
     public boolean isGoogleRunning(){
         synchronized(googleTaskLock){
-            return googleTask != null && googleTask.isAlive();
-        }
-    }
-
-    public boolean scrapeSingleKeyword(Run run, Integer searchId) {
-        if (isGoogleRunning()) {
+            if(googleTask != null && googleTask.isAlive()){
+                return true;
+            }
             return false;
-        }
-        googleTask = googleTaskFactory.create(run);
-
-        run.setStarted(LocalDateTime.now());
-        Run.Status status = googleTask.scrapeSingleKeyword(searchId);
-        run.setStatus(status);
-        run.setFinished(LocalDateTime.now());
-        return true;
+        }        
     }
-
+    
     public boolean startGoogleTask(Run run){
         synchronized(googleTaskLock){
-            if (googleTask != null && googleTask.isAlive()) {
+            
+            if(googleTask != null && googleTask.isAlive()){
                 return false;
             }
+            
             googleTask = googleTaskFactory.create(run);
             googleTask.start();
             return true;

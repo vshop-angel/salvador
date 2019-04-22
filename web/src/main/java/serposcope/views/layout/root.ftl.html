@@ -179,7 +179,11 @@
         </div>
         
         <#if global.prod >
-        <script type="text/javascript" src="/assets/combined.min.js?v=${global.version}"></script>
+        <#if user.isAdmin()>
+        <script type="text/javascript" src="/assets/combined.admin.min.js?v=${global.version}"></script>
+        <#else>
+        <script type="text/javascript" src="/assets/combined.user.min.js?v=${global.version}"></script>
+        </#if>
         <#else>
         <!-- start-js -->
         <script type="text/javascript" src="/assets/js/init.js"></script>
@@ -223,8 +227,8 @@
         <script type="text/javascript" src="/assets/js/views/google/GoogleGroupController.js"></script>
         <script type="text/javascript" src="/assets/js/views/google/GoogleSearchController.js"></script>
         <#if user.isAdmin()>
-        <script type="text/javascript" src="/assets/js/views/google/GoogleGroupControllerGrid.js"></script>
-        <script type="text/javascript" src="/assets/js/views/google/GoogleTargetControllerGrid.js"></script>
+        <script type="text/javascript" src="/assets/js/views/google/GoogleGroupControllerGrid.admin.js"></script>
+        <script type="text/javascript" src="/assets/js/views/google/GoogleTargetControllerGrid.admin.js"></script>
         <#else>
         <script type="text/javascript" src="/assets/js/views/google/GoogleGroupControllerGrid.user.js"></script>
         <script type="text/javascript" src="/assets/js/views/google/GoogleTargetControllerGrid.user.js"></script>
