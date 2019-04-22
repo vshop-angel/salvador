@@ -7,8 +7,8 @@
  */
 package com.serphacker.serposcope.db.google;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import com.serphacker.serposcope.db.base.ConfigDB;
 import com.serphacker.serposcope.models.google.GoogleSettings;
 

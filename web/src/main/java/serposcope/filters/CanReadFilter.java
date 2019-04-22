@@ -7,17 +7,12 @@
  */
 package serposcope.filters;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.models.base.Group;
 import com.serphacker.serposcope.models.base.User;
-import ninja.Context;
-import ninja.Filter;
-import ninja.FilterChain;
-import ninja.Result;
-import ninja.Results;
-import ninja.Router;
+import ninja.*;
 import ninja.session.FlashScope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

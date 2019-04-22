@@ -7,19 +7,12 @@
  */
 package serposcope.controllers;
 
-import com.google.inject.Inject;
-import ninja.Result;
-import ninja.Results;
-
-import com.google.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.models.base.User;
 import conf.SerposcopeConf;
-import java.io.File;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import javax.sql.DataSource;
 import ninja.Context;
+import ninja.Result;
+import ninja.Results;
 import ninja.Router;
 import ninja.params.Param;
 import ninja.session.FlashScope;
@@ -27,6 +20,12 @@ import ninja.session.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import serposcope.helpers.Validator;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.io.File;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 @Singleton
 public class AuthController extends BaseController {

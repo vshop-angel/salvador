@@ -7,18 +7,19 @@
  */
 package com.serphacker.serposcope.db.google;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import com.serphacker.serposcope.db.AbstractDBIT;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.models.base.Group;
 import com.serphacker.serposcope.models.google.GoogleTarget;
 import com.serphacker.serposcope.models.google.GoogleTarget.PatternType;
+import org.junit.Test;
+import org.unitils.reflectionassert.ReflectionAssert;
+
 import java.util.Arrays;
 import java.util.List;
-import java.util.regex.Pattern;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
-import org.unitils.reflectionassert.ReflectionAssert;
 
 /**
  *

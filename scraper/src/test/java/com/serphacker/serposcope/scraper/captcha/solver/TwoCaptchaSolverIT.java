@@ -7,10 +7,9 @@
  */
 package com.serphacker.serposcope.scraper.captcha.solver;
 
-import java.io.IOException;
 import org.junit.Before;
+
 import static org.junit.Assert.assertNotNull;
-import org.junit.Test;
 
 /**
  *

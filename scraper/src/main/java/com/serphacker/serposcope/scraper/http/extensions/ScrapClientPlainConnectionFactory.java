@@ -5,15 +5,16 @@
  */
 package com.serphacker.serposcope.scraper.http.extensions;
 
+import org.apache.http.HttpHost;
+import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.protocol.HttpContext;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.Socket;
 import java.net.SocketTimeoutException;
-import org.apache.http.HttpHost;
-import org.apache.http.conn.ConnectTimeoutException;
-import org.apache.http.conn.socket.ConnectionSocketFactory;
-import org.apache.http.protocol.HttpContext;
 
 public class ScrapClientPlainConnectionFactory implements ConnectionSocketFactory {
     

@@ -8,6 +8,7 @@
 package com.serphacker.serposcope.scraper.captcha.solver;
 
 import org.junit.Before;
+
 import static org.junit.Assert.assertNotNull;
 
 /**

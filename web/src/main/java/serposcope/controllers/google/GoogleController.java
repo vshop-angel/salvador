@@ -10,13 +10,14 @@ package serposcope.controllers.google;
 import com.serphacker.serposcope.inteligenciaseo.Report;
 import com.serphacker.serposcope.models.google.GoogleSearch;
 import com.serphacker.serposcope.models.google.GoogleTarget;
-import java.util.List;
 import ninja.Context;
 import ninja.FilterWith;
 import serposcope.controllers.BaseController;
 import serposcope.filters.AuthFilter;
 import serposcope.filters.CanReadFilter;
 import serposcope.filters.GoogleGroupFilter;
+
+import java.util.List;
 
 @FilterWith({
     AuthFilter.class,

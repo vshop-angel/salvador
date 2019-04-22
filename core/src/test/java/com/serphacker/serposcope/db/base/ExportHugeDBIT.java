@@ -7,27 +7,24 @@
  */
 package com.serphacker.serposcope.db.base;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-import com.google.inject.Module;
-import com.google.inject.Singleton;
+import com.google.inject.*;
 import com.querydsl.sql.Configuration;
 import com.serphacker.serposcope.DeepIntegrationTest;
 import com.serphacker.serposcope.db.google.GoogleDB;
 import com.serphacker.serposcope.di.db.ConfigurationProvider;
 import com.serphacker.serposcope.di.db.DataSourceProvider;
+import org.junit.Before;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.sql.DataSource;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import javax.sql.DataSource;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  *

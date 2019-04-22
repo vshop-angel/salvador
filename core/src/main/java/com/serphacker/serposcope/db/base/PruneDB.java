@@ -15,6 +15,7 @@ import com.serphacker.serposcope.querybuilder.QGoogleRank;
 import com.serphacker.serposcope.querybuilder.QGoogleSerp;
 import com.serphacker.serposcope.querybuilder.QGoogleTargetSummary;
 import com.serphacker.serposcope.querybuilder.QRun;
+
 import java.sql.Connection;
 import java.util.List;
 

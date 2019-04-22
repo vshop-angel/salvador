@@ -7,11 +7,7 @@
  */
 package serposcope.controllers;
 
-import com.google.inject.Inject;
-import com.serphacker.serposcope.models.base.Group;
 import ninja.FilterWith;
-import ninja.Router;
-import serposcope.controllers.google.GoogleGroupController;
 import serposcope.filters.BaseFilter;
 
 @FilterWith(BaseFilter.class)

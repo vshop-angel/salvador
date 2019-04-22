@@ -10,8 +10,9 @@ package com.serphacker.serposcope.scraper.captcha.solver;
 import com.google.common.io.ByteStreams;
 import com.serphacker.serposcope.scraper.DeepIntegrationTest;
 import com.serphacker.serposcope.scraper.captcha.CaptchaImage;
-import java.io.IOException;
 import org.junit.Test;
+
+import java.io.IOException;
 
 /**
  *

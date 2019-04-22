@@ -8,18 +8,20 @@
 package com.serphacker.serposcope.scraper.captcha.solver;
 
 import com.serphacker.serposcope.scraper.captcha.Captcha;
-import static com.serphacker.serposcope.scraper.captcha.Captcha.Error.EXCEPTION;
 import com.serphacker.serposcope.scraper.captcha.CaptchaImage;
 import com.serphacker.serposcope.scraper.captcha.CaptchaRecaptcha;
 import com.serphacker.serposcope.scraper.http.ScrapClient;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import static com.serphacker.serposcope.scraper.captcha.Captcha.Error.EXCEPTION;
 
 public class ImageTyperzSolver implements CaptchaSolver {
 

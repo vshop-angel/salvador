@@ -15,15 +15,15 @@ import com.serphacker.serposcope.models.google.GoogleRank;
 import com.serphacker.serposcope.models.google.GoogleSearch;
 import com.serphacker.serposcope.models.google.GoogleTarget;
 import com.serphacker.serposcope.models.google.GoogleTargetSummary;
+import org.junit.Test;
+import org.unitils.reflectionassert.ReflectionAssert;
+
+import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-import javax.inject.Inject;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import org.unitils.reflectionassert.ReflectionAssert;
 
 /**
  *

@@ -12,15 +12,13 @@ import com.serphacker.serposcope.db.AbstractDBIT;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.models.base.Proxy;
 import com.serphacker.serposcope.scraper.http.proxy.BindProxy;
-import com.serphacker.serposcope.scraper.http.proxy.HttpProxy;
 import com.serphacker.serposcope.scraper.http.proxy.ScrapProxy;
+import org.junit.Test;
+
+import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-import javax.inject.Inject;
-import org.junit.Test;
-import static org.junit.Assert.*;
 
 /**
  *

@@ -8,7 +8,6 @@
 
 package com.serphacker.serposcope;
 
-import java.util.Properties;
 import org.junit.Assume;
 import org.junit.Before;
 

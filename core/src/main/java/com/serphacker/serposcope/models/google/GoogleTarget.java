@@ -7,11 +7,12 @@
  */
 package com.serphacker.serposcope.models.google;
 
-import static com.serphacker.serposcope.models.google.GoogleTarget.PatternType.DOMAIN;
-import static com.serphacker.serposcope.models.google.GoogleTarget.PatternType.SUBDOMAIN;
 import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
+
+import static com.serphacker.serposcope.models.google.GoogleTarget.PatternType.DOMAIN;
+import static com.serphacker.serposcope.models.google.GoogleTarget.PatternType.SUBDOMAIN;
 
 
 public class GoogleTarget {

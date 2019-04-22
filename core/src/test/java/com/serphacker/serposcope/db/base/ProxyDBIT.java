@@ -7,23 +7,21 @@
  */
 package com.serphacker.serposcope.db.base;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import com.serphacker.serposcope.db.AbstractDBIT;
 import com.serphacker.serposcope.models.base.Proxy;
 import com.serphacker.serposcope.scraper.http.proxy.BindProxy;
 import com.serphacker.serposcope.scraper.http.proxy.HttpProxy;
+import com.serphacker.serposcope.scraper.http.proxy.ScrapProxy;
+import org.junit.Test;
+
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import com.serphacker.serposcope.scraper.http.proxy.ScrapProxy;
-import java.time.LocalDateTime;
-import java.time.Month;
-import java.util.ArrayList;
-import java.util.function.Function;
-import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  *

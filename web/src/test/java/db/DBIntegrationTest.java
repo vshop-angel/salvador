@@ -16,19 +16,16 @@ package db;
  */
 
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Inject;
-import com.google.inject.Module;
-import com.google.inject.Singleton;
+import com.google.inject.*;
 import com.querydsl.sql.Configuration;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.di.db.ConfigurationProvider;
 import com.serphacker.serposcope.di.db.DataSourceProvider;
+import org.junit.Before;
+
+import javax.sql.DataSource;
 import java.util.ArrayList;
 import java.util.List;
-import javax.sql.DataSource;
-import org.junit.Before;
 
 public abstract class DBIntegrationTest {
 

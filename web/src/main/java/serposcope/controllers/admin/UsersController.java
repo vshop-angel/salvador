@@ -7,19 +7,14 @@
  */
 package serposcope.controllers.admin;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 import com.google.common.base.Optional;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.models.base.Group;
 import com.serphacker.serposcope.models.base.User;
-import java.util.List;
-import ninja.AuthenticityFilter;
-import ninja.Context;
-import ninja.FilterWith;
-import ninja.Result;
-import ninja.Results;
-import ninja.Router;
+import ninja.*;
 import ninja.i18n.Messages;
 import ninja.params.Param;
 import ninja.session.FlashScope;
@@ -29,6 +24,8 @@ import serposcope.controllers.BaseController;
 import serposcope.filters.AdminFilter;
 import serposcope.filters.XSRFFilter;
 import serposcope.helpers.Validator;
+
+import java.util.List;
 
 @FilterWith(AdminFilter.class)
 @Singleton

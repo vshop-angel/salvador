@@ -7,13 +7,15 @@
  */
 package com.serphacker.serposcope.models.base;
 
-import static com.serphacker.serposcope.models.base.Proxy.Status.UNCHECKED;
 import com.serphacker.serposcope.scraper.http.proxy.BindProxy;
 import com.serphacker.serposcope.scraper.http.proxy.HttpProxy;
 import com.serphacker.serposcope.scraper.http.proxy.ScrapProxy;
 import com.serphacker.serposcope.scraper.http.proxy.SocksProxy;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
+
+import static com.serphacker.serposcope.models.base.Proxy.Status.UNCHECKED;
 
 
 public class Proxy {

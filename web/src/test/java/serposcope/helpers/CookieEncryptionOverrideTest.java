@@ -7,13 +7,16 @@
  */
 package serposcope.helpers;
 
-import javax.crypto.Cipher;
-import static ninja.utils.CookieEncryption.ALGORITHM;
 import ninja.utils.NinjaConstant;
 import ninja.utils.NinjaMode;
 import ninja.utils.NinjaPropertiesImpl;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import javax.crypto.Cipher;
+
+import static ninja.utils.CookieEncryption.ALGORITHM;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 /**
  *

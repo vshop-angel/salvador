@@ -10,42 +10,34 @@ package serposcope.controllers.google;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
-import com.google.inject.Inject;
-import com.serphacker.serposcope.inteligenciaseo.SearchSettingsDB;
-import com.serphacker.serposcope.models.base.User;
-import ninja.*;
-
-import com.google.inject.Singleton;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
-import static com.serphacker.serposcope.db.base.RunDB.STATUSES_DONE;
 import com.serphacker.serposcope.db.google.GoogleDB;
+import com.serphacker.serposcope.inteligenciaseo.SearchSettingsDB;
 import com.serphacker.serposcope.models.base.Config;
 import com.serphacker.serposcope.models.base.Group;
 import com.serphacker.serposcope.models.base.Group.Module;
 import com.serphacker.serposcope.models.base.Run;
-import com.serphacker.serposcope.models.google.GoogleBest;
-import com.serphacker.serposcope.models.google.GoogleRank;
-import static com.serphacker.serposcope.models.google.GoogleRank.UNRANKED;
-import com.serphacker.serposcope.models.google.GoogleSettings;
-import com.serphacker.serposcope.models.google.GoogleSearch;
-import com.serphacker.serposcope.models.google.GoogleSerp;
-import com.serphacker.serposcope.models.google.GoogleSerpEntry;
-import com.serphacker.serposcope.models.google.GoogleTarget;
-import java.time.LocalDate;
-import java.time.ZoneOffset;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.serphacker.serposcope.models.base.User;
+import com.serphacker.serposcope.models.google.*;
+import ninja.*;
 import ninja.i18n.Messages;
 import ninja.params.Param;
 import ninja.params.PathParam;
 import ninja.session.FlashScope;
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.hibernate.annotations.Filter;
 import serposcope.filters.AdminFilter;
 import serposcope.filters.XSRFFilter;
+
+import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static com.serphacker.serposcope.db.base.RunDB.STATUSES_DONE;
+import static com.serphacker.serposcope.models.google.GoogleRank.UNRANKED;
 
 
 @Singleton
@@ -121,7 +113,7 @@ public class GoogleSearchController extends GoogleController {
                 .render("minDate", minDay)
                 .render("maxDate", maxDay)                        
                 .render("search", search)
-                .render("categories", settingsDB.getCategories())
+                .render("categories", settingsDB.getCategories(context.getAttribute("user", User.class)))
             ;
         }
         
@@ -151,8 +143,8 @@ public class GoogleSearchController extends GoogleController {
         String jsonRanks = getJsonRanks(group, targets, firstRun, lastRun, searchId);
         Config config = baseDB.config.getConfig();
 
-        List<String> categories = settingsDB.getCategories();
         User user = context.getAttribute("user", User.class);
+        List<String> categories = settingsDB.getCategories(user);
         return Results.ok()
             .render("displayMode", config.getDisplayGoogleSearch())
             .render("events", user.isAdmin() ? jsonEvents : "[]")

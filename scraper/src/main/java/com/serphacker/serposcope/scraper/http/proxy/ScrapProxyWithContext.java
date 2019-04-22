@@ -8,7 +8,6 @@
 
 package com.serphacker.serposcope.scraper.http.proxy;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 

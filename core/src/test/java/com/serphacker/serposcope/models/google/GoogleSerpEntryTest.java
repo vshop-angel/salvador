@@ -7,10 +7,9 @@
  */
 package com.serphacker.serposcope.models.google;
 
-import java.net.URLDecoder;
-import java.nio.charset.Charset;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  *

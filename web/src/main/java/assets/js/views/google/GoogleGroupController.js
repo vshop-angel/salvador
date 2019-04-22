@@ -146,7 +146,33 @@ serposcope.googleGroupController = function () {
         
         return false;
     };    
-    
+
+    var refreshVolumes = function(elt) {
+        if(!confirm("Refresh search volumes?")){
+            return false;
+        }
+
+        var $form = $('<form>', {
+            'action': $(elt.currentTarget).attr("data-action"),
+            'method': 'post',
+            'target': '_top'
+        }).append($('<input>', {
+            'name': '_xsrf',
+            'value': $('#_xsrf').attr("data-value"),
+            'type': 'hidden'
+        }));
+
+        var ids = serposcope.googleGroupControllerGrid.getSelection();
+        for(var i=0; i <ids.length; i++){
+           $form.append($('<input>', {
+                'name': 'id[]',
+                'value': ids[i],
+                'type': 'hidden'
+            }));
+        }
+        $form.appendTo(document.body).submit();
+        return false;
+    };
     var deleteSearches = function(elt){
         if(!confirm("Delete searches ?\nAll history will be erased.")){
             return false;
@@ -531,6 +557,7 @@ serposcope.googleGroupController = function () {
         $('#btn-chk-target').click(checkTarget);
         $('#btn-export-searches').click(exportSearches);
         $('#btn-delete-searches').click(deleteSearches);
+        $('#btn-refresh-volumes').click(refreshVolumes);
         $('#btn-delete-targets').click(deleteTargets);
         $('#btn-delete-reports').click(deleteReports);
         $('#table-target').stupidtable();

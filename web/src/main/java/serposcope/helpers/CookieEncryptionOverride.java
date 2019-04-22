@@ -8,17 +8,17 @@
 package serposcope.helpers;
 
 import com.google.common.base.Optional;
-import java.lang.reflect.Field;
-import javax.crypto.Cipher;
-import javax.crypto.spec.SecretKeySpec;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import ninja.utils.CookieEncryption;
-import static ninja.utils.CookieEncryption.ALGORITHM;
 import ninja.utils.NinjaConstant;
 import ninja.utils.NinjaProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.lang.reflect.Field;
 
 @Singleton
 public class CookieEncryptionOverride extends CookieEncryption{

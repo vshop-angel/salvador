@@ -7,43 +7,34 @@
  */
 package com.serphacker.serposcope.task.google;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import com.serphacker.serposcope.db.google.GoogleDB;
 import com.serphacker.serposcope.di.CaptchaSolverFactory;
+import com.serphacker.serposcope.di.GoogleScraperFactory;
 import com.serphacker.serposcope.di.ScrapClientFactory;
-//import com.serphacker.serposcope.di.ScraperFactory;
 import com.serphacker.serposcope.models.base.Proxy;
 import com.serphacker.serposcope.models.base.Run;
-import com.serphacker.serposcope.models.google.GoogleSettings;
-import com.serphacker.serposcope.models.google.GoogleRank;
-import com.serphacker.serposcope.models.google.GoogleSearch;
-import com.serphacker.serposcope.models.google.GoogleSerp;
-import com.serphacker.serposcope.models.google.GoogleSerpEntry;
-import com.serphacker.serposcope.models.google.GoogleTarget;
+import com.serphacker.serposcope.models.google.*;
 import com.serphacker.serposcope.scraper.captcha.solver.CaptchaSolver;
 import com.serphacker.serposcope.scraper.google.GoogleScrapResult;
 import com.serphacker.serposcope.scraper.google.scraper.GoogleScraper;
 import com.serphacker.serposcope.scraper.http.ScrapClient;
 import com.serphacker.serposcope.scraper.http.proxy.DirectNoProxy;
 import com.serphacker.serposcope.scraper.http.proxy.ProxyRotator;
+import com.serphacker.serposcope.scraper.http.proxy.ScrapProxy;
 import com.serphacker.serposcope.task.AbstractTask;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.atomic.AtomicInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import com.serphacker.serposcope.scraper.http.proxy.ScrapProxy;
-import java.util.stream.Collectors;
-import com.serphacker.serposcope.di.GoogleScraperFactory;
-import com.serphacker.serposcope.models.google.GoogleBest;
-import com.serphacker.serposcope.models.google.GoogleTargetSummary;
+
 import java.io.IOException;
-import java.util.Collections;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
+
+//import com.serphacker.serposcope.di.ScraperFactory;
 
 public class GoogleTask extends AbstractTask {
 

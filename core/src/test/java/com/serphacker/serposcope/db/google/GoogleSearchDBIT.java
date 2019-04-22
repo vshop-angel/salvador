@@ -7,7 +7,7 @@
  */
 package com.serphacker.serposcope.db.google;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import com.serphacker.serposcope.db.AbstractDBIT;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.db.base.GroupDB;
@@ -18,14 +18,16 @@ import com.serphacker.serposcope.models.google.GoogleSearch;
 import com.serphacker.serposcope.models.google.GoogleSerp;
 import com.serphacker.serposcope.scraper.google.GoogleCountryCode;
 import com.serphacker.serposcope.scraper.google.GoogleDevice;
+import org.junit.Test;
+import org.unitils.reflectionassert.ReflectionAssert;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
-import org.unitils.reflectionassert.ReflectionAssert;
 
 /**
  *

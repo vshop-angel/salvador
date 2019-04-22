@@ -1,21 +1,16 @@
 package serposcope.controllers.inteligenciaseo;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import com.serphacker.serposcope.inteligenciaseo.Report;
 import com.serphacker.serposcope.inteligenciaseo.ReportsDB;
-
-import com.serphacker.serposcope.models.base.Group;
-import ninja.*;
-import ninja.params.Params;
-
-import ninja.session.FlashScope;
-import serposcope.controllers.BaseController;
+import ninja.FilterWith;
+import ninja.Result;
+import ninja.Results;
+import ninja.Router;
 import ninja.params.PathParam;
-import serposcope.controllers.google.GoogleGroupController;
+import serposcope.controllers.BaseController;
 import serposcope.filters.AdminFilter;
 import serposcope.filters.XSRFFilter;
-
-import java.util.List;
 
 public class ReportsController extends BaseController {
     @Inject

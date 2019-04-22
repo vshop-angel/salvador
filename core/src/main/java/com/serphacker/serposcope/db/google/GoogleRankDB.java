@@ -7,33 +7,26 @@
  */
 package com.serphacker.serposcope.db.google;
 
-import com.google.inject.Singleton;
-import com.mysema.commons.lang.CloseableIterator;
+import javax.inject.Singleton;
 import com.querydsl.core.QueryFlag;
 import com.querydsl.core.Tuple;
-import com.querydsl.sql.SQLBindings;
 import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.dml.SQLDeleteClause;
 import com.querydsl.sql.dml.SQLInsertClause;
-import com.querydsl.sql.dml.SQLMergeBatch;
 import com.querydsl.sql.dml.SQLMergeClause;
 import com.serphacker.serposcope.db.AbstractDB;
 import com.serphacker.serposcope.models.google.GoogleBest;
 import com.serphacker.serposcope.models.google.GoogleRank;
-import com.serphacker.serposcope.models.google.GoogleTarget;
 import com.serphacker.serposcope.querybuilder.QGoogleRank;
 import com.serphacker.serposcope.querybuilder.QGoogleRankBest;
+
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
-import java.util.regex.Pattern;
 
 @Singleton
 public class GoogleRankDB extends AbstractDB {

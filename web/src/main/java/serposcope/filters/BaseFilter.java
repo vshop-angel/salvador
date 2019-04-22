@@ -7,29 +7,20 @@
  */
 package serposcope.filters;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
-import com.serphacker.serposcope.models.base.Group;
 import com.serphacker.serposcope.models.base.User;
 import conf.SerposcopeConf;
-import java.io.File;
-import java.nio.file.Files;
-import java.util.List;
-import ninja.Context;
-import ninja.Filter;
-import ninja.FilterChain;
-import ninja.Result;
-import ninja.Results;
-import ninja.Router;
+import ninja.*;
 import ninja.diagnostics.DiagnosticError;
-import ninja.i18n.Lang;
-import ninja.session.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import serposcope.controllers.AuthController;
+
+import java.io.File;
+
 import static serposcope.controllers.AuthController.PASSWORD_RESET_FILENAME;
 
 @Singleton

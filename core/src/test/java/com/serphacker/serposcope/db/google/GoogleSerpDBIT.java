@@ -7,7 +7,7 @@
  */
 package com.serphacker.serposcope.db.google;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import com.serphacker.serposcope.db.AbstractDBIT;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.models.base.Group;
@@ -15,19 +15,15 @@ import com.serphacker.serposcope.models.base.Run;
 import com.serphacker.serposcope.models.google.GoogleSearch;
 import com.serphacker.serposcope.models.google.GoogleSerp;
 import com.serphacker.serposcope.models.google.GoogleSerpEntry;
-import it.unimi.dsi.fastutil.shorts.Short2ShortArrayMap;
+import org.junit.Assert;
+import org.junit.Test;
+import org.unitils.reflectionassert.ReflectionAssert;
+
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
-import net.jpountz.lz4.LZ4Compressor;
-import net.jpountz.lz4.LZ4Factory;
-import org.junit.Assert;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import org.unitils.reflectionassert.ReflectionAssert;
 
 /**
  *

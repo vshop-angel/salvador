@@ -9,20 +9,16 @@ package com.serphacker.serposcope.scraper.captcha.solver;
 
 import com.serphacker.serposcope.scraper.captcha.Captcha;
 import com.serphacker.serposcope.scraper.captcha.CaptchaImage;
-import java.awt.Color;
-import java.awt.Frame;
-import java.awt.event.KeyEvent;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ConcurrentModificationException;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.locks.Lock;
-import javax.swing.ImageIcon;
-import javax.swing.JDialog;
-import javax.swing.SwingUtilities;
-import javax.swing.border.LineBorder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.border.LineBorder;
+import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.util.ConcurrentModificationException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  *

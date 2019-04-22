@@ -8,32 +8,23 @@
 package com.serphacker.serposcope.db.base;
 
 import com.google.common.collect.Sets;
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-import com.google.inject.Module;
-import com.google.inject.Singleton;
+import com.google.inject.*;
 import com.querydsl.sql.Configuration;
-import static com.serphacker.serposcope.db.base.MigrationDB.LAST_DB_VERSION;
 import com.serphacker.serposcope.db.google.GoogleSearchDB;
 import com.serphacker.serposcope.di.db.ConfigurationProvider;
 import com.serphacker.serposcope.di.db.DataSourceProvider;
-import com.serphacker.serposcope.models.google.GoogleSearch;
 import com.serphacker.serposcope.scraper.google.GoogleCountryCode;
 import com.zaxxer.hikari.HikariDataSource;
+import org.junit.Before;
+import org.junit.Test;
+
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Properties;
-import javax.sql.DataSource;
-import org.junit.Test;
+import java.util.*;
+
 import static org.junit.Assert.*;
-import org.junit.Before;
 
 /**
  *

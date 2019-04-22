@@ -12,21 +12,18 @@ import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.models.base.Proxy;
 import com.serphacker.serposcope.scraper.http.ScrapClient;
 import com.serphacker.serposcope.scraper.http.proxy.ScrapProxy;
-import com.serphacker.serposcope.scraper.http.proxy.ScrapProxy;
+import org.apache.commons.lang3.time.DurationFormatUtils;
+import org.slf4j.LoggerFactory;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import javax.inject.Inject;
-import org.apache.commons.lang3.time.DurationFormatUtils;
-import org.slf4j.LoggerFactory;
 
 public class ProxyChecker extends Thread {
     

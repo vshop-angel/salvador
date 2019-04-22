@@ -10,18 +10,16 @@ package serposcope.services;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.db.base.ConfigDB;
 import com.serphacker.serposcope.scraper.http.ScrapClient;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.time.LocalTime;
-import java.util.concurrent.TimeUnit;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import ninja.scheduler.Schedule;
-import ninja.utils.NinjaMode;
 import ninja.utils.NinjaProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import serposcope.Version;
+
+import javax.inject.Inject;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.concurrent.TimeUnit;
 
 public class Scheduler {
     

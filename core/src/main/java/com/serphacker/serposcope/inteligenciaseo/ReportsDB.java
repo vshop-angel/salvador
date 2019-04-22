@@ -1,6 +1,6 @@
 package com.serphacker.serposcope.inteligenciaseo;
 
-import com.google.inject.Singleton;
+import javax.inject.Singleton;
 import com.querydsl.core.Tuple;
 import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.dml.SQLDeleteClause;

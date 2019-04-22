@@ -10,6 +10,7 @@ package com.serphacker.serposcope.scraper.captcha.solver;
 
 import com.serphacker.serposcope.scraper.captcha.Captcha;
 import com.serphacker.serposcope.scraper.captcha.CaptchaImage;
+
 import java.io.IOException;
 
 

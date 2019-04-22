@@ -7,15 +7,15 @@
  */
 package com.serphacker.serposcope.db.base;
 
-import com.serphacker.serposcope.db.base.UserDB;
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import com.serphacker.serposcope.db.AbstractDBIT;
 import com.serphacker.serposcope.models.base.Group;
 import com.serphacker.serposcope.models.base.User;
-import java.security.NoSuchAlgorithmException;
+import org.junit.Test;
+
 import java.util.ArrayList;
 import java.util.List;
-import org.junit.Test;
+
 import static org.junit.Assert.*;
 
 /**

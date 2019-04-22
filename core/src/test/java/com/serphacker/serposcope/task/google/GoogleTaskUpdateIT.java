@@ -9,31 +9,33 @@ package com.serphacker.serposcope.task.google;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
-import com.serphacker.serposcope.db.google.*;
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import com.google.inject.Module;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.serphacker.serposcope.db.AbstractDBIT;
 import com.serphacker.serposcope.db.base.BaseDB;
+import com.serphacker.serposcope.db.google.GoogleDB;
+import com.serphacker.serposcope.di.GoogleScraperFactory;
 import com.serphacker.serposcope.di.TaskFactory;
 import com.serphacker.serposcope.models.base.Group;
+import com.serphacker.serposcope.models.base.Run;
 import com.serphacker.serposcope.models.base.Run.Mode;
+import com.serphacker.serposcope.models.base.Run.Status;
 import com.serphacker.serposcope.models.google.GoogleSearch;
 import com.serphacker.serposcope.models.google.GoogleTarget;
+import com.serphacker.serposcope.models.google.GoogleTargetSummary;
 import com.serphacker.serposcope.scraper.captcha.solver.CaptchaSolver;
+import com.serphacker.serposcope.scraper.google.GoogleScrapResult;
 import com.serphacker.serposcope.scraper.google.GoogleScrapSearch;
 import com.serphacker.serposcope.scraper.google.scraper.GoogleScraper;
 import com.serphacker.serposcope.scraper.http.ScrapClient;
+import org.junit.Test;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.junit.Test;
-import com.serphacker.serposcope.di.GoogleScraperFactory;
-import com.serphacker.serposcope.models.base.Run;
-import com.serphacker.serposcope.models.base.Run.Status;
-import com.serphacker.serposcope.models.google.GoogleTargetSummary;
-import com.serphacker.serposcope.scraper.google.GoogleScrapResult;
+
 import static org.junit.Assert.assertEquals;
 
 /**

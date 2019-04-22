@@ -9,10 +9,10 @@ package serposcope.helpers;
 
 import ninja.utils.NinjaConstant;
 import ninja.utils.NinjaMode;
-import ninja.utils.NinjaProperties;
 import ninja.utils.NinjaPropertiesImpl;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  *

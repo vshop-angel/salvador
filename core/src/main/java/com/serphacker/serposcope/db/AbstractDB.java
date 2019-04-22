@@ -8,10 +8,11 @@
 package com.serphacker.serposcope.db;
 
 import com.querydsl.sql.Configuration;
-import javax.inject.Inject;
-import javax.sql.DataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import javax.sql.DataSource;
 
 
 public abstract class AbstractDB {

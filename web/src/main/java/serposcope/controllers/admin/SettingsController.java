@@ -8,25 +8,11 @@
 package serposcope.controllers.admin;
 
 import com.google.common.base.Optional;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
-import static com.serphacker.serposcope.db.base.ConfigDB.APP_PRUNE_RUNS;
 import com.serphacker.serposcope.db.base.PruneDB;
 import com.serphacker.serposcope.models.base.Config;
-import com.serphacker.serposcope.scraper.captcha.solver.AntiCaptchaSolver;
-import com.serphacker.serposcope.scraper.captcha.solver.CaptchaSolver;
-import com.serphacker.serposcope.scraper.captcha.solver.DeathByCaptchaSolver;
-import com.serphacker.serposcope.scraper.captcha.solver.DecaptcherSolver;
-import com.serphacker.serposcope.scraper.captcha.solver.ImageTyperzSolver;
-import com.serphacker.serposcope.scraper.captcha.solver.TwoCaptchaSolver;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import ninja.Context;
-import ninja.FilterWith;
-import ninja.Result;
-import ninja.Results;
-import ninja.Router;
+import com.serphacker.serposcope.scraper.captcha.solver.*;
+import ninja.*;
 import ninja.i18n.Messages;
 import ninja.params.Param;
 import ninja.session.FlashScope;
@@ -39,7 +25,15 @@ import serposcope.filters.XSRFFilter;
 import serposcope.helpers.Validator;
 import serposcope.lifecycle.DBSizeUtils;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+
+import static com.serphacker.serposcope.db.base.ConfigDB.APP_PRUNE_RUNS;
+
 @FilterWith(AdminFilter.class)
+
 @Singleton
 public class SettingsController extends BaseController {
     

@@ -7,17 +7,18 @@
  */
 package conf;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.nio.file.Files;
-import java.util.Properties;
-import java.util.Random;
-import javax.inject.Singleton;
 import ninja.utils.NinjaMode;
 import ninja.utils.NinjaModeHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import serposcope.Version;
+
+import javax.inject.Singleton;
+import java.io.File;
+import java.io.FileInputStream;
+import java.nio.file.Files;
+import java.util.Properties;
+import java.util.Random;
 
 @Singleton
 public class SerposcopeConf {

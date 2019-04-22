@@ -8,6 +8,7 @@
 package com.serphacker.serposcope.scraper.captcha.solver;
 
 import com.serphacker.serposcope.scraper.captcha.Captcha;
+
 import java.io.Closeable;
 
 /**

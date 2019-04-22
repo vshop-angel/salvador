@@ -7,8 +7,8 @@
  */
 package serposcope.controllers.admin;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.db.google.GoogleDB;
 import com.serphacker.serposcope.models.base.Group;
@@ -16,45 +16,19 @@ import com.serphacker.serposcope.models.base.Proxy;
 import com.serphacker.serposcope.models.google.GoogleSearch;
 import com.serphacker.serposcope.models.google.GoogleTarget;
 import conf.SerposcopeConf;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.io.Writer;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-import java.util.function.Consumer;
-import java.util.logging.Level;
-import ninja.Context;
-import ninja.FilterWith;
-import ninja.Result;
-import ninja.Results;
-import ninja.Router;
+import ninja.*;
 import ninja.params.Param;
-import ninja.session.FlashScope;
 import ninja.utils.ResponseStreams;
 import org.apache.commons.lang3.StringUtils;
-import org.eclipse.jetty.server.HttpOutput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import serposcope.controllers.BaseController;
 import serposcope.filters.AdminFilter;
-import serposcope.filters.XSRFFilter;
+
+import java.io.*;
+import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.util.*;
 
 @FilterWith(AdminFilter.class)
 @Singleton

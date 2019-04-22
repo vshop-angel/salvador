@@ -10,9 +10,11 @@
                <i class="glyphicon glyphicon-search hidden-lg" ></i><span class="hidden-xs hidden-sm hidden-md" > ${i18n("label.addSearch")}</span>
             </a>
             <input id="btn-export-searches" type="button" class="btn btn-primary" value="${i18n("google.group.exportKeywords")}"
-                   data-action="${reverseRoute("google.GoogleGroupController","exportSearches","groupId",group.getId())}" />
+                data-action="${reverseRoute("google.GoogleGroupController","exportSearches","groupId",group.getId())}" />
             <input id="btn-delete-searches" type="button" class="btn btn-danger" value="${i18n("google.group.deleteKeywords")}" 
                 data-action="${reverseRoute("google.GoogleGroupController","delSearch","groupId",group.getId())}" />
+            <input id="btn-refresh-volumes" type="button" class="btn" value="Refresh Volumes"
+                data-action="${reverseRoute("google.GoogleGroupController","refreshVolumes","groupId",group.getId())}">
         </div>
         </#if>
     </div>

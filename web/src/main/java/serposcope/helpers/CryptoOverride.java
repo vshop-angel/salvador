@@ -7,12 +7,13 @@
  */
 package serposcope.helpers;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import java.lang.reflect.Field;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import ninja.utils.Crypto;
 import ninja.utils.NinjaConstant;
 import ninja.utils.NinjaProperties;
+
+import java.lang.reflect.Field;
 
 @Singleton
 public class CryptoOverride extends Crypto {

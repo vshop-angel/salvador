@@ -7,7 +7,7 @@
  */
 package com.serphacker.serposcope.db.base;
 
-import com.google.inject.Singleton;
+import javax.inject.Singleton;
 import com.querydsl.core.Tuple;
 import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.dml.SQLDeleteClause;
@@ -17,13 +17,8 @@ import com.serphacker.serposcope.db.AbstractDB;
 import com.serphacker.serposcope.models.base.Group.Module;
 import com.serphacker.serposcope.models.base.Run;
 import com.serphacker.serposcope.models.base.Run.Status;
-import static com.serphacker.serposcope.models.base.Run.Status.ABORTING;
-import static com.serphacker.serposcope.models.base.Run.Status.DONE_ABORTED;
-import static com.serphacker.serposcope.models.base.Run.Status.DONE_CRASHED;
-import static com.serphacker.serposcope.models.base.Run.Status.DONE_SUCCESS;
-import static com.serphacker.serposcope.models.base.Run.Status.DONE_WITH_ERROR;
-import static com.serphacker.serposcope.models.base.Run.Status.RUNNING;
 import com.serphacker.serposcope.querybuilder.QRun;
+
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.Timestamp;
@@ -31,9 +26,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.serphacker.serposcope.models.base.Run.Status.*;
 
 @Singleton
 public class RunDB extends AbstractDB {

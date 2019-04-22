@@ -13,37 +13,35 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.Appender;
 import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
-import com.google.inject.Singleton;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.querydsl.sql.Configuration;
 import com.serphacker.serposcope.di.CaptchaSolverFactory;
 import com.serphacker.serposcope.di.GoogleScraperFactory;
+import com.serphacker.serposcope.di.TaskFactory;
 import com.serphacker.serposcope.di.db.ConfigurationProvider;
 import com.serphacker.serposcope.di.db.DataSourceProvider;
-import com.serphacker.serposcope.di.TaskFactory;
 import com.serphacker.serposcope.models.base.Config;
 import com.serphacker.serposcope.scraper.captcha.solver.CaptchaSolver;
 import com.serphacker.serposcope.scraper.google.scraper.RandomGScraper;
 import com.serphacker.serposcope.scraper.http.ScrapClient;
 import com.serphacker.serposcope.task.TaskManager;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
-import javax.sql.DataSource;
+import ninja.conf.FrameworkModule;
+import ninja.conf.NinjaClassicModule;
 import ninja.template.TemplateEngineFreemarkerReverseRouteHelper;
 import ninja.utils.Crypto;
 import ninja.utils.NinjaMode;
 import ninja.utils.NinjaModeHelper;
+import ninja.utils.NinjaProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import serposcope.helpers.CryptoOverride;
 import serposcope.helpers.TemplateEngineFreemarkerReverseRouteHelperSerposcope;
-import ninja.conf.FrameworkModule;
-import ninja.conf.NinjaClassicModule;
 import serposcope.services.CronService;
-//import serposcope.services.CronSrv;
-import ninja.utils.NinjaProperties;
 
-
+import javax.inject.Singleton;
+import javax.sql.DataSource;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
 
 @Singleton
 public class Module extends FrameworkModule {

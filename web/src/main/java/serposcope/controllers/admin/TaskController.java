@@ -7,34 +7,32 @@
  */
 package serposcope.controllers.admin;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.db.base.RunDB;
 import com.serphacker.serposcope.db.google.GoogleDB;
 import com.serphacker.serposcope.models.base.Group;
-import static com.serphacker.serposcope.models.base.Group.Module.GOOGLE;
 import com.serphacker.serposcope.models.base.Run;
 import com.serphacker.serposcope.models.google.GoogleSearch;
 import com.serphacker.serposcope.models.google.GoogleTarget;
-import java.time.LocalDateTime;
-import java.util.List;
-import ninja.Context;
-import ninja.FilterWith;
-import ninja.Result;
-import ninja.Results;
-import ninja.Router;
+import com.serphacker.serposcope.task.TaskManager;
+import ninja.*;
 import ninja.params.Param;
+import ninja.params.PathParam;
 import ninja.session.FlashScope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import serposcope.controllers.BaseController;
+import serposcope.controllers.HomeController;
 import serposcope.filters.AdminFilter;
 import serposcope.filters.XSRFFilter;
-import com.serphacker.serposcope.task.TaskManager;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.time.LocalDateTime;
 import java.util.Arrays;
-import ninja.params.PathParam;
-import serposcope.controllers.HomeController;
+import java.util.List;
+
+import static com.serphacker.serposcope.models.base.Group.Module.GOOGLE;
 
 @FilterWith(AdminFilter.class)
 @Singleton

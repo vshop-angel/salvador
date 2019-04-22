@@ -7,9 +7,11 @@
  */
 package com.serphacker.serposcope.models.base;
 
-import java.time.LocalDateTime;
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import java.time.LocalDateTime;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  *

@@ -9,52 +9,42 @@ package serposcope.controllers.google;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.base.Functions;
-import com.google.inject.Inject;
-import com.serphacker.serposcope.inteligenciaseo.SearchSettings;
-import com.serphacker.serposcope.inteligenciaseo.SearchSettingsDB;
-import ninja.Result;
-import ninja.Results;
-
-import com.google.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.db.base.RunDB;
 import com.serphacker.serposcope.db.google.GoogleDB;
-import com.serphacker.serposcope.models.base.Config;
-import com.serphacker.serposcope.models.base.Event;
-import com.serphacker.serposcope.models.base.Group;
-import com.serphacker.serposcope.models.base.Run;
+import com.serphacker.serposcope.inteligenciaseo.SearchSettingsDB;
+import com.serphacker.serposcope.models.base.*;
 import com.serphacker.serposcope.models.google.GoogleBest;
 import com.serphacker.serposcope.models.google.GoogleRank;
-import static com.serphacker.serposcope.models.google.GoogleRank.UNRANKED;
 import com.serphacker.serposcope.models.google.GoogleSearch;
 import com.serphacker.serposcope.models.google.GoogleTarget;
 import com.serphacker.serposcope.scraper.google.GoogleDevice;
-import static com.serphacker.serposcope.scraper.google.GoogleDevice.SMARTPHONE;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.Writer;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.zip.GZIPOutputStream;
 import ninja.Context;
+import ninja.Result;
+import ninja.Results;
 import ninja.Router;
 import ninja.params.Param;
 import ninja.params.PathParam;
 import ninja.utils.ResponseStreams;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.zip.GZIPOutputStream;
+
+import static com.serphacker.serposcope.models.google.GoogleRank.UNRANKED;
+import static com.serphacker.serposcope.scraper.google.GoogleDevice.SMARTPHONE;
 
 @Singleton
 public class GoogleTargetController extends GoogleController {
@@ -177,7 +167,7 @@ public class GoogleTargetController extends GoogleController {
                 .render("endDate", "")
                 .render("display", fallbackDisplay)
                 .render("target", target)
-                .render("categories", settingsDB.getCategories());
+                .render("categories", settingsDB.getCategories(context.getAttribute("user", User.class)));
         }
 
         LocalDate minDay = minRun.getDay();
@@ -223,7 +213,7 @@ public class GoogleTargetController extends GoogleController {
                     .render("minDate", minDay)
                     .render("maxDate", maxDay)
                     .render("display", display)
-                    .render("categories", settingsDB.getCategories());
+                    .render("categories", settingsDB.getCategories(context.getAttribute("user", User.class)));
             case "chart":
                 return renderChart(group, target, searches, runs, minDay, maxDay, startDate, endDate);
             case "export":

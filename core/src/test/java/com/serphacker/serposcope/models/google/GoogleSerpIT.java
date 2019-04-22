@@ -7,12 +7,11 @@
  */
 package com.serphacker.serposcope.models.google;
 
-import java.io.IOException;
-import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 import org.junit.Test;
-import static org.junit.Assert.*;
 import org.unitils.reflectionassert.ReflectionAssert;
+
+import java.io.IOException;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  *

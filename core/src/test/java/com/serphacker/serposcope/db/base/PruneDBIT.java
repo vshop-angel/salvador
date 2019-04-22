@@ -28,17 +28,17 @@ import com.serphacker.serposcope.scraper.captcha.solver.CaptchaSolver;
 import com.serphacker.serposcope.scraper.google.scraper.FakeGScraper;
 import com.serphacker.serposcope.scraper.http.ScrapClient;
 import com.serphacker.serposcope.task.google.GoogleTask;
-import com.serphacker.serposcope.task.google.GoogleTaskIT;
+import org.junit.Test;
+
+import javax.inject.Inject;
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.inject.Inject;
-import javax.sql.DataSource;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import org.unitils.reflectionassert.ReflectionAssert;
+
+import static org.junit.Assert.assertEquals;
 
 /**
  *

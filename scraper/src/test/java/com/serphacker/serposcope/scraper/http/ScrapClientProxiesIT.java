@@ -8,21 +8,17 @@
 package com.serphacker.serposcope.scraper.http;
 
 import com.serphacker.serposcope.scraper.DeepIntegrationTest;
-import com.serphacker.serposcope.scraper.http.extensions.ScrapClientSocksAuthenticator;
 import com.serphacker.serposcope.scraper.http.proxy.BindProxy;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.util.EntityUtils;
-import org.junit.Test;
 import com.serphacker.serposcope.scraper.http.proxy.HttpProxy;
 import com.serphacker.serposcope.scraper.http.proxy.SocksProxy;
-import java.util.HashMap;
-import java.util.Map;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import org.junit.Test;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.Assert.*;
 
 /**
  *

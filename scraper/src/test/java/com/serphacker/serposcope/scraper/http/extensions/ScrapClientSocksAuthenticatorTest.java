@@ -8,8 +8,10 @@
 package com.serphacker.serposcope.scraper.http.extensions;
 
 import com.serphacker.serposcope.scraper.http.proxy.SocksProxy;
-import java.net.PasswordAuthentication;
 import org.junit.Test;
+
+import java.net.PasswordAuthentication;
+
 import static org.junit.Assert.*;
 
 /**

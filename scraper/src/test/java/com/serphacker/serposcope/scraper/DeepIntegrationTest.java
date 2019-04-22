@@ -8,9 +8,10 @@
 
 package com.serphacker.serposcope.scraper;
 
-import java.util.Properties;
 import org.junit.Assume;
 import org.junit.Before;
+
+import java.util.Properties;
 
 
 public abstract class DeepIntegrationTest {

@@ -10,9 +10,10 @@ package it;
 
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.models.base.User;
+import ninja.NinjaTest;
+
 import java.util.HashMap;
 import java.util.Map;
-import ninja.NinjaTest;
 
 
 public abstract class SerposcopeNinjaTest extends NinjaTest {

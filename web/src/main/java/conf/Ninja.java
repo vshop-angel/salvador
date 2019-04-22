@@ -8,22 +8,13 @@
 package conf;
 
 import com.fasterxml.uuid.Generators;
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.db.base.ConfigDB;
 import com.serphacker.serposcope.db.base.RunDB;
 import com.serphacker.serposcope.models.base.Run;
 import com.serphacker.serposcope.scraper.google.GoogleCountryCode;
 import com.serphacker.serposcope.task.TaskManager;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
-import java.util.UUID;
 import ninja.NinjaDefault;
 import ninja.template.TemplateEngineFreemarker;
 import ninja.utils.NinjaConstant;
@@ -36,6 +27,10 @@ import serposcope.Version;
 import serposcope.helpers.CookieEncryptionOverride;
 import serposcope.helpers.CryptoOverride;
 import serposcope.services.Scheduler;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class Ninja extends NinjaDefault {
     

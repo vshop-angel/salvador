@@ -12,26 +12,22 @@ import com.serphacker.serposcope.db.base.ConfigDB;
 import com.serphacker.serposcope.db.base.ExportDB;
 import com.serphacker.serposcope.db.base.PruneDB;
 import com.serphacker.serposcope.models.base.Config;
-import com.serphacker.serposcope.models.base.Group;
 import com.serphacker.serposcope.models.base.Group.Module;
 import com.serphacker.serposcope.models.base.Run;
 import com.serphacker.serposcope.task.TaskManager;
+import ninja.lifecycle.Dispose;
+import ninja.lifecycle.Start;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.text.SimpleDateFormat;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import javax.inject.Inject;
-import javax.inject.Singleton;
-import ninja.lifecycle.Dispose;
-import ninja.lifecycle.Start;
-import ninja.scheduler.Schedule;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import sun.java2d.pipe.SpanShapeRenderer;
 
 @Singleton
 public class CronService implements Runnable {

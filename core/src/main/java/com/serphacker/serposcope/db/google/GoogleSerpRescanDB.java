@@ -10,25 +10,16 @@ package com.serphacker.serposcope.db.google;
 
 import com.serphacker.serposcope.db.base.RunDB;
 import com.serphacker.serposcope.models.base.Run;
-import com.serphacker.serposcope.models.google.GoogleBest;
-import com.serphacker.serposcope.models.google.GoogleRank;
-import com.serphacker.serposcope.models.google.GoogleSearch;
-import com.serphacker.serposcope.models.google.GoogleSerp;
-import com.serphacker.serposcope.models.google.GoogleTarget;
-import com.serphacker.serposcope.models.google.GoogleTargetSummary;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import javax.inject.Inject;
+import com.serphacker.serposcope.models.google.*;
 import org.apache.commons.lang3.mutable.MutableInt;
 import org.apache.commons.lang3.time.DurationFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 
 public class GoogleSerpRescanDB {

@@ -8,10 +8,12 @@
 package com.serphacker.serposcope.scraper.captcha;
 
 import com.serphacker.serposcope.scraper.captcha.solver.CaptchaSolver;
-import static com.serphacker.serposcope.scraper.captcha.Captcha.Error.SUCCESS;
-import static com.serphacker.serposcope.scraper.captcha.Captcha.Status.CREATED;
+
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.serphacker.serposcope.scraper.captcha.Captcha.Error.SUCCESS;
+import static com.serphacker.serposcope.scraper.captcha.Captcha.Status.CREATED;
 
 /**
  *

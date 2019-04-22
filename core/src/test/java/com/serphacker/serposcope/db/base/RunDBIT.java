@@ -7,22 +7,22 @@
  */
 package com.serphacker.serposcope.db.base;
 
-import com.google.inject.Inject;
+import javax.inject.Inject;
 import com.serphacker.serposcope.db.AbstractDBIT;
-import static com.serphacker.serposcope.db.base.RunDB.STATUSES_DONE;
 import com.serphacker.serposcope.models.base.Group;
 import com.serphacker.serposcope.models.base.Group.Module;
 import com.serphacker.serposcope.models.base.Run;
 import com.serphacker.serposcope.models.base.Run.Mode;
+import org.junit.Test;
+import org.unitils.reflectionassert.ReflectionAssert;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import org.junit.Test;
+
+import static com.serphacker.serposcope.db.base.RunDB.STATUSES_DONE;
 import static org.junit.Assert.*;
-import org.unitils.reflectionassert.ReflectionAssert;
 
 /**
  *

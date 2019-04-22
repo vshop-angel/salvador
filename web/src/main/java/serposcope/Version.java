@@ -7,10 +7,10 @@
  */
 package serposcope;
 
+import javax.inject.Singleton;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.inject.Singleton;
 
 @Singleton
 public class Version implements Comparable<Version> {

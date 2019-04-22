@@ -53,10 +53,10 @@
             <li>
                 <a href="#tab-calendar" data-toggle="tab">${i18n("label.calendar")}</a>
             </li>
-            </#if>
             <li>
                 <a href="#tab-reports" data-toggle="tab">${i18n("label.reports")} (${reports?size})</a>
             </li>
+            </#if>
         </ul>
 
         <div class="tab-content tab-groups">
@@ -72,10 +72,11 @@
             <div class="tab-pane" id="tab-calendar">
                 <#include "tab-calendar.ftl.html" />
             </div>
-
+            <#if user.isAdmin()>
             <div class="tab-pane" id="tab-reports">
                 <#include "tab-reports.ftl.html" />
             </div>
+            </#if>
         </div>
     </div>
 </div>

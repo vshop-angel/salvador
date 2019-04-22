@@ -7,15 +7,15 @@
  */
 package com.serphacker.serposcope.db.base;
 
-import com.google.inject.Singleton;
+import javax.inject.Singleton;
 import com.querydsl.core.QueryFlag.Position;
 import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.dml.SQLDeleteClause;
 import com.querydsl.sql.dml.SQLInsertClause;
 import com.serphacker.serposcope.db.AbstractDB;
 import com.serphacker.serposcope.models.base.Config;
-import static com.serphacker.serposcope.models.base.Config.DEFAULT_PRUNE_RUNS;
 import com.serphacker.serposcope.querybuilder.QConfig;
+
 import java.sql.Connection;
 
 @Singleton

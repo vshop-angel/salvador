@@ -9,10 +9,11 @@
 package serposcope.lifecycle;
 
 import conf.SerposcopeConf;
-import java.io.File;
+import org.apache.commons.io.FileUtils;
+
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import org.apache.commons.io.FileUtils;
+import java.io.File;
 
 @Singleton
 public class DBSizeUtils {

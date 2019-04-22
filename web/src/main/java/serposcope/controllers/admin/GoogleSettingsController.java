@@ -7,18 +7,12 @@
  */
 package serposcope.controllers.admin;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import com.serphacker.serposcope.db.google.GoogleDB;
 import com.serphacker.serposcope.models.google.GoogleSettings;
 import com.serphacker.serposcope.scraper.google.GoogleDevice;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import ninja.Context;
-import ninja.FilterWith;
-import ninja.Result;
-import ninja.Results;
-import ninja.Router;
+import ninja.*;
 import ninja.params.Param;
 import ninja.session.FlashScope;
 import org.slf4j.Logger;

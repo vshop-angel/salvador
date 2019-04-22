@@ -10,7 +10,6 @@ package com.serphacker.serposcope.di;
 import com.google.inject.ImplementedBy;
 import com.serphacker.serposcope.models.base.Config;
 import com.serphacker.serposcope.scraper.captcha.solver.CaptchaSolver;
-import java.util.Map;
 
 /**
  *

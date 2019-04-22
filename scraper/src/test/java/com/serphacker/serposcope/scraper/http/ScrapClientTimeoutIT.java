@@ -11,10 +11,12 @@ package com.serphacker.serposcope.scraper.http;
 import com.serphacker.serposcope.scraper.DeepIntegrationTest;
 import com.serphacker.serposcope.scraper.http.proxy.HttpProxy;
 import com.serphacker.serposcope.scraper.http.proxy.SocksProxy;
+import org.junit.Test;
+
 import java.io.InterruptedIOException;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import org.junit.Test;
 
 
 public class ScrapClientTimeoutIT extends DeepIntegrationTest {

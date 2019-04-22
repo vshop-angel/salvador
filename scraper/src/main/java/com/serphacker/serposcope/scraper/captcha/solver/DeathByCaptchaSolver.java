@@ -9,11 +9,14 @@ package com.serphacker.serposcope.scraper.captcha.solver;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.serphacker.serposcope.scraper.captcha.Captcha;
-import static com.serphacker.serposcope.scraper.captcha.Captcha.Error.EXCEPTION;
 import com.serphacker.serposcope.scraper.captcha.CaptchaImage;
 import com.serphacker.serposcope.scraper.captcha.CaptchaRecaptcha;
 import com.serphacker.serposcope.scraper.http.ScrapClient;
-import com.serphacker.serposcope.scraper.http.proxy.HttpProxy;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.content.ByteArrayBody;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,10 +24,8 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.content.ByteArrayBody;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+
+import static com.serphacker.serposcope.scraper.captcha.Captcha.Error.EXCEPTION;
 
 public class DeathByCaptchaSolver implements CaptchaSolver {
 

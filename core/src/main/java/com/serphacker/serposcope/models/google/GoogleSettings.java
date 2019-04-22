@@ -9,8 +9,6 @@ package com.serphacker.serposcope.models.google;
 
 import com.serphacker.serposcope.scraper.google.GoogleCountryCode;
 import com.serphacker.serposcope.scraper.google.GoogleDevice;
-import java.util.Arrays;
-import java.util.List;
 
 
 public class GoogleSettings {

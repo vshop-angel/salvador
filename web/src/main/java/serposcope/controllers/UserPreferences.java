@@ -8,17 +8,11 @@
 package serposcope.controllers;
 
 import com.google.common.base.Optional;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.models.base.User;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import ninja.Context;
-import ninja.FilterWith;
-import ninja.Result;
-import ninja.Results;
-import ninja.Router;
+import ninja.*;
 import ninja.i18n.Lang;
 import ninja.params.Param;
 import ninja.session.FlashScope;
@@ -26,6 +20,9 @@ import ninja.utils.NinjaProperties;
 import serposcope.filters.AuthFilter;
 import serposcope.filters.XSRFFilter;
 import serposcope.helpers.Validator;
+
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 
 @Singleton
 @FilterWith(AuthFilter.class)

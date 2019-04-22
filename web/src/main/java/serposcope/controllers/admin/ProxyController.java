@@ -8,32 +8,27 @@
 package serposcope.controllers.admin;
 
 import com.google.common.base.Optional;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.models.base.Proxy;
 import com.serphacker.serposcope.task.proxy.ProxyChecker;
-import ninja.FilterWith;
-import ninja.Result;
-import ninja.Results;
-import ninja.Router;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import serposcope.controllers.BaseController;
-import serposcope.filters.AdminFilter;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.stream.Collectors;
-import ninja.Context;
+import ninja.*;
 import ninja.i18n.Messages;
 import ninja.params.Param;
 import ninja.params.Params;
 import ninja.session.FlashScope;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import serposcope.controllers.BaseController;
+import serposcope.filters.AdminFilter;
 import serposcope.filters.XSRFFilter;
 import serposcope.helpers.Validator;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @FilterWith(AdminFilter.class)
 @Singleton

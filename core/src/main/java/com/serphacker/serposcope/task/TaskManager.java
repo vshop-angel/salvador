@@ -7,20 +7,17 @@
  */
 package com.serphacker.serposcope.task;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.di.TaskFactory;
-import com.serphacker.serposcope.models.base.Group;
-import com.serphacker.serposcope.models.base.Group.Module;
 import com.serphacker.serposcope.models.base.Run;
-import com.serphacker.serposcope.models.base.Run.Mode;
 import com.serphacker.serposcope.task.google.GoogleTask;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Singleton
 public class TaskManager {

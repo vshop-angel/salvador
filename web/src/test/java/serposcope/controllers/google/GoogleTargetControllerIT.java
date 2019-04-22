@@ -7,11 +7,7 @@
  */
 package serposcope.controllers.google;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Inject;
-import com.google.inject.Module;
-import com.google.inject.Singleton;
+import com.google.inject.*;
 import com.querydsl.sql.Configuration;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.db.google.GoogleDB;
@@ -19,30 +15,19 @@ import com.serphacker.serposcope.di.db.ConfigurationProvider;
 import com.serphacker.serposcope.di.db.DataSourceProvider;
 import com.serphacker.serposcope.models.base.Group;
 import com.serphacker.serposcope.models.base.Run;
-import com.serphacker.serposcope.models.base.User;
 import com.serphacker.serposcope.models.google.GoogleSearch;
 import com.serphacker.serposcope.models.google.GoogleTarget;
+import org.apache.commons.lang3.time.DurationFormatUtils;
+import org.junit.Before;
+
+import javax.sql.DataSource;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.security.NoSuchAlgorithmException;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 import java.util.zip.GZIPOutputStream;
-import javax.sql.DataSource;
-
-import net.sourceforge.htmlunit.corejs.javascript.ContextFactory;
-import ninja.Context;
-import ninja.NinjaTest;
-import ninja.Result;
-import org.apache.commons.lang3.time.DurationFormatUtils;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import org.junit.Before;
-import serposcope.controllers.google.GoogleTargetController;
 
 /**
  *

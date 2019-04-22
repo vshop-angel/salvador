@@ -8,15 +8,17 @@
 package it;
 
 import com.serphacker.serposcope.models.base.User;
-import java.util.HashMap;
-import java.util.Map;
 import org.apache.commons.lang.StringUtils;
-import static org.junit.Assert.assertFalse;
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.assertTrue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 
 public class BigPostRequestIT extends SerposcopeNinjaTest {

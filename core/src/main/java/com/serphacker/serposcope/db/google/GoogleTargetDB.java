@@ -7,9 +7,8 @@
  */
 package com.serphacker.serposcope.db.google;
 
-import com.google.inject.Singleton;
+import javax.inject.Singleton;
 import com.querydsl.core.Tuple;
-import com.querydsl.core.types.Expression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.dml.SQLDeleteClause;
@@ -19,6 +18,7 @@ import com.serphacker.serposcope.db.AbstractDB;
 import com.serphacker.serposcope.models.google.GoogleTarget;
 import com.serphacker.serposcope.models.google.GoogleTarget.PatternType;
 import com.serphacker.serposcope.querybuilder.QGoogleTarget;
+
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collection;

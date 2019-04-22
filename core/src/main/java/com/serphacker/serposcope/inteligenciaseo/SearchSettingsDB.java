@@ -1,10 +1,11 @@
 package com.serphacker.serposcope.inteligenciaseo;
 
-import com.google.inject.Singleton;
+import javax.inject.Singleton;
 import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.dml.SQLInsertClause;
 import com.querydsl.sql.dml.SQLUpdateClause;
 import com.serphacker.serposcope.db.AbstractDB;
+import com.serphacker.serposcope.models.base.User;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -38,15 +39,16 @@ public class SearchSettingsDB extends AbstractDB {
         return count;
     }
 
-    public List<String> getCategories() {
+    public List<String> getCategories(User user) {
         try (Connection con = ds.getConnection()) {
             SQLQuery<String> query = new SQLQuery<>(con, dbTplConf)
                     .select(t_search_settings.category)
                     .distinct()
-                    .from(t_search_settings)
-            ;
-            List<String> list = query.fetch();
-            return list;
+                    .from(t_search_settings);
+            if (!user.isAdmin()) {
+                query = query.where(t_search_settings.adminsOnly.eq(false));
+            }
+            return query.fetch();
         } catch (Exception ex) {
             ex.printStackTrace();
             LOG.error("SQLError ex", ex);

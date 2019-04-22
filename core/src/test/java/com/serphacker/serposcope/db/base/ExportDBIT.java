@@ -7,44 +7,30 @@
  */
 package com.serphacker.serposcope.db.base;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.Guice;
-import com.google.inject.Inject;
-import com.google.inject.Injector;
-import com.google.inject.Module;
-import com.google.inject.Singleton;
+import com.google.inject.*;
 import com.querydsl.sql.Configuration;
 import com.serphacker.serposcope.db.google.GoogleDB;
 import com.serphacker.serposcope.di.db.ConfigurationProvider;
 import com.serphacker.serposcope.di.db.DataSourceProvider;
-import com.serphacker.serposcope.models.base.Event;
-import com.serphacker.serposcope.models.base.Group;
-import com.serphacker.serposcope.models.base.Proxy;
-import com.serphacker.serposcope.models.base.Run;
-import com.serphacker.serposcope.models.base.User;
+import com.serphacker.serposcope.models.base.*;
 import com.serphacker.serposcope.models.google.GoogleSearch;
 import com.serphacker.serposcope.models.google.GoogleSerp;
 import com.serphacker.serposcope.models.google.GoogleSerpEntry;
-import com.serphacker.serposcope.models.google.GoogleSettings;
 import com.serphacker.serposcope.models.google.GoogleTarget;
 import com.serphacker.serposcope.scraper.google.GoogleCountryCode;
 import com.serphacker.serposcope.scraper.google.GoogleDevice;
-import java.sql.Clob;
+import org.junit.Before;
+import org.junit.Test;
+
+import javax.sql.DataSource;
 import java.sql.Connection;
-import java.sql.JDBCType;
 import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Properties;
-import javax.sql.DataSource;
-import org.h2.jdbc.JdbcClob;
-import org.junit.Test;
-import static org.junit.Assert.*;
-import org.junit.Before;
+import java.util.*;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  *

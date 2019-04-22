@@ -9,11 +9,13 @@ package serposcope.controllers.google;
 
 import com.google.common.base.Optional;
 import com.google.inject.Inject;
+import com.serphacker.serposcope.db.google.GoogleSearchDB;
 import com.serphacker.serposcope.inteligenciaseo.Report;
 import com.serphacker.serposcope.inteligenciaseo.ReportsDB;
 import com.serphacker.serposcope.inteligenciaseo.SearchSettings;
 import com.serphacker.serposcope.inteligenciaseo.SearchSettingsDB;
 import com.serphacker.serposcope.models.base.User;
+import com.serphacker.serposcope.querybuilder.QGoogleSearch;
 import ninja.Result;
 import ninja.Results;
 
@@ -129,7 +131,7 @@ public class GoogleGroupController extends GoogleController {
                 .render("targets", context.getAttribute("targets"))
                 .render("summaries", summaryByTagetId)
                 .render("histories", scoreHistoryByTagetId)
-                .render("categories", settingsDB.getCategories());
+                .render("categories", settingsDB.getCategories(user));
     }
 
     public Result jsonSearches(Context context) {
@@ -495,6 +497,27 @@ public class GoogleGroupController extends GoogleController {
 
         flash.success("google.group.websiteRenamed");
         return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()));
+    }
+
+    @FilterWith({
+            XSRFFilter.class,
+            AdminFilter.class
+    })
+    public Result refreshVolumes(
+            Context context,
+            @Params("id[]") String[] ids
+    ) {
+        Group group = context.getAttribute("group", Group.class);
+        if (ids == null) {
+            return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()) + "#tab-searches");
+        }
+        // List<Keyword> keywords = new ArrayList<Keyword>();
+        System.out.println("refreshing keyword search volumes");
+        for (String id: ids) {
+            GoogleSearch search = googleDB.search.find(Integer.valueOf(id));
+            System.out.printf("\t%s\n", search.getKeyword());
+        }
+        return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()) + "#tab-searches");
     }
 
     @FilterWith({

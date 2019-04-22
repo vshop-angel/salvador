@@ -9,6 +9,7 @@
 package com.serphacker.serposcope.db.base;
 
 import com.serphacker.serposcope.scraper.google.GoogleCountryCode;
+
 import static com.serphacker.serposcope.scraper.google.GoogleCountryCode.*;
 
 public class MigrationTLDtoCountry {

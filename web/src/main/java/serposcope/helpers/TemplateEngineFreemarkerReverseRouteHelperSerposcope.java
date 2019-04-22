@@ -8,19 +8,17 @@
 package serposcope.helpers;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
-import ninja.Router;
-
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import freemarker.template.SimpleNumber;
 import freemarker.template.SimpleScalar;
 import freemarker.template.TemplateModel;
 import freemarker.template.TemplateModelException;
+import ninja.Router;
 import ninja.template.TemplateEngineFreemarkerReverseRouteHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Singleton
 public class TemplateEngineFreemarkerReverseRouteHelperSerposcope 

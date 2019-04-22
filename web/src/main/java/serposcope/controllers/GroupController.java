@@ -8,20 +8,14 @@
 package serposcope.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.db.google.GoogleDB;
 import com.serphacker.serposcope.models.base.Group;
 import com.serphacker.serposcope.models.base.Group.Module;
 import conf.SerposcopeConf;
-import java.util.Comparator;
-import java.util.List;
-import ninja.Context;
-import ninja.FilterWith;
-import ninja.Result;
-import ninja.Results;
-import ninja.Router;
+import ninja.*;
 import ninja.params.Param;
 import ninja.session.FlashScope;
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -29,6 +23,8 @@ import serposcope.controllers.google.GoogleGroupController;
 import serposcope.filters.AdminFilter;
 import serposcope.filters.AuthFilter;
 import serposcope.filters.XSRFFilter;
+
+import java.util.List;
 
 @Singleton
 @FilterWith(AuthFilter.class)

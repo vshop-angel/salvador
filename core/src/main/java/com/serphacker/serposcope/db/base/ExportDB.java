@@ -9,28 +9,15 @@ package com.serphacker.serposcope.db.base;
 
 import com.google.common.io.ByteStreams;
 import com.serphacker.serposcope.db.AbstractDB;
-import static com.serphacker.serposcope.db.base.MigrationDB.TABLES;
-import java.io.BufferedReader;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.Reader;
-import java.io.Writer;
-import java.nio.charset.Charset;
-import java.sql.Blob;
-import java.sql.Clob;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.zip.GZIPOutputStream;
-import javax.inject.Inject;
-import org.apache.commons.lang3.StringEscapeUtils;
 import org.apache.commons.lang3.time.DurationFormatUtils;
+
+import javax.inject.Inject;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.sql.*;
+import java.util.zip.GZIPOutputStream;
+
+import static com.serphacker.serposcope.db.base.MigrationDB.TABLES;
 
 public class ExportDB extends AbstractDB {
     

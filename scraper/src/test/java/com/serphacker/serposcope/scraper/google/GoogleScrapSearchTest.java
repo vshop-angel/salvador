@@ -8,7 +8,8 @@
 package com.serphacker.serposcope.scraper.google;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  *

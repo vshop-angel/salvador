@@ -7,10 +7,9 @@
  */
 package serposcope.helpers;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import static java.util.regex.Pattern.UNICODE_CHARACTER_CLASS;
 
 public class Validator {

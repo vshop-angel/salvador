@@ -8,21 +8,14 @@
 package com.serphacker.serposcope.di;
 
 import com.serphacker.serposcope.models.base.Config;
-import com.serphacker.serposcope.scraper.captcha.solver.AntiCaptchaSolver;
-import com.serphacker.serposcope.scraper.captcha.solver.CaptchaSolver;
-import com.serphacker.serposcope.scraper.captcha.solver.DeathByCaptchaSolver;
-import com.serphacker.serposcope.scraper.captcha.solver.DecaptcherSolver;
-import com.serphacker.serposcope.scraper.captcha.solver.ImageTyperzSolver;
-import com.serphacker.serposcope.scraper.captcha.solver.RandomCaptchaSolver;
-import com.serphacker.serposcope.scraper.captcha.solver.SwingUICaptchaSolver;
-import com.serphacker.serposcope.scraper.captcha.solver.TwoCaptchaSolver;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import com.serphacker.serposcope.scraper.captcha.solver.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class CaptchaSolverFactoryImpl implements CaptchaSolverFactory {
 

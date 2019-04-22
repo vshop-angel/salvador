@@ -164,8 +164,8 @@ serposcope.googleTargetControllerGrid = function () {
     };
 
     var compareVolumes = function (a, b) {
-        var A = parseInt(a[COL_SEARCH_SETTINGS][0]);
-        var B = parseInt(b[COL_SEARCH_SETTINGS][0]);
+        var A = parseInt(a[COL_SEARCH_SETTINGS].volume);
+        var B = parseInt(b[COL_SEARCH_SETTINGS].volume);
         if (isNaN(A)) {
             return isNaN(B) ? 0 : 1;
         } else if (isNaN(B)) {
