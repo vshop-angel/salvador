@@ -7,12 +7,12 @@
  */
 package serposcope.helpers;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import ninja.utils.Crypto;
 import ninja.utils.NinjaConstant;
 import ninja.utils.NinjaProperties;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.lang.reflect.Field;
 
 @Singleton

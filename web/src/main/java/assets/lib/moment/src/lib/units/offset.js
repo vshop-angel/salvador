@@ -1,17 +1,17 @@
 import zeroFill from '../utils/zero-fill';
-import { createDuration } from '../duration/create';
-import { addSubtract } from '../moment/add-subtract';
-import { isMoment, copyConfig } from '../moment/constructor';
-import { addFormatToken } from '../format/format';
-import { addRegexToken, matchOffset } from '../parse/regex';
-import { addParseToken } from '../parse/token';
-import { createLocal } from '../create/local';
-import { prepareConfig } from '../create/from-anything';
-import { createUTC } from '../create/utc';
+import {createDuration} from '../duration/create';
+import {addSubtract} from '../moment/add-subtract';
+import {copyConfig, isMoment} from '../moment/constructor';
+import {addFormatToken} from '../format/format';
+import {addRegexToken, matchOffset} from '../parse/regex';
+import {addParseToken} from '../parse/token';
+import {createLocal} from '../create/local';
+import {prepareConfig} from '../create/from-anything';
+import {createUTC} from '../create/utc';
 import isDate from '../utils/is-date';
 import toInt from '../utils/to-int';
 import compareArrays from '../utils/compare-arrays';
-import { hooks } from '../utils/hooks';
+import {hooks} from '../utils/hooks';
 
 // FORMATTING
 

@@ -7,9 +7,6 @@
  */
 package serposcope.controllers.admin;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import com.google.common.base.Optional;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.models.base.Group;
@@ -25,6 +22,8 @@ import serposcope.filters.AdminFilter;
 import serposcope.filters.XSRFFilter;
 import serposcope.helpers.Validator;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.List;
 
 @FilterWith(AdminFilter.class)

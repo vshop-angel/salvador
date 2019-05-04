@@ -7,7 +7,6 @@
  */
 package com.serphacker.serposcope.db.google;
 
-import javax.inject.Singleton;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLQuery;
@@ -19,6 +18,7 @@ import com.serphacker.serposcope.models.google.GoogleTarget;
 import com.serphacker.serposcope.models.google.GoogleTarget.PatternType;
 import com.serphacker.serposcope.querybuilder.QGoogleTarget;
 
+import javax.inject.Singleton;
 import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Collection;

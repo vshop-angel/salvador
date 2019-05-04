@@ -49,6 +49,16 @@
             </a>
         </li>      
         </#if>
+        <li>
+            <a href="${reverseRoute("admin.BackupController","table")}">
+                <i class="fa fa-refresh"></i> ${i18n("admin.viewBackups")}
+            </a>
+        </li>
+        <li>
+            <a href="${reverseRoute("admin.BackupController","create")}">
+                <i class="fa fa-save"></i> ${i18n("admin.createBackup")}
+            </a>
+        </li>
     </ul>
 </li>
 </#assign>

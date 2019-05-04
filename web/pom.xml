@@ -253,6 +253,7 @@
                                         <jsSourceFile>/assets/js/views/admin/SettingsController.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/admin/UsersController.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/admin/DebugController.js</jsSourceFile>
+                                        <jsSourceFile>/assets/js/views/admin/BackupController.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/admin/GoogleSettingsController.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/admin/TaskController.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/admin/ProxyController.js</jsSourceFile>
@@ -310,6 +311,7 @@
                                         <jsSourceFile>/assets/js/views/admin/SettingsController.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/admin/UsersController.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/admin/DebugController.js</jsSourceFile>
+                                        <jsSourceFile>/assets/js/views/admin/BackupController.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/admin/GoogleSettingsController.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/admin/TaskController.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/admin/ProxyController.js</jsSourceFile>
@@ -364,6 +366,12 @@
             <groupId>com.fasterxml.uuid</groupId>
             <artifactId>java-uuid-generator</artifactId>
             <version>3.1.4</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.24</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

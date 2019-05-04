@@ -1,5 +1,5 @@
-import { createDuration } from '../duration/create';
-import { createLocal } from '../create/local';
+import {createDuration} from '../duration/create';
+import {createLocal} from '../create/local';
 
 export function to (time, withoutSuffix) {
     if (!this.isValid()) {

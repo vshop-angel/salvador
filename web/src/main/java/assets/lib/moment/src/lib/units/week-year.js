@@ -1,11 +1,11 @@
-import { addFormatToken } from '../format/format';
-import { addUnitAlias } from './aliases';
-import { addRegexToken, match1to2, match1to4, match1to6, match2, match4, match6, matchSigned } from '../parse/regex';
-import { addWeekParseToken } from '../parse/token';
-import { weekOfYear } from './week';
+import {addFormatToken} from '../format/format';
+import {addUnitAlias} from './aliases';
+import {addRegexToken, match1to2, match1to4, match1to6, match2, match4, match6, matchSigned} from '../parse/regex';
+import {addWeekParseToken} from '../parse/token';
+import {weekOfYear} from './week';
 import toInt from '../utils/to-int';
-import { hooks } from '../utils/hooks';
-import { createLocal } from '../create/local';
+import {hooks} from '../utils/hooks';
+import {createLocal} from '../create/local';
 
 // FORMATTING
 

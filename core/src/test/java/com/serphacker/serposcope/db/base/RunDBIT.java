@@ -7,7 +7,6 @@
  */
 package com.serphacker.serposcope.db.base;
 
-import javax.inject.Inject;
 import com.serphacker.serposcope.db.AbstractDBIT;
 import com.serphacker.serposcope.models.base.Group;
 import com.serphacker.serposcope.models.base.Group.Module;
@@ -16,6 +15,7 @@ import com.serphacker.serposcope.models.base.Run.Mode;
 import org.junit.Test;
 import org.unitils.reflectionassert.ReflectionAssert;
 
+import javax.inject.Inject;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;

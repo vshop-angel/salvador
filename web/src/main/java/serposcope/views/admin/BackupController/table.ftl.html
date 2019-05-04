@@ -1,0 +1,78 @@
+<#-- @ftlvariable name="serp" type="com.serphacker.serposcope.models.google.GoogleSerp" -->
+<#import "../admin.ftl.html" as layout>
+<@layout.adminLayout i18n("label.backup") >
+    <#assign formKey="backup-table-form-id">
+
+    <script type="text/javascript" src="/assets/js/views/admin/BackupController.js"></script>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="inline-block">
+                <form method="POST" action="${reverseRoute("admin.BackupController","delete")}"
+                      onsubmit="return confirmWipe(event, '${formKey}')">
+                    <@authenticityForm/>
+                    <input type="submit" id="btn-clear" class="btn btn-danger" value="${i18n("admin.backup.clear")}" ${status}="disabled">
+                </form>
+            </div>
+            <div class="inline-block">
+                <form class="form-horizontal form-inline" method="POST"
+                      action="${reverseRoute("admin.BackupController","restore")}"
+                      onsubmit="return confirmRestore(event, '${formKey}')">
+                    <@authenticityForm/>
+                    <input type="submit" id="btn-restore" class="btn" value="${i18n("admin.backup.restore")}" ${status}="disabled">
+                </form>
+            </div>
+        </div>
+    </div>
+    <br/>
+    <div class="row">
+        <div class="col-xs-12">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active"><a>${i18n("label.savedBackups")}</a></li>
+            </ul>
+            <div class="tab-content tab-groups">
+                <br/>
+                <form id="${formKey}">
+                    <table class="table table-condensed table-striped table-bordered">
+                        <thead>
+                        <tr>
+                            <th width="22px" style="text-align:center;"><i class="fa fa-archive"></i></th>
+                            <th style="text-align:center;">${i18n("label.date")}</th>
+                            <th style="text-align:center;">${i18n("label.time")}</th>
+                            <th style="text-align:center;">${i18n("label.size")}</th>
+                            <th style="text-align:center;">${i18n("label.name")}</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <#list files as file>
+                            <script type="text/javascript">checkBackupStatus('${file.name}', '${file.status}');</script>
+                            <tr id="${file.name}">
+                                <td>
+                                    <#if file.status == "Pending">
+                                        <span class="simple-spinner"></span>
+                                    <#else>
+                                       <label class="compact"><input type="checkbox" name="selected[]" value="${file.name}" ${status}="disabled"/></label>
+                                    </#if>
+                                </td>
+                                <td>${file.date?date?string.long}</td>
+                                <td style="text-align:center;">${file.time}</td>
+                                <td style="text-align:center;">${file.size}</td>
+                                <td>
+                                    <#if status == "disabled">
+                                        <a href="javascript:void(0)" class="inactive">
+                                            <i class="fa fa-download"></i> ${file.name}
+                                        </a>
+                                    <#else>
+                                        <a href="${reverseRoute("admin.BackupController","download","name",file.name)}">
+                                            <i class="fa fa-download"></i> ${file.name}
+                                        </a>
+                                    </#if>
+                                </td>
+                            </tr>
+                        </#list>
+                        </tbody>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</@>

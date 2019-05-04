@@ -47,8 +47,15 @@ public class Routes implements ApplicationRoutes {
         router.POST().route("/admin/debug/dry-run").with(DebugController.class, "dryRun"); 
         router.GET().route("/admin/debug/test").with(DebugController.class, "test"); 
         router.GET().route("/admin/debug/shutdown").with(DebugController.class, "shutdown"); 
-        router.POST().route("/admin/debug/dummy-post").with(DebugController.class, "dummyPost"); 
-        
+        router.POST().route("/admin/debug/dummy-post").with(DebugController.class, "dummyPost");
+
+        router.GET().route("/admin/backup").with(BackupController.class, "table");
+        router.GET().route("/admin/backup/create").with(BackupController.class, "create");
+        router.GET().route("/admin/backup/download").with(BackupController.class, "download");
+        router.GET().route("/admin/backup/status").with(BackupController.class, "getStatus");
+        router.POST().route("/admin/backup/delete").with(BackupController.class, "delete");
+        router.POST().route("/admin/backup/restore").with(BackupController.class, "restore");
+
         router.GET().route("/admin/settings").with(SettingsController.class, "settings");
         router.POST().route("/admin/settings/update").with(SettingsController.class, "update");
         router.POST().route("/admin/settings/reset").with(SettingsController.class, "reset");        

@@ -8,7 +8,6 @@
 package conf;
 
 import com.fasterxml.uuid.Generators;
-import javax.inject.Inject;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.db.base.ConfigDB;
 import com.serphacker.serposcope.db.base.RunDB;
@@ -28,6 +27,7 @@ import serposcope.helpers.CookieEncryptionOverride;
 import serposcope.helpers.CryptoOverride;
 import serposcope.services.Scheduler;
 
+import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;

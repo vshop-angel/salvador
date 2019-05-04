@@ -4,42 +4,41 @@
 //! license : MIT
 //! momentjs.com
 
-import { hooks as moment, setHookCallback } from './lib/utils/hooks';
-
-moment.version = '2.10.6';
-
+import {hooks as moment, setHookCallback} from './lib/utils/hooks';
 import {
-    min,
-    max,
+    createInvalid as invalid,
+    createInZone as parseZone,
+    createLocal as local,
+    createUnix as unix,
+    createUTC as utc,
     isMoment,
-    momentPrototype as fn,
-    createUTC       as utc,
-    createUnix      as unix,
-    createLocal     as local,
-    createInvalid   as invalid,
-    createInZone    as parseZone
+    max,
+    min,
+    momentPrototype as fn
 } from './lib/moment/moment';
 
 import {
     defineLocale,
+    getLocale as localeData,
     getSetGlobalLocale as locale,
-    getLocale          as localeData,
-    listMonths         as months,
-    listMonthsShort    as monthsShort,
-    listWeekdays       as weekdays,
-    listWeekdaysMin    as weekdaysMin,
-    listWeekdaysShort  as weekdaysShort
+    listMonths as months,
+    listMonthsShort as monthsShort,
+    listWeekdays as weekdays,
+    listWeekdaysMin as weekdaysMin,
+    listWeekdaysShort as weekdaysShort
 } from './lib/locale/locale';
 
 import {
-    isDuration,
     createDuration as duration,
-    getSetRelativeTimeThreshold as relativeTimeThreshold
+    getSetRelativeTimeThreshold as relativeTimeThreshold,
+    isDuration
 } from './lib/duration/duration';
 
-import { normalizeUnits } from './lib/units/units';
+import {normalizeUnits} from './lib/units/units';
 
 import isDate from './lib/utils/is-date';
+
+moment.version = '2.10.6';
 
 setHookCallback(local);
 

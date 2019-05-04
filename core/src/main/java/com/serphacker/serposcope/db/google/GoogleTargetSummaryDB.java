@@ -7,7 +7,6 @@
  */
 package com.serphacker.serposcope.db.google;
 
-import javax.inject.Singleton;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.sql.SQLQuery;
@@ -21,6 +20,7 @@ import com.serphacker.serposcope.models.google.GoogleTargetSummary;
 import com.serphacker.serposcope.querybuilder.QGoogleRank;
 import com.serphacker.serposcope.querybuilder.QGoogleTargetSummary;
 
+import javax.inject.Singleton;
 import java.sql.Connection;
 import java.util.*;
 

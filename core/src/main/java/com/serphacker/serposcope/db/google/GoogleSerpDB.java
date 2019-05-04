@@ -7,7 +7,6 @@
  */
 package com.serphacker.serposcope.db.google;
 
-import javax.inject.Singleton;
 import com.mysema.commons.lang.CloseableIterator;
 import com.querydsl.core.Tuple;
 import com.querydsl.sql.SQLQuery;
@@ -21,6 +20,7 @@ import net.jpountz.lz4.LZ4Compressor;
 import net.jpountz.lz4.LZ4Factory;
 import net.jpountz.lz4.LZ4FastDecompressor;
 
+import javax.inject.Singleton;
 import javax.sql.rowset.serial.SerialBlob;
 import java.nio.ByteBuffer;
 import java.sql.Blob;

@@ -7,7 +7,6 @@
  */
 package com.serphacker.serposcope.task.google;
 
-import javax.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import com.serphacker.serposcope.db.google.GoogleDB;
 import com.serphacker.serposcope.di.CaptchaSolverFactory;
@@ -27,6 +26,7 @@ import com.serphacker.serposcope.task.AbstractTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;

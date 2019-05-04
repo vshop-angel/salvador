@@ -7,8 +7,6 @@
  */
 package serposcope.controllers;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.db.base.RunDB;
 import com.serphacker.serposcope.db.google.GoogleDB;
@@ -25,6 +23,8 @@ import ninja.params.PathParam;
 import serposcope.filters.AuthFilter;
 import serposcope.lifecycle.DBSizeUtils;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.function.Function;
@@ -108,10 +108,16 @@ public class HomeController extends BaseController {
         for (GoogleTarget target : targets) {
             GoogleTargetSummary summary = summariesByTarget.get(target.getId());
             if(summary != null){
-                List<Integer> scoreHistory = googleDB.targetSummary.listScoreHistory(target.getGroupId(), target.getId(), 30);
-                int missingScore = 30 - scoreHistory.size();
-                for (int i = 0; i < missingScore; i++) {
-                    scoreHistory.add(0, 0);
+                List<Integer> scoreHistory;
+
+                if (user.isAdmin()) {
+                    scoreHistory = googleDB.targetSummary.listScoreHistory(target.getGroupId(), target.getId(), 30);
+                    int missingScore = 30 - scoreHistory.size();
+                    for (int i = 0; i < missingScore; i++) {
+                        scoreHistory.add(0, 0);
+                    }
+                } else {
+                    scoreHistory = new ArrayList<>();
                 }
                 summaries.add(new TargetHomeEntry(groupById.get(target.getGroupId()).getName(), target, summary, scoreHistory));
             }

@@ -9,7 +9,6 @@ package com.serphacker.serposcope.task.google;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
-import javax.inject.Inject;
 import com.google.inject.Module;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.serphacker.serposcope.db.AbstractDBIT;
@@ -31,6 +30,7 @@ import com.serphacker.serposcope.scraper.google.scraper.GoogleScraper;
 import com.serphacker.serposcope.scraper.http.ScrapClient;
 import org.junit.Test;
 
+import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;

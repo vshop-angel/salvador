@@ -7,7 +7,6 @@
  */
 package com.serphacker.serposcope.db.base;
 
-import javax.inject.Inject;
 import com.serphacker.serposcope.db.AbstractDBIT;
 import com.serphacker.serposcope.models.base.Proxy;
 import com.serphacker.serposcope.scraper.http.proxy.BindProxy;
@@ -15,6 +14,7 @@ import com.serphacker.serposcope.scraper.http.proxy.HttpProxy;
 import com.serphacker.serposcope.scraper.http.proxy.ScrapProxy;
 import org.junit.Test;
 
+import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashSet;

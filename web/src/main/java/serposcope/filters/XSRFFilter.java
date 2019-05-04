@@ -7,13 +7,14 @@
  */
 package serposcope.filters;
 
-import javax.inject.Singleton;
 import ninja.Context;
 import ninja.FilterChain;
 import ninja.Result;
 import ninja.Results;
 import ninja.session.Session;
 import ninja.utils.NinjaConstant;
+
+import javax.inject.Singleton;
 
 @Singleton
 public class XSRFFilter extends AbstractFilter {

@@ -8,8 +8,6 @@
 package serposcope.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.db.google.GoogleDB;
 import com.serphacker.serposcope.models.base.Group;
@@ -24,6 +22,8 @@ import serposcope.filters.AdminFilter;
 import serposcope.filters.AuthFilter;
 import serposcope.filters.XSRFFilter;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.List;
 
 @Singleton

@@ -7,8 +7,6 @@
  */
 package serposcope.controllers.admin;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import com.serphacker.serposcope.db.google.GoogleDB;
 import com.serphacker.serposcope.models.google.GoogleSettings;
 import com.serphacker.serposcope.scraper.google.GoogleDevice;
@@ -21,6 +19,9 @@ import serposcope.controllers.BaseController;
 import serposcope.filters.AdminFilter;
 import serposcope.filters.XSRFFilter;
 import serposcope.helpers.Validator;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 @FilterWith(AdminFilter.class)
 @Singleton

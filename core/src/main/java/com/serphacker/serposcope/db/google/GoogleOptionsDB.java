@@ -7,10 +7,11 @@
  */
 package com.serphacker.serposcope.db.google;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import com.serphacker.serposcope.db.base.ConfigDB;
 import com.serphacker.serposcope.models.google.GoogleSettings;
+
+import javax.inject.Inject;
+import javax.inject.Singleton;
 
 @Singleton
 public class GoogleOptionsDB {

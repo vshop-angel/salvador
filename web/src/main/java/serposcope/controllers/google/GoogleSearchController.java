@@ -10,8 +10,6 @@ package serposcope.controllers.google;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Optional;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.db.google.GoogleDB;
 import com.serphacker.serposcope.inteligenciaseo.SearchSettingsDB;
@@ -30,6 +28,8 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import serposcope.filters.AdminFilter;
 import serposcope.filters.XSRFFilter;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.util.HashMap;

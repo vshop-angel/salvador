@@ -120,6 +120,24 @@
         </div>
     </a>    
     </#if>
+    <a href="${reverseRoute("admin.BackupController","table")}" class="col-md-3 col-sm-6 col-xs-12 info-box-container">
+        <div class="info-box">
+            <span class="info-box-icon bg-blue"><i class="fa fa-refresh"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">${i18n("admin.viewBackups")}</span>
+            </div>
+        </div>
+    </a>
+    <a href="${reverseRoute("admin.BackupController","create")}" class="col-md-3 col-sm-6 col-xs-12 info-box-container">
+        <div class="info-box">
+            <span class="info-box-icon bg-purple"><i class="fa fa-save"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">${i18n("admin.createBackup")}</span>
+            </div>
+        </div>
+    </a>
 </div>
 <div class="csp-script" data-src="adminMenuController.menu" ></div>
 </@>

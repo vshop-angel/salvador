@@ -7,7 +7,6 @@
  */
 package com.serphacker.serposcope.db.google;
 
-import javax.inject.Singleton;
 import com.querydsl.core.QueryFlag;
 import com.querydsl.core.Tuple;
 import com.querydsl.sql.SQLQuery;
@@ -20,6 +19,7 @@ import com.serphacker.serposcope.models.google.GoogleRank;
 import com.serphacker.serposcope.querybuilder.QGoogleRank;
 import com.serphacker.serposcope.querybuilder.QGoogleRankBest;
 
+import javax.inject.Singleton;
 import java.sql.Connection;
 import java.sql.Statement;
 import java.sql.Timestamp;

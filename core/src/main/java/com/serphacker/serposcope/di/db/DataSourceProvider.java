@@ -8,13 +8,13 @@
 package com.serphacker.serposcope.di.db;
 
 import com.google.inject.Provider;
-import javax.inject.Singleton;
 import com.p6spy.engine.spy.P6DataSource;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Singleton;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -7,12 +7,12 @@
  */
 package com.serphacker.serposcope.db.base;
 
-import javax.inject.Inject;
 import com.serphacker.serposcope.db.AbstractDBIT;
 import com.serphacker.serposcope.models.base.Group;
 import com.serphacker.serposcope.models.base.User;
 import org.junit.Test;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 

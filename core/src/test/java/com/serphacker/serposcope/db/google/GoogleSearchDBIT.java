@@ -7,7 +7,6 @@
  */
 package com.serphacker.serposcope.db.google;
 
-import javax.inject.Inject;
 import com.serphacker.serposcope.db.AbstractDBIT;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.db.base.GroupDB;
@@ -21,6 +20,7 @@ import com.serphacker.serposcope.scraper.google.GoogleDevice;
 import org.junit.Test;
 import org.unitils.reflectionassert.ReflectionAssert;
 
+import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;

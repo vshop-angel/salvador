@@ -8,8 +8,6 @@
 package serposcope.helpers;
 
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import freemarker.template.SimpleNumber;
 import freemarker.template.SimpleScalar;
 import freemarker.template.TemplateModel;
@@ -17,6 +15,8 @@ import freemarker.template.TemplateModelException;
 import ninja.Router;
 import ninja.template.TemplateEngineFreemarkerReverseRouteHelper;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
 

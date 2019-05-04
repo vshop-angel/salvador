@@ -9,50 +9,26 @@ package serposcope.controllers.google;
 
 import com.google.common.base.Optional;
 import com.google.inject.Inject;
-import com.serphacker.serposcope.db.google.GoogleSearchDB;
-import com.serphacker.serposcope.inteligenciaseo.Report;
-import com.serphacker.serposcope.inteligenciaseo.ReportsDB;
-import com.serphacker.serposcope.inteligenciaseo.SearchSettings;
-import com.serphacker.serposcope.inteligenciaseo.SearchSettingsDB;
-import com.serphacker.serposcope.models.base.User;
-import com.serphacker.serposcope.querybuilder.QGoogleSearch;
-import ninja.Result;
-import ninja.Results;
-
 import com.google.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.db.base.RunDB;
 import com.serphacker.serposcope.db.google.GoogleDB;
+import com.serphacker.serposcope.inteligenciaseo.Report;
+import com.serphacker.serposcope.inteligenciaseo.ReportsDB;
+import com.serphacker.serposcope.inteligenciaseo.SearchSettings;
+import com.serphacker.serposcope.inteligenciaseo.SearchSettingsDB;
 import com.serphacker.serposcope.models.base.Event;
 import com.serphacker.serposcope.models.base.Group;
 import com.serphacker.serposcope.models.base.Run;
+import com.serphacker.serposcope.models.base.User;
 import com.serphacker.serposcope.models.google.GoogleSearch;
 import com.serphacker.serposcope.models.google.GoogleTarget;
 import com.serphacker.serposcope.models.google.GoogleTarget.PatternType;
 import com.serphacker.serposcope.models.google.GoogleTargetSummary;
 import com.serphacker.serposcope.scraper.google.GoogleCountryCode;
 import com.serphacker.serposcope.scraper.google.GoogleDevice;
-
-import static com.serphacker.serposcope.scraper.google.GoogleDevice.SMARTPHONE;
-
 import com.serphacker.serposcope.task.TaskManager;
-
-import java.io.OutputStream;
-import java.io.PrintWriter;
-import java.net.IDN;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.zip.GZIPOutputStream;
-
-import ninja.Context;
-import ninja.FilterWith;
-import ninja.Router;
+import ninja.*;
 import ninja.i18n.Messages;
 import ninja.params.Param;
 import ninja.params.Params;
@@ -67,6 +43,15 @@ import serposcope.controllers.GroupController;
 import serposcope.filters.AdminFilter;
 import serposcope.filters.XSRFFilter;
 import serposcope.helpers.Validator;
+
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.net.IDN;
+import java.time.LocalDate;
+import java.util.*;
+import java.util.zip.GZIPOutputStream;
+
+import static com.serphacker.serposcope.scraper.google.GoogleDevice.SMARTPHONE;
 
 @Singleton
 public class GoogleGroupController extends GoogleController {

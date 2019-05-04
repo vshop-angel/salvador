@@ -8,13 +8,13 @@
 package com.serphacker.serposcope.db.base;
 
 import com.google.common.io.ByteStreams;
-import javax.inject.Singleton;
 import com.serphacker.serposcope.db.AbstractDB;
 import com.serphacker.serposcope.scraper.google.GoogleCountryCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;

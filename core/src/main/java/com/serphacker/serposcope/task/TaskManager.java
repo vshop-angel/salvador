@@ -7,8 +7,6 @@
  */
 package com.serphacker.serposcope.task;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.di.TaskFactory;
 import com.serphacker.serposcope.models.base.Run;
@@ -16,6 +14,8 @@ import com.serphacker.serposcope.task.google.GoogleTask;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.List;
 

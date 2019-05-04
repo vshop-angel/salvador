@@ -8,8 +8,6 @@
 package serposcope.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.models.base.User;
 import conf.SerposcopeConf;
@@ -19,6 +17,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import serposcope.controllers.AuthController;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.File;
 
 import static serposcope.controllers.AuthController.PASSWORD_RESET_FILENAME;

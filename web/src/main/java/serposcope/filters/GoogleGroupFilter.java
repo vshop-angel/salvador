@@ -8,8 +8,6 @@
 package serposcope.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.db.google.GoogleDB;
 import com.serphacker.serposcope.inteligenciaseo.Report;
@@ -27,6 +25,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import serposcope.controllers.HomeController;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

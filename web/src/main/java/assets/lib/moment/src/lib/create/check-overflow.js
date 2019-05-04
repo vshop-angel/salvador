@@ -1,5 +1,5 @@
-import { daysInMonth } from '../units/month';
-import { YEAR, MONTH, DATE, HOUR, MINUTE, SECOND, MILLISECOND } from '../units/constants';
+import {daysInMonth} from '../units/month';
+import {DATE, HOUR, MILLISECOND, MINUTE, MONTH, SECOND, YEAR} from '../units/constants';
 import getParsingFlags from '../create/parsing-flags';
 
 export default function checkOverflow (m) {

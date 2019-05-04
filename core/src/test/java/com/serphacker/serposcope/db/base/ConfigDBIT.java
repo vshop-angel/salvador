@@ -7,9 +7,10 @@
  */
 package com.serphacker.serposcope.db.base;
 
-import javax.inject.Inject;
 import com.serphacker.serposcope.db.AbstractDBIT;
 import org.junit.Test;
+
+import javax.inject.Inject;
 
 import static org.junit.Assert.assertEquals;
 

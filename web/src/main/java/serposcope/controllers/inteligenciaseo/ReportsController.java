@@ -1,6 +1,5 @@
 package serposcope.controllers.inteligenciaseo;
 
-import javax.inject.Inject;
 import com.serphacker.serposcope.inteligenciaseo.Report;
 import com.serphacker.serposcope.inteligenciaseo.ReportsDB;
 import ninja.FilterWith;
@@ -11,6 +10,8 @@ import ninja.params.PathParam;
 import serposcope.controllers.BaseController;
 import serposcope.filters.AdminFilter;
 import serposcope.filters.XSRFFilter;
+
+import javax.inject.Inject;
 
 public class ReportsController extends BaseController {
     @Inject

@@ -7,8 +7,6 @@
  */
 package serposcope.controllers.admin;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.db.google.GoogleDB;
 import com.serphacker.serposcope.models.base.Group;
@@ -25,6 +23,8 @@ import org.slf4j.LoggerFactory;
 import serposcope.controllers.BaseController;
 import serposcope.filters.AdminFilter;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.*;
 import java.net.URLEncoder;
 import java.nio.file.Files;

@@ -7,13 +7,13 @@
  */
 package com.serphacker.serposcope.task;
 
-import javax.inject.Inject;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.models.base.Group;
 import com.serphacker.serposcope.models.base.Run;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import java.util.List;
 import java.util.stream.Collectors;
 

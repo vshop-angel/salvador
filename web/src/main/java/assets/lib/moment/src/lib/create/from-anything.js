@@ -1,17 +1,17 @@
 import isArray from '../utils/is-array';
 import isDate from '../utils/is-date';
 import map from '../utils/map';
-import { createInvalid } from './valid';
-import { Moment, isMoment } from '../moment/constructor';
-import { getLocale } from '../locale/locales';
-import { hooks } from '../utils/hooks';
+import {createInvalid} from './valid';
+import {isMoment, Moment} from '../moment/constructor';
+import {getLocale} from '../locale/locales';
+import {hooks} from '../utils/hooks';
 import checkOverflow from './check-overflow';
 
-import { configFromStringAndArray }  from './from-string-and-array';
-import { configFromStringAndFormat } from './from-string-and-format';
-import { configFromString }          from './from-string';
-import { configFromArray }           from './from-array';
-import { configFromObject }          from './from-object';
+import {configFromStringAndArray} from './from-string-and-array';
+import {configFromStringAndFormat} from './from-string-and-format';
+import {configFromString} from './from-string';
+import {configFromArray} from './from-array';
+import {configFromObject} from './from-object';
 
 function createFromConfig (config) {
     var res = new Moment(checkOverflow(prepareConfig(config)));

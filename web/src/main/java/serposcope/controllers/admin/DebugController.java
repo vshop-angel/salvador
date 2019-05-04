@@ -7,8 +7,6 @@
  */
 package serposcope.controllers.admin;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import com.p6spy.engine.spy.P6DataSource;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.db.google.GoogleDB;
@@ -36,6 +34,8 @@ import serposcope.controllers.admin.DebugController.DebugFilter;
 import serposcope.filters.AdminFilter;
 import serposcope.filters.XSRFFilter;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;

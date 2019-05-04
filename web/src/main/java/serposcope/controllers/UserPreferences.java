@@ -8,8 +8,6 @@
 package serposcope.controllers;
 
 import com.google.common.base.Optional;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.models.base.User;
 import ninja.*;
@@ -21,6 +19,8 @@ import serposcope.filters.AuthFilter;
 import serposcope.filters.XSRFFilter;
 import serposcope.helpers.Validator;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 

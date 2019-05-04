@@ -8,8 +8,6 @@
 package serposcope.controllers.admin;
 
 import com.google.common.base.Optional;
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.models.base.Proxy;
 import com.serphacker.serposcope.task.proxy.ProxyChecker;
@@ -25,6 +23,8 @@ import serposcope.filters.AdminFilter;
 import serposcope.filters.XSRFFilter;
 import serposcope.helpers.Validator;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

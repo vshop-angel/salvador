@@ -1,12 +1,12 @@
 package com.serphacker.serposcope.inteligenciaseo;
 
-import javax.inject.Singleton;
 import com.querydsl.core.Tuple;
 import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.dml.SQLDeleteClause;
 import com.querydsl.sql.dml.SQLInsertClause;
 import com.serphacker.serposcope.db.AbstractDB;
 
+import javax.inject.Singleton;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;

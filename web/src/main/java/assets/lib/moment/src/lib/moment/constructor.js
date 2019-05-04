@@ -1,5 +1,4 @@
-import { hooks } from '../utils/hooks';
-import hasOwnProp from '../utils/has-own-prop';
+import {hooks} from '../utils/hooks';
 import getParsingFlags from '../create/parsing-flags';
 
 // Plugins that add properties should also add the key here (null value),

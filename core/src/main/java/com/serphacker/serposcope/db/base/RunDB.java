@@ -7,7 +7,6 @@
  */
 package com.serphacker.serposcope.db.base;
 
-import javax.inject.Singleton;
 import com.querydsl.core.Tuple;
 import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.dml.SQLDeleteClause;
@@ -19,6 +18,7 @@ import com.serphacker.serposcope.models.base.Run;
 import com.serphacker.serposcope.models.base.Run.Status;
 import com.serphacker.serposcope.querybuilder.QRun;
 
+import javax.inject.Singleton;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.Timestamp;

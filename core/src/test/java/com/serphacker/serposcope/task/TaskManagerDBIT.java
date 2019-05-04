@@ -8,7 +8,6 @@
 package com.serphacker.serposcope.task;
 
 import com.google.inject.AbstractModule;
-import javax.inject.Inject;
 import com.google.inject.Module;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.serphacker.serposcope.db.AbstractDBIT;
@@ -30,6 +29,7 @@ import com.serphacker.serposcope.scraper.google.scraper.FakeGScraper;
 import com.serphacker.serposcope.scraper.http.ScrapClient;
 import org.junit.Test;
 
+import javax.inject.Inject;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.time.LocalDateTime;

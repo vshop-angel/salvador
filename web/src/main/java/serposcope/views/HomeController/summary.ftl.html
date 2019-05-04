@@ -72,7 +72,9 @@
                                     <p data-toggle="tooltip" 
                                        title="${i18n("label.previous")} : ${fu.formatScore(summary.getPreviousScoreBP())}%">0</p>
                                     </#if>
+                                    <#if user.isAdmin()>
                                     <div class="hb-score-history" data-values="<#list record.scoreHistory as score>${fu.formatScore(score)}<#sep>,</#list>" ></div>
+                                    </#if>
                                 </div>
                                 <div class="hb-legend" ><i class="fa fa-trophy"></i> score</div>
                             </div>

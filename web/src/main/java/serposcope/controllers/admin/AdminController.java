@@ -7,8 +7,6 @@
  */
 package serposcope.controllers.admin;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
 import com.serphacker.serposcope.db.base.ExportDB;
 import conf.SerposcopeConf;
 import ninja.*;
@@ -25,6 +23,8 @@ import serposcope.controllers.BaseController;
 import serposcope.filters.AdminFilter;
 import serposcope.filters.XSRFFilter;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
 import java.io.*;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
