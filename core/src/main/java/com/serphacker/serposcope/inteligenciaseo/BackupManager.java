@@ -9,13 +9,16 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
+import java.sql.SQLException;
 import java.sql.Time;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 @Singleton
@@ -56,12 +59,30 @@ public class BackupManager {
     }
 
     public String getSizeOf(String name) {
-        File file = new File(String.format("%s/%s", getTargetPath(), name));
+        File file = new File(getFilePath(name));
         return humanizedSize(file.length());
     }
 
     private void removeExpiredFile() {
-        list = list();
+        List<BackupEntry> backups = list();
+        // If there are not enough backups, ignore this
+        if (backups.size() < 7)
+            return;
+        // Sort the backups to remove the oldest
+        backups.sort(Comparator.comparing(entry -> entry.date));
+        // Now pick the oldest
+        BackupEntry first = backups.get(0);
+        // Delete the file
+        deleteOne(first.name);
+    }
+
+    public boolean deleteOne(String name) {
+        File file = new File(getFilePath(name));
+        return file.delete();
+    }
+
+    private static String getFilePath(String name) {
+        return String.format("%s/%s", getTargetPath(), name);
     }
 
     public void create(ExportDB exportDB) {
@@ -75,7 +96,7 @@ public class BackupManager {
         // We set this as we are processing the file
         currentFile = String.format("backup-%s.sql.gz", now.format(formatter));
         // Build the path
-        String path = String.format("%s/%s", getTargetPath(), currentFile);
+        String path = getFilePath(currentFile);
         // Create a thread to run this in the background
         thread = new Thread(() -> {
             try (
@@ -92,6 +113,17 @@ public class BackupManager {
             }
         });
         thread.start();
+    }
+
+    public void restore(String name, ExportDB exportDB) throws Exception {
+        try (
+            FileInputStream inputStream = new FileInputStream(getFilePath(name));
+            GZIPInputStream gzis = new GZIPInputStream(inputStream);
+            InputStreamReader isr = new InputStreamReader(gzis, StandardCharsets.UTF_8);
+            BufferedReader reader = new BufferedReader(isr);
+        ) {
+            exportDB.importStream(reader);
+        }
     }
 
     private static String humanizedSize(long value) {

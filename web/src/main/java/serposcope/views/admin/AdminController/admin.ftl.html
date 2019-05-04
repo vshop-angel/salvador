@@ -2,11 +2,12 @@
 <#import "../admin.ftl.html" as layout>
 <@layout.adminLayout i18n("admin.title") >
 
+<script type="text/javascript" src="/assets/js/views/admin/AdminFunctions.js"></script>
 <h2 class="styled-h2">${i18n("admin.menu.settings")}</h2>
 <div class="row top15">
     <a href="${reverseRoute("admin.SettingsController","settings")}" class="col-md-3 col-sm-6 col-xs-12 info-box-container">
        <div class="info-box">
-            <span class="info-box-icon bg-aqua"><i class="fa fa-wrench"></i></span>
+            <span class="info-box-icon bg-aqua"><i class="fa fa-sliders-h"></i></span>
 
             <div class="info-box-content">
                 <span class="info-box-text">${i18n("label.general")}</span>
@@ -15,7 +16,7 @@
     </a>
     <a href="${reverseRoute("admin.ProxyController","proxies")}" class="col-md-3 col-sm-6 col-xs-12 info-box-container">
        <div class="info-box">
-            <span class="info-box-icon bg-red"><i class="fa fa-shield"></i></span>
+            <span class="info-box-icon bg-red"><i class="fa fa-shield-alt"></i></span>
 
             <div class="info-box-content">
                 <span class="info-box-text">${i18n("label.proxies")}</span>
@@ -24,7 +25,7 @@
     </a>
     <a href="${reverseRoute("admin.GoogleSettingsController","settings")}" class="col-md-3 col-sm-6 col-xs-12 info-box-container">
        <div class="info-box">
-            <span class="info-box-icon bg-yellow"><i class="fa fa-google-plus-square"></i></span>
+            <span class="info-box-icon bg-yellow"><i class="fab fa-google"></i></span>
 
             <div class="info-box-content">
                 <span class="info-box-text">${i18n("label.google")}</span>
@@ -37,7 +38,7 @@
 <div class="row top15">
     <a href="${reverseRoute("admin.UsersController","users")}" class="col-md-3 col-sm-6 col-xs-12 info-box-container">
        <div class="info-box">
-            <span class="info-box-icon bg-navy"><i class="fa fa-group"></i></span>
+            <span class="info-box-icon bg-navy"><i class="fa fa-users"></i></span>
 
             <div class="info-box-content">
                 <span class="info-box-text">${i18n("label.users")}</span>
@@ -59,7 +60,7 @@
     </a>
     <a href="${reverseRoute("admin.LogController","logs")}" class="col-md-3 col-sm-6 col-xs-12 info-box-container">
        <div class="info-box">
-            <span class="info-box-icon bg-maroon"><i class="fa fa-file-text"></i></span>
+            <span class="info-box-icon bg-maroon"><i class="fa fa-clipboard-list"></i></span>
 
             <div class="info-box-content">
                 <span class="info-box-text">${i18n("label.logs")}</span>
@@ -93,7 +94,7 @@
     </a>    
     <a href="${reverseRoute("admin.AdminController","sysconfig")}" class="col-md-3 col-sm-6 col-xs-12 info-box-container">
        <div class="info-box">
-            <span class="info-box-icon bg-gray"><i class="fa fa-desktop"></i></span>
+            <span class="info-box-icon bg-gray"><i class="fa fa-wrench"></i></span>
 
             <div class="info-box-content">
                 <span class="info-box-text">${i18n("label.sysconfig")}</span>
@@ -102,7 +103,7 @@
     </a>
     <a href="${reverseRoute("admin.AdminController","stackdump")}" class="col-md-3 col-sm-6 col-xs-12 info-box-container">
        <div class="info-box">
-            <span class="info-box-icon bg-olive"><i class="fa fa-support"></i></span>
+            <span class="info-box-icon bg-olive"><i class="fa fa-layer-group"></i></span>
 
             <div class="info-box-content">
                 <span class="info-box-text">${i18n("label.stackdump")}</span>
@@ -112,7 +113,7 @@
     <#if !global.prod >
     <a href="${reverseRoute("admin.DebugController","debug")}" class="col-md-3 col-sm-6 col-xs-12 info-box-container">
        <div class="info-box">
-            <span class="info-box-icon bg-green"><i class="fa fa-briefcase"></i></span>
+            <span class="info-box-icon bg-green"><i class="fa fa-bug"></i></span>
 
             <div class="info-box-content">
                 <span class="info-box-text">${i18n("label.debug")}</span>
@@ -122,7 +123,7 @@
     </#if>
     <a href="${reverseRoute("admin.BackupController","table")}" class="col-md-3 col-sm-6 col-xs-12 info-box-container">
         <div class="info-box">
-            <span class="info-box-icon bg-blue"><i class="fa fa-refresh"></i></span>
+            <span class="info-box-icon bg-blue"><i class="fa fa-redo"></i></span>
 
             <div class="info-box-content">
                 <span class="info-box-text">${i18n("admin.viewBackups")}</span>
@@ -135,6 +136,15 @@
 
             <div class="info-box-content">
                 <span class="info-box-text">${i18n("admin.createBackup")}</span>
+            </div>
+        </div>
+    </a>
+    <a href="${reverseRoute("admin.HouseKeepingController","removeInactiveKeywords")}" class="col-md-3 col-sm-6 col-xs-12 info-box-container" onclick="return confirmRemoveDeadKeywords();">
+        <div class="info-box">
+            <span class="info-box-icon bg-orange"><i class="fa fa-broom"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">${i18n("admin.optimizeKeywords")}</span>
             </div>
         </div>
     </a>

@@ -56,6 +56,8 @@ public class Routes implements ApplicationRoutes {
         router.POST().route("/admin/backup/delete").with(BackupController.class, "delete");
         router.POST().route("/admin/backup/restore").with(BackupController.class, "restore");
 
+        router.GET().route("/admin/housekeeping/remove-inactive-keywords").with(HouseKeepingController.class, "removeInactiveKeywords");
+
         router.GET().route("/admin/settings").with(SettingsController.class, "settings");
         router.POST().route("/admin/settings/update").with(SettingsController.class, "update");
         router.POST().route("/admin/settings/reset").with(SettingsController.class, "reset");        
@@ -126,7 +128,8 @@ public class Routes implements ApplicationRoutes {
         router.GET().route("/google/{groupId: [0-9]+}/search/{searchId: [0-9]+}").with(GoogleSearchController.class, "search");
         router.GET().route("/google/{groupId: [0-9]+}/search/{searchId: [0-9]+}/url-ranks").with(GoogleSearchController.class, "urlRanks");
         router.GET().route("/google/{groupId: [0-9]+}/search/{searchId: [0-9]+}/export-serp").with(GoogleSearchController.class, "exportSerp");
-        
+        router.POST().route("/google/{groupId: [0-9]+}/search/{searchId: [0-9]+}/set-volume").with(GoogleSearchController.class, "setVolume");
+
         router.GET().route("/google/{groupId: [0-9]+}/target/{targetId: [0-9]+}/ranks").with(GoogleTargetController.class, "jsonRanks");
         router.GET().route("/google/{groupId: [0-9]+}/target/{targetId: [0-9]+}/variation").with(GoogleTargetController.class, "jsonVariation");
         router.GET().route("/google/{groupId: [0-9]+}/target/{targetId: [0-9]+}").with(GoogleTargetController.class, "target");

@@ -8,7 +8,7 @@
 
 /* global serposcope, Slick */
 
-var inteligenciaSEOEditKeyword = function(event, id, category, volume, isAdminOnly) {
+var inteligenciaSEOEditKeyword = function (event, id, category, volume, isAdminOnly) {
     var target = $(event.currentTarget);
     var content = $('#edit-keyword');
     // Hide the modal if visible
@@ -23,6 +23,31 @@ var inteligenciaSEOEditKeyword = function(event, id, category, volume, isAdminOn
         $(content).find('input[name="onlyAdmin"][value="true"]').attr('checked', 'checked');
     }
     content.modal();
+    return false;
+};
+
+var startEditVolume = function (event) {
+    var target = event.target;
+    var value = target.value;
+    var searchId = target.getAttribute('data-search-id');
+    target.readOnly = false;
+    target.onkeyup = function (keyboard) {
+        switch (keyboard.keyCode) {
+            case 13:
+                target.readOnly = true;
+                // Try to update the volume
+                setVolume(target, searchId, target.value, function () {
+                    target.value = value;
+                }, function() {
+                    target.blur();
+                });
+                break;
+            case 27:
+                target.readOnly = true;
+                target.value = value;
+                break;
+        }
+    };
     return false;
 };
 
@@ -59,17 +84,17 @@ serposcope.googleGroupControllerGrid = function () {
         $('#filter-reset').click(resetFilter);
         fetchData();
     };
-    
-    var fetchData = function() {
+
+    var fetchData = function () {
         $.getJSON('/google/' + $('#csp-vars').data('group-id') + '/search/list')
-        .done(function (json) {
-            $(".ajax-loader").remove();
-            data = json;
-            renderGrid();
-        }).fail(function (err) {
+            .done(function (json) {
+                $(".ajax-loader").remove();
+                data = json;
+                renderGrid();
+            }).fail(function (err) {
             $(".ajax-loader").remove();
             $("#group-searches-grid").html("error");
-        });        
+        });
     };
 
     var renderGrid = function () {
@@ -80,19 +105,19 @@ serposcope.googleGroupControllerGrid = function () {
             forceFitColumns: true
         };
 
-        var toString = function(value) {
+        var toString = function (value) {
             return '\'' + value + '\'';
         };
 
-        var visibilityTableOption = function(row, col, unk, colDef, rowData) {
+        var visibilityTableOption = function (row, col, unk, colDef, rowData) {
             if (!rowData.isAdminOnly) {
                 return '<input type="checkbox" checked onchange="setKeywordVisibility(this, ' + rowData.id + ')">'
             } else {
-                return '<input type="checkbox" onchange="setKeywordVisibility(this, '  + rowData.id +  ')">'
+                return '<input type="checkbox" onchange="setKeywordVisibility(this, ' + rowData.id + ')">'
             }
         };
 
-        var searchesTableOptions = function(row, col, unk, colDef, rowData) {
+        var searchesTableOptions = function (row, col, unk, colDef, rowData) {
             var args = [rowData.id, toString(rowData.category), rowData.volume, rowData.isAdminOnly].join(',');
             return '<span class="search-options">' +
                 '<a onclick="return inteligenciaSEOEditKeyword(event, ' + args + ')" data-id="' + rowData.id + '" id="btn-edit-keyword" class="edit" title="Edit"><i class="glyphicon glyphicon-edit"></i></a>' +
@@ -106,25 +131,29 @@ serposcope.googleGroupControllerGrid = function () {
             name: '<i class="fa fa-cogs"></i>',
             formatter: searchesTableOptions
         }, {
-            id: "visibility", width: 22, name: '<i class="fa fa-eye"></i>', formatter: visibilityTableOption, cssClass: 'slick-cell-checkboxsel'
+            id: "visibility",
+            width: 22,
+            name: '<i class="fa fa-eye"></i>',
+            formatter: visibilityTableOption,
+            cssClass: 'slick-cell-checkboxsel'
         }, {
             id: "keyword", field: "keyword", minWidth: 200, sortable: true, name: 'Keyword', formatter: formatKeyword
-        },{
+        }, {
             id: "device", field: "device", minWidth: 100, sortable: true, name: 'Device', formatter: formatDevice
-        },{
+        }, {
             id: "country", field: "country", minWidth: 60, sortable: true, name: 'Country', formatter: formatCountry
-        },{
+        }, {
             id: "datacenter", field: "datacenter", minWidth: 100, sortable: true, name: 'Datacenter'/*, formatter: formatDatacenter,*/
-        },{
+        }, {
             id: "local", field: "local", minWidth: 200, sortable: true, name: 'Local'/*, formatter: formatLocal,*/
-        },{
+        }, {
             id: "custom", field: "custom", minWidth: 200, sortable: true, name: 'Custom'/*, formatter: formatCustom*/
-        },{
+        }, {
             id: "category", field: "category", minWidth: 150, sortable: true, name: 'Category'/*, formatter: formatCustom*/
-        },{
-            id: "volume", field: "volume", minWidth: 50, sortable: true, name: 'Volume', formatter: formatNumber
+        }, {
+            id: "volume", field: "volume", minWidth: 50, sortable: true, name: 'Volume', formatter: formatVolume
         }];
-        
+
         dataView = new Slick.Data.DataView();
         grid = new Slick.Grid("#group-searches-grid", dataView, columns, options);
         grid.registerPlugin(checkboxSelector);
@@ -208,35 +237,40 @@ serposcope.googleGroupControllerGrid = function () {
 
         return !(filter.category != -1 && item.category.toLowerCase().indexOf(filter.category) === -1);
     };
-    
-    formatKeyword = function (row, col, unk, colDef, rowData) {
+
+    var formatKeyword = function (row, col, unk, colDef, rowData) {
         return "&nbsp;<a href=\"/google/" + groupId + "/search/" + rowData.id + "\" >" + rowData.keyword + "</a>";
     };
-    
-    formatDevice = function (row, col, unk, colDef, rowData) {
-        if(rowData.device === 'M'){
+
+    var formatDevice = function (row, col, unk, colDef, rowData) {
+        if (rowData.device === 'M') {
             return "<i data-toggle=\"tooltip\" title=\"mobile\" class=\"fa fa-mobile fa-fw\" ></i>";
         } else {
             return "<i data-toggle=\"tooltip\" title=\"desktop\" class=\"fa fa-desktop fa-fw\" ></i>";
         }
     };
-    
-    formatCountry = function (row, col, unk, colDef, rowData) {
-        if(rowData.country === '__'){
+
+    var formatCountry = function (row, col, unk, colDef, rowData) {
+        if (rowData.country === '__') {
             return "__ (no country)";
         } else {
             return rowData.country;
         }
     };
 
-    formatNumber = function (row, col, unk, colDef, rowData) {
-        return Number(rowData.volume);
+    var formatVolume = function (row, col, unk, colDef, rowData) {
+        var searchId = rowData.id;
+        return '<input class="volume" value="' + Number(rowData.volume) + '" data-search-id="' + searchId + '"' +
+            ' title="Double click to edit. Then Return to submit or Escape to cancel"' +
+            ' ondblclick="startEditVolume(event)" readonly/>';
     };
-    
-    var getSelection = function() {
-        return grid.getSelectedRows().map(dataView.getItem).map(function(x){ return x.id; });
+
+    var getSelection = function () {
+        return grid.getSelectedRows().map(dataView.getItem).map(function (x) {
+            return x.id;
+        });
     };
-    
+
     var genFakeSearch = function (i) {
         return {
             id: i,

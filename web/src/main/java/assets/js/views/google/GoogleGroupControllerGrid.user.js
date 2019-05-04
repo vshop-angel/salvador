@@ -83,7 +83,7 @@ serposcope.googleGroupControllerGrid = function () {
         },{
             id: "category", field: "category", minWidth: 150, sortable: true, name: 'Category'/*, formatter: formatCustom*/
         },{
-            id: "volume", field: "volume", minWidth: 50, sortable: true, name: 'Volume', formatter: formatNumber
+            id: "volume", field: "volume", minWidth: 50, sortable: true, name: 'Volume', formatter: formatVolume
         }];
         
         dataView = new Slick.Data.DataView();
@@ -170,11 +170,11 @@ serposcope.googleGroupControllerGrid = function () {
         return !(filter.category != -1 && item.category.toLowerCase().indexOf(filter.category) === -1);
     };
     
-    formatKeyword = function (row, col, unk, colDef, rowData) {
+    var formatKeyword = function (row, col, unk, colDef, rowData) {
         return "&nbsp;<a href=\"/google/" + groupId + "/search/" + rowData.id + "\" >" + rowData.keyword + "</a>";
     };
     
-    formatDevice = function (row, col, unk, colDef, rowData) {
+    var formatDevice = function (row, col, unk, colDef, rowData) {
         if(rowData.device === 'M'){
             return "<i data-toggle=\"tooltip\" title=\"mobile\" class=\"fa fa-mobile fa-fw\" ></i>";
         } else {
@@ -182,7 +182,7 @@ serposcope.googleGroupControllerGrid = function () {
         }
     };
     
-    formatCountry = function (row, col, unk, colDef, rowData) {
+    var formatCountry = function (row, col, unk, colDef, rowData) {
         if(rowData.country === '__'){
             return "__ (no country)";
         } else {
@@ -190,8 +190,8 @@ serposcope.googleGroupControllerGrid = function () {
         }
     };
 
-    formatNumber = function (row, col, unk, colDef, rowData) {
-        return Number(rowData.volume);
+    var formatVolume = function (row, col, unk, colDef, rowData) {
+        return '<div style="text-align:right;padding:0 4px;">' + Number(rowData.volume) + '</div>';
     };
     
     var getSelection = function() {

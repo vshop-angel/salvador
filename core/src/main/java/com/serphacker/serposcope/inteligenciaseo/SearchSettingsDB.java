@@ -16,6 +16,7 @@ import java.util.List;
 @Singleton
 public class SearchSettingsDB extends AbstractDB {
     QSearchSettings t_search_settings = QSearchSettings.searchSettings;
+
     SearchSettingsDB() {
     }
 
@@ -29,8 +30,7 @@ public class SearchSettingsDB extends AbstractDB {
                         .set(t_search_settings.category, item.getCategory())
                         .set(t_search_settings.volume, item.getVolume())
                         .set(t_search_settings.adminsOnly, item.isAdminsOnly())
-                        .executeWithKey(t_search_settings.id)
-                ;
+                        .executeWithKey(t_search_settings.id);
                 count += 1;
             }
         } catch (SQLException exception) {
@@ -62,8 +62,7 @@ public class SearchSettingsDB extends AbstractDB {
                     .select(t_search_settings.category)
                     .distinct()
                     .from(t_search_settings)
-                    .where(t_search_settings.searchId.eq(id))
-            ;
+                    .where(t_search_settings.searchId.eq(id));
             List<String> list = query.fetch();
             if ((list == null) || (list.size() == 0))
                 return null;
@@ -82,8 +81,7 @@ public class SearchSettingsDB extends AbstractDB {
                     .select(t_search_settings.volume)
                     .distinct()
                     .from(t_search_settings)
-                    .where(t_search_settings.searchId.eq(id))
-                    ;
+                    .where(t_search_settings.searchId.eq(id));
             List<String> list = query.fetch();
             if ((list == null) || (list.size() == 0))
                 return null;
@@ -101,8 +99,7 @@ public class SearchSettingsDB extends AbstractDB {
             SQLQuery<Boolean> query = new SQLQuery<>(con, dbTplConf)
                     .select(t_search_settings.adminsOnly)
                     .from(t_search_settings)
-                    .where(t_search_settings.searchId.eq(id))
-            ;
+                    .where(t_search_settings.searchId.eq(id));
             List<Boolean> list = query.fetch();
             if ((list == null) || (list.size() == 0))
                 return false;
@@ -120,8 +117,7 @@ public class SearchSettingsDB extends AbstractDB {
             SQLQuery<Integer> query = new SQLQuery<>(con, dbTplConf)
                     .select(t_search_settings.searchId)
                     .from(t_search_settings)
-                    .where(t_search_settings.searchId.eq(search_id))
-                ;
+                    .where(t_search_settings.searchId.eq(search_id));
             return query.fetchCount() == 1;
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -184,6 +180,29 @@ public class SearchSettingsDB extends AbstractDB {
                         .set(t_search_settings.searchId, searchId)
                         .set(t_search_settings.groupId, groupId)
                         .set(t_search_settings.adminsOnly, true)
+                        .execute();
+            }
+            return result == 1L;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            LOG.error("SQLError ex", ex);
+        }
+        return false;
+    }
+
+    public boolean setVolume(Integer searchId, int groupId, Integer volume) {
+        try (Connection con = ds.getConnection()) {
+            long result;
+            if (exists(searchId)) {
+                result = new SQLUpdateClause(con, dbTplConf, t_search_settings)
+                        .set(t_search_settings.volume, volume.toString())
+                        .where(t_search_settings.searchId.eq(searchId).and(t_search_settings.groupId.eq(groupId)))
+                        .execute();
+            } else {
+                result = new SQLInsertClause(con, dbTplConf, t_search_settings)
+                        .set(t_search_settings.searchId, searchId)
+                        .set(t_search_settings.groupId, groupId)
+                        .set(t_search_settings.volume, volume.toString())
                         .execute();
             }
             return result == 1L;

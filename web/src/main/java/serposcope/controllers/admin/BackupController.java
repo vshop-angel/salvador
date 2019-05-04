@@ -38,14 +38,14 @@ public class BackupController extends BaseController {
     public Result table() {
         return Results
                 .ok()
-                .render("files", backupManager.list(LOG))
+                .render("files", backupManager.list())
                 .render("status", backupManager.isBusy() ? "disabled" : "data-ignore")
                 ;
     }
 
     public Result getStatus(@Param("name") String name) {
         BackupManager.Status status = backupManager.getStatusFor(name);
-        Map<String,String> data = new HashMap<>();
+        Map<String, String> data = new HashMap<>();
         data.put("size", backupManager.getSizeOf(name));
         data.put("status", status.name());
         return Results
@@ -85,22 +85,29 @@ public class BackupController extends BaseController {
     public Result delete(Context context, @Params("names[]") String[] names) {
         FlashScope flash = context.getFlashScope();
         boolean error = false;
-        for (String name: names) {
-            String path = String.format("%s/%s", BackupManager.getTargetPath(), name);
-            File file = new File(path);
-            error = error || !file.delete();
+        for (String name : names) {
+            if (!backupManager.deleteOne(name)) {
+                LOG.info(String.format("error deleting: '%s'", name));
+                error = true;
+            }
         }
         if (!error) {
-            flash.success("All backups deleted correctly");
+            flash.success("message.deleteBackupSuccess");
         } else {
-            flash.error(String.join(", ", names));
+            flash.error("error.deleteBackupFailed");
         }
         return Results.redirect(router.getReverseRoute(BackupController.class, "table"));
     }
 
     public Result restore(Context context, @Params("names[]") String[] names) {
         FlashScope flash = context.getFlashScope();
-        flash.success(String.join(", ", names));
+        try {
+            backupManager.restore(names[0], exportDB);
+            flash.success("message.importBackupSuccess");
+        } catch (Exception e) {
+            LOG.error("Import", e);
+            flash.error("error.importBackupFailed");
+        }
         return Results.redirect(router.getReverseRoute(BackupController.class, "table"));
     }
 }

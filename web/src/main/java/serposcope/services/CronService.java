@@ -11,6 +11,7 @@ package serposcope.services;
 import com.serphacker.serposcope.db.base.ConfigDB;
 import com.serphacker.serposcope.db.base.ExportDB;
 import com.serphacker.serposcope.db.base.PruneDB;
+import com.serphacker.serposcope.inteligenciaseo.BackupManager;
 import com.serphacker.serposcope.models.base.Config;
 import com.serphacker.serposcope.models.base.Group.Module;
 import com.serphacker.serposcope.models.base.Run;
@@ -49,6 +50,9 @@ public class CronService implements Runnable {
 
     @Inject
     ExportDB exportDB;
+
+    @Inject
+    private BackupManager backupManager;
     
     @Start(order = 90)
     public void startService() {
@@ -94,14 +98,7 @@ public class CronService implements Runnable {
     }
 
     private void createBackup() {
-        LocalDateTime now = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd-HH.mm");
-        String path = String.format("%s/%s.sql.gz", System.getProperty("user.home"), now.format(formatter));
-        try {
-            exportDB.export(path);
-        } catch (Exception ex) {
-            LOG.error("ExportError", ex);
-        }
+        backupManager.create(exportDB);
     }
 
     @Override

@@ -50,10 +50,10 @@
                                     <#if file.status == "Pending">
                                         <span class="simple-spinner"></span>
                                     <#else>
-                                       <label class="compact"><input type="checkbox" name="selected[]" value="${file.name}" ${status}="disabled"/></label>
+                                       <input type="checkbox" name="selected[]" value="${file.name}" ${status}="disabled" id="${file.name}editor"/>
                                     </#if>
                                 </td>
-                                <td>${file.date?date?string.long}</td>
+                                <td><label for="${file.name}editor" class="compact">${file.date?date?string.long}</labelfor></td>
                                 <td style="text-align:center;">${file.time}</td>
                                 <td style="text-align:center;">${file.size}</td>
                                 <td>

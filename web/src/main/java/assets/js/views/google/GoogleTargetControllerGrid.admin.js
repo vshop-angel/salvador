@@ -256,16 +256,40 @@ serposcope.googleTargetControllerGrid = function () {
         return !(filter.category != -1 && search[COL_SEARCH_CATEGORY].toLowerCase().indexOf(filter.category) === -1);
     };
 
-    window.setKeywordVisibility = function (checkbox, id) {
-        var toQueryString = function(obj) {
-            var params = [];
-            for (var key in obj) {
-                if (obj.hasOwnProperty(key)) {
-                    params.push(key + '=' + obj[key])
-                }
+    var toQueryString = function (obj) {
+        var params = [];
+        for (var key in obj) {
+            if (obj.hasOwnProperty(key)) {
+                params.push(key + '=' + obj[key])
             }
-            return params.join('&');
+        }
+        return params.join('&');
+    };
+
+    window.setVolume = function (input, searchId, volume, error, ok) {
+        var variables = $('#csp-vars');
+        var request = {
+            id: searchId,
+            volume: volume,
+            _xsrf: variables.attr('data-xsrf')
         };
+        var xhr = new XMLHttpRequest();
+        var groupId = variables.attr('data-group-id');
+        xhr.open('POST', '/google/' + groupId + '/search/' + searchId + '/set-volume', true);
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState !== 4)
+                return;
+            if (xhr.status !== 200) {
+                error();
+            } else {
+                ok();
+            }
+        };
+        xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
+        xhr.send(toQueryString(request));
+    };
+
+    window.setKeywordVisibility = function (checkbox, id) {
         var variables = $('#csp-vars');
         var request = {
             id: id,
@@ -274,7 +298,7 @@ serposcope.googleTargetControllerGrid = function () {
         };
         var xhr = new XMLHttpRequest();
         xhr.open('POST', "/google/" + variables.attr('data-group-id') + "/search/set-visibility", true);
-        xhr.onreadystatechange = function() {
+        xhr.onreadystatechange = function () {
             if (xhr.readyState !== 4)
                 return;
             if (xhr.status !== 200) {
@@ -296,7 +320,7 @@ serposcope.googleTargetControllerGrid = function () {
         if (!cell.is_admins_only) {
             return '<input type="checkbox" checked onchange="setKeywordVisibility(this, ' + rowData[COL_ID] + ')">'
         } else {
-            return '<input type="checkbox" onchange="setKeywordVisibility(this, '  + rowData[COL_ID] +  ')">'
+            return '<input type="checkbox" onchange="setKeywordVisibility(this, ' + rowData[COL_ID] + ')">'
         }
     };
 
