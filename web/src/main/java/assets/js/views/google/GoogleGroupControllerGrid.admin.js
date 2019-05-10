@@ -7,64 +7,12 @@
  */
 
 /* global serposcope, Slick */
-
-var inteligenciaSEOEditKeyword = function (event, id, category, volume, isAdminOnly) {
-    var target = $(event.currentTarget);
-    var content = $('#edit-keyword');
-    // Hide the modal if visible
-    $('.modal').modal('hide');
-    // Build the new modal
-    $(content).find('#searchEditId').val(target.attr('data-id'));
-    $(content).find('#searchEditCategory').val(category);
-    $(content).find('#searchEditVolume').val(volume);
-    if (isAdminOnly === false) {
-        $(content).find('input[name="onlyAdmin"][value="false"]').attr('checked', 'checked');
-    } else {
-        $(content).find('input[name="onlyAdmin"][value="true"]').attr('checked', 'checked');
-    }
-    content.modal();
-    return false;
-};
-
-var startEditVolume = function (event) {
-    var target = event.target;
-    var value = target.value;
-    var searchId = target.getAttribute('data-search-id');
-    target.readOnly = false;
-    target.onkeyup = function (keyboard) {
-        switch (keyboard.keyCode) {
-            case 13:
-                target.readOnly = true;
-                // Try to update the volume
-                setVolume(target, searchId, target.value, function () {
-                    target.value = value;
-                }, function() {
-                    target.blur();
-                });
-                break;
-            case 27:
-                target.readOnly = true;
-                target.value = value;
-                break;
-        }
-    };
-    return false;
-};
-
 serposcope.googleGroupControllerGrid = function () {
 
     var grid = null;
     var dataView = null;
 
-    var filter = {
-        keyword: '',
-        country: '',
-        device: '',
-        local: '',
-        datacenter: '',
-        custom: '',
-        category: -1
-    };
+    var filter = new KeywordFilter();
 
     // provided by API
     var data = [];
@@ -78,10 +26,18 @@ serposcope.googleGroupControllerGrid = function () {
         }
     };
 
+    var filterGrid = function(item) {
+        return matchesAtLeastOneFilter(filter, item);
+    };
+
     var render = function () {
         groupId = $('#csp-vars').attr('data-group-id');
-        $('#filter-apply').click(applyFilter);
-        $('#filter-reset').click(resetFilter);
+        $('#filter-apply').click(function () {
+            applyFilter(filter, dataView);
+        });
+        $('#filter-reset').click(function () {
+            resetFilter(filter, dataView);
+        });
         fetchData();
     };
 
@@ -102,56 +58,74 @@ serposcope.googleGroupControllerGrid = function () {
             explicitInitialization: true,
             enableColumnReorder: false,
             enableTextSelectionOnCells: true,
-            forceFitColumns: true
+            forceFitColumns: true,
+            forceSyncScrolling: true
         };
 
         var toString = function (value) {
             return '\'' + value + '\'';
         };
 
+
         var visibilityTableOption = function (row, col, unk, colDef, rowData) {
+            var onchange = 'setKeywordVisibility(this)';
             if (!rowData.isAdminOnly) {
-                return '<input type="checkbox" checked onchange="setKeywordVisibility(this, ' + rowData.id + ')">'
+                return '<input type="checkbox" checked onclick="return ' + onchange + '" data-search-id="' + rowData.id + '">'
             } else {
-                return '<input type="checkbox" onchange="setKeywordVisibility(this, ' + rowData.id + ')">'
+                return '<input type="checkbox" onclick="return ' + onchange + '" data-search-id="' + rowData.id + '">'
             }
         };
 
         var searchesTableOptions = function (row, col, unk, colDef, rowData) {
             var args = [rowData.id, toString(rowData.category), rowData.volume, rowData.isAdminOnly].join(',');
             return '<span class="search-options">' +
-                '<a onclick="return inteligenciaSEOEditKeyword(event, ' + args + ')" data-id="' + rowData.id + '" id="btn-edit-keyword" class="edit" title="Edit"><i class="glyphicon glyphicon-edit"></i></a>' +
+                '<a onclick="return inteligenciaSEOEditKeyword(event, ' + args + ')" data-id="' + rowData.id +
+                '" id="btn-edit-keyword" class="edit" title="Edit"><i class="glyphicon glyphicon-edit"></i></a>' +
                 '</span>';
         };
 
         var checkboxSelector = new Slick.CheckboxSelectColumn({cssClass: "slick-cell-checkboxsel"});
         var columns = [checkboxSelector.getColumnDefinition(), {
-            id: "options",
-            width: 22,
-            name: '<i class="fa fa-cogs"></i>',
-            formatter: searchesTableOptions
-        }, {
             id: "visibility",
             width: 22,
             name: '<i class="fa fa-eye"></i>',
-            formatter: visibilityTableOption,
-            cssClass: 'slick-cell-checkboxsel'
+            cssClass: 'slick-cell-checkboxsel',
+            formatter: visibilityTableOption
         }, {
-            id: "keyword", field: "keyword", minWidth: 200, sortable: true, name: 'Keyword', formatter: formatKeyword
+            id: "keyword",
+            field: "keyword",
+            minWidth: 200,
+            sortable: true,
+            name: 'Palabra Clave',
+            formatter: formatKeyword
         }, {
-            id: "device", field: "device", minWidth: 100, sortable: true, name: 'Device', formatter: formatDevice
+            id: "volume", field: "volume", minWidth: 50, sortable: true, name: 'Volumen', formatter: formatVolume
         }, {
-            id: "country", field: "country", minWidth: 60, sortable: true, name: 'Country', formatter: formatCountry
+            id: "category",
+            field: "category",
+            minWidth: 100,
+            sortable: true,
+            name: 'Categoría',
+            formatter: formatCategory,
+        }, {
+            id: "competition",
+            field: "competition",
+            minWidth: 100,
+            sortable: true,
+            name: 'Competencia',
+            formatter: formatCompetition,
+        }, {
+            id: "cpc", field: "cpc", minWidth: 80, sortable: true, name: 'CPC', formatter: formatCPC,
+        }, {
+            id: "tag", field: "tag", minWidth: 80, sortable: true, name: 'Etiqueta', formatter: formatTag,
+        }, {
+            id: "device", field: "device", minWidth: 100, sortable: true, name: 'Dispositivo', formatter: formatDevice
+        }, {
+            id: "country", field: "country", minWidth: 60, sortable: true, name: 'País', formatter: formatCountry
         }, {
             id: "datacenter", field: "datacenter", minWidth: 100, sortable: true, name: 'Datacenter'/*, formatter: formatDatacenter,*/
         }, {
             id: "local", field: "local", minWidth: 200, sortable: true, name: 'Local'/*, formatter: formatLocal,*/
-        }, {
-            id: "custom", field: "custom", minWidth: 200, sortable: true, name: 'Custom'/*, formatter: formatCustom*/
-        }, {
-            id: "category", field: "category", minWidth: 150, sortable: true, name: 'Category'/*, formatter: formatCustom*/
-        }, {
-            id: "volume", field: "volume", minWidth: 50, sortable: true, name: 'Volume', formatter: formatVolume
         }];
 
         dataView = new Slick.Data.DataView();
@@ -180,62 +154,19 @@ serposcope.googleGroupControllerGrid = function () {
 
     var gridSort = function (e, args) {
         var comparer = function (a, b) {
-            return a[args.sortCol.field] > b[args.sortCol.field] ? 1 : -1;
+            var A = Number(a[args.sortCol.field]);
+            var B = Number(b[args.sortCol.field]);
+            if (!isNaN(A) && !isNaN(B)) {
+                return A - B;
+            } else if (isNaN(A) && !isNaN(B)) {
+                return 1;
+            } else if (isNaN(B) && !isNaN(A)) {
+                return -1;
+            } else {
+                return a[args.sortCol.field] > b[args.sortCol.field] ? 1 : -1;
+            }
         };
         dataView.sort(comparer, args.sortAsc);
-    };
-
-    var applyFilter = function () {
-        var category = $('#filter-category').val() || '-1';
-
-        filter.keyword = $('#filter-keyword').val().toLowerCase();
-        filter.country = $('#filter-country').val().toLowerCase();
-        filter.device = $('#filter-device').val();
-        filter.local = $('#filter-local').val().toLowerCase();
-        filter.datacenter = $('#filter-datacenter').val().toLowerCase();
-        filter.custom = $('#filter-custom').val().toLowerCase();
-        filter.category = category.toLowerCase();
-
-        dataView.refresh();
-    };
-
-    var resetFilter = function () {
-        $('#filter-keyword').val('');
-        $('#filter-country').val('');
-        $('#filter-device').val('');
-        $('#filter-local').val('');
-        $('#filter-datacenter').val('');
-        $('#filter-custom').val('');
-        $('#filter-category').val(-1);
-        applyFilter();
-    };
-
-    var filterGrid = function (item) {
-        if (filter.keyword !== '' && item.keyword.toLowerCase().indexOf(filter.keyword) === -1) {
-            return false;
-        }
-
-        if (filter.device !== '' && item.device != filter.device) {
-            return false;
-        }
-
-        if (filter.country !== '' && item.country.toLowerCase() != filter.country) {
-            return false;
-        }
-
-        if (filter.local !== '' && item.local.toLowerCase().indexOf(filter.local) === -1) {
-            return false;
-        }
-
-        if (filter.datacenter !== '' && item.datacenter != filter.datacenter) {
-            return false;
-        }
-
-        if (filter.custom !== '' && item.custom.toLowerCase().indexOf(filter.custom) === -1) {
-            return false;
-        }
-
-        return !(filter.category != -1 && item.category.toLowerCase().indexOf(filter.category) === -1);
     };
 
     var formatKeyword = function (row, col, unk, colDef, rowData) {
@@ -259,10 +190,36 @@ serposcope.googleGroupControllerGrid = function () {
     };
 
     var formatVolume = function (row, col, unk, colDef, rowData) {
-        var searchId = rowData.id;
-        return '<input class="volume" value="' + Number(rowData.volume) + '" data-search-id="' + searchId + '"' +
-            ' title="Double click to edit. Then Return to submit or Escape to cancel"' +
-            ' ondblclick="startEditVolume(event)" readonly/>';
+        return createEditableInputCell(Number(rowData.volume), rowData.id, 'setVolume', 0);
+    };
+
+    var formatCPC = function (row, col, unk, colDef, rowData) {
+        var value = Number(rowData.cpc);
+        if (isNaN(value) || value === 0) {
+            value = '-';
+        } else {
+            value = value.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+        }
+        return createEditableInputCell(value, rowData.id, 'setCPC', 2);
+    };
+
+    var formatTag = function (row, col, unk, colDef, rowData) {
+        // var searchId = rowData.id;
+        var value = rowData.tag || '';
+        return createEditableInputCell(value, rowData.id, 'setTag');
+    };
+
+    var formatCategory = function (row, col, unk, colDef, rowData) {
+        // var searchId = rowData.id;
+        var value = rowData.category || '';
+        return createEditableInputCell(value, rowData.id, 'setCategory');
+    };
+
+    var formatCompetition = function (row, col, unk, colDef, rowData) {
+        var value = Number(rowData.competition);
+        if (isNaN(value) || value === 0)
+            value = '-';
+        return createEditableInputCell(value, rowData.id, 'setCompetition', 0)
     };
 
     var getSelection = function () {
@@ -279,7 +236,7 @@ serposcope.googleGroupControllerGrid = function () {
             device: parseInt(Math.random() * 5) == 0 ? 'M' : 'D',
             local: parseInt(Math.random() * 5) == 0 ? 'Paris' : '',
             datacenter: parseInt(Math.random() * 5) == 0 ? '1.2.3.4' : '',
-            custom: parseInt(Math.random() * 5) == 0 ? 'hl=fr' : ''
+            competition: parseInt(Math.random() * 5) == 0 ? 'hl=fr' : ''
         };
     };
 
@@ -290,12 +247,24 @@ serposcope.googleGroupControllerGrid = function () {
         }
     };
 
-    var oPublic = {
-        resize: resize,
-        render: render,
-        getSelection: getSelection
+    var setSearchVisibility = function (searchId, visibility) {
+        var item = null;
+        var seek = Number(searchId);
+        for (var i = 0; i < data.length && item === null; ++i) {
+            if (data[i].id === seek) {
+                item = data[i];
+            }
+        }
+        // We should probably not ignore this error
+        if (item === null)
+            return;
+        item.isAdminOnly = !visibility;
     };
 
-    return oPublic;
-
+    return {
+        resize: resize,
+        render: render,
+        setSearchVisibility: setSearchVisibility,
+        getSelection: getSelection
+    };
 }();

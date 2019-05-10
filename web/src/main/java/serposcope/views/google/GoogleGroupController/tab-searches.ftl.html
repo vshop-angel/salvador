@@ -13,8 +13,6 @@
                 data-action="${reverseRoute("google.GoogleGroupController","exportSearches","groupId",group.getId())}" />
             <input id="btn-delete-searches" type="button" class="btn btn-danger" value="${i18n("google.group.deleteKeywords")}" 
                 data-action="${reverseRoute("google.GoogleGroupController","delSearch","groupId",group.getId())}" />
-            <input id="btn-refresh-volumes" type="button" class="btn" value="Refresh Volumes"
-                data-action="${reverseRoute("google.GoogleGroupController","refreshVolumes","groupId",group.getId())}">
         </div>
         </#if>
     </div>

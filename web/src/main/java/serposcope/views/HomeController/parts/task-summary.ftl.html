@@ -1,0 +1,45 @@
+<div class="home-task-summary panel-item">
+    <div class="title">${i18n("home.lastTasks")}</div>
+    <div class="home-task-label">
+        <#if lastRuns?? && lastRuns?has_content >
+            <#list lastRuns as task>
+                <#switch task.status>
+                    <#case "RUNNING">
+                        <#assign taskLabel="primary" >
+                        <#assign taskCaption=i18n("home.taskRunning") >
+                        <#break>
+
+                    <#case "ABORTING">
+                        <#assign taskLabel="warning" >
+                        <#assign taskCaption=i18n("home.taskAborting") >
+                        <#break>
+
+                    <#case "DONE_SUCCESS">
+                        <#assign taskLabel="success" >
+                        <#assign taskCaption=i18n("home.taskOk") >
+                        <#break>
+
+                    <#default>
+                        <#assign taskLabel="danger" >
+                        <#assign taskCaption=i18n("home.taskFailure") >
+                </#switch>
+
+                <a href="${reverseRoute("admin.TaskController","tasks")}"
+                   class="task-badge label-${taskLabel}"
+                   data-toggle="tooltip" title="${task.day} - ${taskCaption}"></a>
+            </#list>
+        <#else>
+            -
+        </#if>
+    </div>
+
+    <#if currentRun?? && currentRun.isRunning() >
+        <div class="home-task-progress progress" title="${i18n("admin.task.remainingTime")} : ${currentRun.getRemainingTimeFormated()}"
+             data-toggle="tooltip" data-id="${currentRun.getId()}">
+            <div class="progress-bar progress-bar-striped active <#if currentRun.getStatus() != "RUNNING" >progress-bar-warning</#if>"
+                 style="width: ${currentRun.getProgress()}%; min-width: 50px;">
+                <span> <#if currentRun.getStatus() != "RUNNING" >${i18n("admin.task.aborting")}<#else>${currentRun.getProgress()} %</#if></span>
+            </div>
+        </div>
+    </#if>
+</div>

@@ -1,20 +1,27 @@
 <div class="search-filter">
-    <input id="filter-keyword" class="form-control inline width250 input-sm" placeholder="${i18n("label.keyword")}" />
-    <select id="filter-device" class="form-control inline width120 input-sm">
+    <input id="filter-keyword" class="form-control inline width250 input-sm" placeholder="${i18n("label.keyword")}"/>
+    <select id="filter-device" class="form-control inline width180 input-sm">
         <option value="">${i18n("label.allDevices")}</option>
         <option value="D">${i18n("label.desktop")}</option>
         <option value="M">${i18n("label.mobile")}</option>
     </select>
-    <input id="filter-country" class="form-control inline width120 input-sm" placeholder="Country" />
-    <input id="filter-local" class="form-control inline width120 input-sm" placeholder="${i18n("label.local")}" />
-    <input id="filter-datacenter" class="form-control inline width120 input-sm" placeholder="${i18n("label.datacenter")}" />
-    <input id="filter-custom" class="form-control inline width120 input-sm" placeholder="${i18n("label.custom")}" />
-    <select id="filter-category" class="form-control inline width120 input-sm">
+    <input id="filter-country" class="form-control inline width120 input-sm" placeholder="Country"/>
+    <input id="filter-local" class="form-control inline width120 input-sm" placeholder="${i18n("label.local")}"/>
+    <input id="filter-datacenter" class="form-control inline width120 input-sm"
+           placeholder="${i18n("label.datacenter")}"/>
+    <input id="filter-competition" class="form-control inline width120 input-sm" placeholder="${i18n("label.custom")}"/>
+    <select id="filter-category" class="form-control inline width150 input-sm">
         <option value="-1" selected disabled>${i18n("label.searchCategory")}</option>
         <#list categories![] as category>
             <option value="${category}">${category}</option>
         </#list>
     </select>
-    <button id="filter-apply" class="btn btn-primary btn-sm" >${i18n("label.filter")}</button>
-    <button id="filter-reset" class="btn btn-default btn-sm" >${i18n("label.reset")}</button>
+    <select id="filter-tag" class="form-control inline width150 input-sm">
+        <option value="-1" selected disabled>${i18n("label.searchTag")}</option>
+        <#list tags![] as tag>
+            <option value="${tag!"empty"}">${tag!"empty"}</option>
+        </#list>
+    </select>
+    <button id="filter-apply" class="btn btn-primary btn-sm">${i18n("label.filter")}</button>
+    <button id="filter-reset" class="btn btn-default btn-sm">${i18n("label.reset")}</button>
 </div>

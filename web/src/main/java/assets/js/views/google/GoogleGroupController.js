@@ -9,61 +9,75 @@
 /* global serposcope, canonLoc, Papa */
 
 serposcope.googleGroupController = function () {
-    
-    var onResize = function(){
+
+    var onResize = function () {
         $('.tab-content').css("min-height", serposcope.theme.availableHeight() - 150);
         serposcope.googleGroupControllerGrid.resize();
     };
-    
-    var configureModalFocus = function() {
-        $('#new-target').on('shown.bs.modal', function(){ $('#targetName').focus(); });
-        $('#new-target-bulk').on('shown.bs.modal', function(){ $('#bulk-target').focus(); });
-        $('#new-search').on('shown.bs.modal', function(){ $('#searchName').focus(); });
-        $('#new-search-bulk').on('shown.bs.modal', function(){ $('#bulk-search').focus(); });
+
+    var configureModalFocus = function () {
+        $('#new-target').on('shown.bs.modal', function () {
+            $('#targetName').focus();
+        });
+        $('#new-target-bulk').on('shown.bs.modal', function () {
+            $('#bulk-target').focus();
+        });
+        $('#new-search').on('shown.bs.modal', function () {
+            $('#searchName').focus();
+        });
+        $('#new-search-bulk').on('shown.bs.modal', function () {
+            $('#bulk-search').focus();
+        });
     };
-    
-    var showNewSearchModal = function(){
+
+    var showNewSearchModal = function () {
         $('.modal').modal('hide');
+        $('#new-search input[data-numeric-input]').each(function (index, input) {
+            var numeric = input.getAttribute('data-numeric-input');
+            if (numeric === null)
+                return;
+            new NumericInputMask(input, Number(numeric));
+        });
         $('#new-search').modal();
         return false;
     };
-    
-    var showNewBulkSearchModal = function(){
+
+    var showNewBulkSearchModal = function () {
         $('.modal').modal('hide');
         $('#new-search-bulk').modal();
         return false;
     };
-    
-    var showNewTargetModal = function(){
+
+    var showNewTargetModal = function () {
         $('.modal').modal('hide');
         $('#new-target').modal();
         return false;
     };
 
-    var showNewReportModal = function(){
+    var showNewReportModal = function () {
         $('.modal').modal('hide');
         console.log($('#new-report')[0]);
         $('#new-report').modal();
         return false;
     };
 
-    var showNewBulkTargetModal = function(){
+    var showNewBulkTargetModal = function () {
         $('.modal').modal('hide');
         $('#new-target-bulk').modal();
         return false;
-    };    
-    
-    var showNewEventModal = function(elt){
+    };
+
+    var showNewEventModal = function (elt) {
         $('#modal-add-event').modal();
         return false;
     };
 
-    var deleteReport = function(elt){
+    var deleteReport = function (elt) {
         var id = $(elt.currentTarget).attr("data-id");
-        var name = $("#report-" + id +" .report-name").html();
-        var href= $(elt.currentTarget).attr("href");
+        var name = $("#report-" + id + " .report-name").html();
+        var href = $(elt.currentTarget).attr("href");
 
-        if(!confirm("Delete report \"" + name + "\"?")){
+        if (!confirm("Delete report \"" + name + "\"?")) {
             return false;
         }
         $('<form>', {
@@ -83,8 +97,8 @@ serposcope.googleGroupController = function () {
         return false;
     };
 
-    var deleteReports = function(elt){
-        if(!confirm("Delete reports?")){
+    var deleteReports = function (elt) {
+        if (!confirm("Delete reports?")) {
             return false;
         }
 
@@ -102,15 +116,15 @@ serposcope.googleGroupController = function () {
         return false;
     };
 
-    var deleteTarget = function(elt){
+    var deleteTarget = function (elt) {
         var id = $(elt.currentTarget).attr("data-id");
-        var name = $("#target-" + id +" .target-name").html();
-        var href= $(elt.currentTarget).attr("href");
-        
-        if(!confirm("Delete website \"" + name + "\" ?\nAll history will be erased.")){
+        var name = $("#target-" + id + " .target-name").html();
+        var href = $(elt.currentTarget).attr("href");
+
+        if (!confirm("Delete website \"" + name + "\" ?\nAll history will be erased.")) {
             return false;
         }
-        
+
         $('<form>', {
             'action': href,
             'method': 'post',
@@ -124,15 +138,15 @@ serposcope.googleGroupController = function () {
             'value': id,
             'type': 'hidden'
         })).appendTo(document.body).submit();
-        
+
         return false;
     };
 
-    var deleteTargets = function(elt){
-        if(!confirm("Delete targets ?\nAll history will be erased.")){
+    var deleteTargets = function (elt) {
+        if (!confirm("Delete targets ?\nAll history will be erased.")) {
             return false;
-        }        
-        
+        }
+
         $('<form>', {
             'action': $(elt.currentTarget).attr("data-action"),
             'method': 'post',
@@ -142,13 +156,13 @@ serposcope.googleGroupController = function () {
             'value': $('#_xsrf').attr("data-value"),
             'type': 'hidden'
         })).append($('.chk-target'))
-        .appendTo(document.body).submit();        
-        
-        return false;
-    };    
+            .appendTo(document.body).submit();
 
-    var refreshVolumes = function(elt) {
-        if(!confirm("Refresh search volumes?")){
+        return false;
+    };
+
+    var refreshVolumes = function (elt) {
+        if (!confirm("Refresh search volumes?")) {
             return false;
         }
 
@@ -163,8 +177,8 @@ serposcope.googleGroupController = function () {
         }));
 
         var ids = serposcope.googleGroupControllerGrid.getSelection();
-        for(var i=0; i <ids.length; i++){
-           $form.append($('<input>', {
+        for (var i = 0; i < ids.length; i++) {
+            $form.append($('<input>', {
                 'name': 'id[]',
                 'value': ids[i],
                 'type': 'hidden'
@@ -173,11 +187,11 @@ serposcope.googleGroupController = function () {
         $form.appendTo(document.body).submit();
         return false;
     };
-    var deleteSearches = function(elt){
-        if(!confirm("Delete searches ?\nAll history will be erased.")){
+    var deleteSearches = function (elt) {
+        if (!confirm("Delete searches ?\nAll history will be erased.")) {
             return false;
         }
-        
+
         var $form = $('<form>', {
             'action': $(elt.currentTarget).attr("data-action"),
             'method': 'post',
@@ -187,10 +201,10 @@ serposcope.googleGroupController = function () {
             'value': $('#_xsrf').attr("data-value"),
             'type': 'hidden'
         }));
-        
+
         var ids = serposcope.googleGroupControllerGrid.getSelection();
-        for(var i=0; i <ids.length; i++){
-           $form.append($('<input>', {
+        for (var i = 0; i < ids.length; i++) {
+            $form.append($('<input>', {
                 'name': 'id[]',
                 'value': ids[i],
                 'type': 'hidden'
@@ -199,29 +213,29 @@ serposcope.googleGroupController = function () {
         $form.appendTo(document.body).submit();
         return false;
     };
-    
-    var bulkTargetSubmit = function() {
+
+    var bulkTargetSubmit = function () {
         var patterns = [];
-        if($('#bulk-target').val() == ""){
+        if ($('#bulk-target').val() == "") {
             alert("no target specified");
             return false;
         }
-        
+
         var lines = $('#bulk-target').val().split(/\r?\n/);
-        for(var i = 0; i< lines.length; i++){
-            lines[i] = lines[i].replace(/(^\s+)|(\s+$)/g,"");
-            if(lines[i].length == 0){
+        for (var i = 0; i < lines.length; i++) {
+            lines[i] = lines[i].replace(/(^\s+)|(\s+$)/g, "");
+            if (lines[i].length == 0) {
                 continue;
             }
-            
+
             patterns.push(lines[i]);
         }
-        
-        if(patterns.length == 0){
+
+        if (patterns.length == 0) {
             alert("no target specified");
             return false;
-        }        
-    
+        }
+
         var form = $('<form>', {
             'action': $("#bulk-target-import").attr("data-action"),
             'method': 'post',
@@ -235,79 +249,160 @@ serposcope.googleGroupController = function () {
             'value': $('#new-target-bulk .target-radio:checked').val(),
             'type': 'hidden'
         }));
-        
+
         var inputs = [];
-        for(var i = 0; i< patterns.length; i++){
-            inputs.push($('<input>', {'name': 'name[]','value': patterns[i],'type': 'hidden'})[0]);
-            inputs.push($('<input>', {'name': 'pattern[]','value': patterns[i],'type': 'hidden'})[0]);
-        }        
+        for (var i = 0; i < patterns.length; i++) {
+            inputs.push($('<input>', {'name': 'name[]', 'value': patterns[i], 'type': 'hidden'})[0]);
+            inputs.push($('<input>', {'name': 'pattern[]', 'value': patterns[i], 'type': 'hidden'})[0]);
+        }
         form.append(inputs);
         form.appendTo(document.body).submit();
         return false;
     };
-    
-    var bulkSearchSubmit = function(){
-        var keyword = [], country = [], datacenter = [], device = [], local = [], custom = [], category = [], visibility = [], volume = [];
-        if($('#bulk-search').val() == ""){
+
+    var bulkSearchSubmit = function () {
+        var cspVars = $('#csp-vars');
+        var content = $('#bulk-search')
+            .val()
+            .trim();
+        var KEYWORD_COLUMN = 0;
+        var COUNTRY_COLUMN = 1;
+        var DATACENTER_COLUMN = 2;
+        var DEVICE_COLUMN = 3;
+        var LOCAL_COLUMN = 4;
+        var CUSTOM_COLUMN = 5;
+        var COMPETITION_COLUMN = 6;
+        var VOLUME_COLUMN = 7;
+        var CATEGORY_COLUMN = 8;
+        var TAG_COLUMN = 9;
+        var CPC_COLUMN = 10;
+        var VISIBILITY_COLUMN = 11;
+
+        var ident = function (value) {
+            return value;
+        };
+
+        var integer = function (value) {
+            var number = Number(value);
+            if (isNaN(number)) {
+                return null;
+            } else if (number !== Math.round(number)) {
+                return null;
+            }
+            return number;
+        };
+
+        var float = function (value) {
+            var fixed = value.replace(getDecimalSeparator(), '.');
+            var number = Number(fixed);
+            if (isNaN(number)) {
+                return null;
+            }
+            return number;
+        };
+
+        var truth = function (value) {
+            return value.toLowerCase() === 'true';
+
+        };
+
+        var collectedData = {
+            keyword: {data: [], column: KEYWORD_COLUMN, validate: ident},
+            country: {data: [], column: COUNTRY_COLUMN, validate: ident},
+            datacenter: {data: [], column: DATACENTER_COLUMN, validate: ident},
+            device: {data: [], column: DEVICE_COLUMN, validate: ident},
+            local: {data: [], column: LOCAL_COLUMN, validate: ident},
+            competition: {data: [], column: COMPETITION_COLUMN, validate: integer},
+            category: {data: [], column: CATEGORY_COLUMN, validate: ident},
+            invisible: {data: [], column: VISIBILITY_COLUMN, validate: truth},
+            volume: {data: [], column: VOLUME_COLUMN, validate: integer},
+            cpc: {data: [], column: CPC_COLUMN, validate: float},
+            tag: {data: [], column: TAG_COLUMN, validate: ident},
+            custom: {data: [], column: CUSTOM_COLUMN, validate: ident}
+        };
+
+        if (content.length === 0) {
             alert("no search specified");
             return false;
         }
-        
-        var lines = $('#bulk-search').val().split(/\r?\n/);
-        for(var i = 0; i< lines.length; i++){
-            lines[i] = lines[i].replace(/(^\s+)|(\s+$)/g,"");
-            if(lines[i].length == 0){
+
+        var lines = content.split(/\r?\n/);
+        var index = 0;
+        for (var j = 0; j < lines.length; j++) {
+            lines[j] = lines[j].trim();
+            if (lines[j].length === 0) {
                 continue;
             }
-
-            var params = Papa.parse(lines[i]);
-            if(params.data.length != 1){
-                alert("error at line " + i + " : " + lines[i]);
+            var parsed = Papa.parse(lines[j], {delimiter: ';'});
+            var data = parsed.data;
+            if (data.length !== 1) {
+                alert("error at line " + j + " : " + lines[j]);
                 return;
             }
-            params = params.data[0];
-            keyword[i] = params[0];
-
-            category[i] = params[1];
-            volume[i] = parseInt(params[2]);
-            if (isNaN(volume[i])) {
+            var params = data[0];
+            for (var key in collectedData) {
+                var item = collectedData[key];
+                if (!collectedData.hasOwnProperty(key))
+                    continue;
+                var array = item.data;
+                var raw = params[item.column];
+                var value = item.validate(raw || cspVars.attr('data-default-' + key));
+                if (value === null) {
+                    switch (item.validate) {
+                        case ident:
+                            alert('Tipo incorrecto para `' + key + '\': `' + raw + '\' what the fuck?');
+                            break;
+                        case float:
+                            alert('Tipo incorrecto para `' + key + '\': `' + raw + '\', se esperaba número');
+                            break;
+                        case integer:
+                            alert('Tipo incorrecto para `' + key + '\': `' + raw + '\', se esperaba entero');
+                            break;
+                    }
+                    return false;
+                }
+                array[index] = value;
+            }
+            index += 1;
+            /*// Extract the values now
+            keyword[j] = params[KEYWORD_COLUMN];
+            category[j] = params[CATEGORY_COLUMN];
+            volume[j] = parseInt(params[VOLUME_COLUMN]);
+            console.log(parsed);
+            if (isNaN(volume[j])) {
                 alert("`volume' must be a number");
                 return false;
             }
-            switch (params[3]) {
-                case 'only-admin':
-                    visibility[i] = true;
-                    break;
-                case 'all':
-                    visibility[i] = false;
-                    break;
-                default:
-                    alert("`visibility' is not recognized, valid values are: only-admin or all");
-                    return false;
+            if (params[VISIBILITY_COLUMN] === 'true') {
+                visibility[j] = false;
+            } else {
+                visibility[j] = false;
+                return false;
             }
-
-
-            country[i] = params[4] || $('#csp-vars').attr('data-default-country');
-            datacenter[i] = params[5] || $('#csp-vars').attr('data-default-datacenter');
-            if (params[6]) {
-                switch(params[6].toLowerCase()){
+            country[j] = params[COUNTRY_COLUMN] || cspVars.attr('data-default-country');
+            datacenter[j] = params[DATACENTER_COLUMN] || cspVars.attr('data-default-datacenter');
+            custom[j] = params[CUSTOM_COLUMN];
+            if (params[DEVICE_COLUMN]) {
+                switch (params[DEVICE_COLUMN].toLowerCase()) {
                     case "desktop":
-                        device[i] = 0;
+                        device[j] = 0;
                         break;
                     case "mobile":
-                        device[i] = 1;
-                        break;  
+                        device[j] = 1;
+                        break;
                     default:
                         alert(params[3] + " is an invalid device type, valid values : desktop, mobile");
                         return false;
                 }
             } else {
-                device[i] = parseInt($('#csp-vars').attr('data-default-device'));
+                device[j] = parseInt(cspVars.attr('data-default-device'));
             }
-            local[i] = params[7] || $('#csp-vars').attr('data-default-local');
-            custom[i] = params[8] || $('#csp-vars').attr('data-default-custom');
+            local[j] = params[LOCAL_COLUMN] || cspVars.attr('data-default-local');
+            competition[j] = params[COMPETITION_COLUMN] || cspVars.attr('data-default-custom');
+            cpc[j] = params[CPC_COLUMN];
+            tag[j] = params[TAG_COLUMN];*/
         }
-        
+
         var form = $('<form>', {
             'action': $("#bulk-search-import").attr("data-action"),
             'method': 'post',
@@ -317,36 +412,30 @@ serposcope.googleGroupController = function () {
             'value': $('#_xsrf').attr("data-value"),
             'type': 'hidden'
         }));
-        
+
         var inputs = [];
-        for(var i=0; i<keyword.length; i++){
-            if(typeof(keyword[i]) == "undefined"){
-                continue;
+        for (var name in collectedData) {
+            var array = collectedData[name].data;
+            for (var k = 0; k < array.length; ++k) {
+                inputs.push($('<input>', {'name': name + '[]', 'value': array[k], 'type': 'hidden'})[0]);
             }
-            inputs.push($('<input>', {'name': 'keyword[]','value': keyword[i],'type': 'hidden'})[0]);
-            inputs.push($('<input>', {'name': 'country[]','value': country[i],'type': 'hidden'})[0]);
-            inputs.push($('<input>', {'name': 'datacenter[]','value': datacenter[i],'type': 'hidden'})[0]);
-            inputs.push($('<input>', {'name': 'device[]','value': device[i],'type': 'hidden'})[0]);
-            inputs.push($('<input>', {'name': 'local[]','value': local[i],'type': 'hidden'})[0]);
-            inputs.push($('<input>', {'name': 'custom[]','value': custom[i],'type': 'hidden'})[0]);
-            inputs.push($('<input>', {'name': 'categories[]','value': category[i],'type': 'hidden'})[0]);
-            inputs.push($('<input>', {'name': 'volumes[]','value': volume[i],'type': 'hidden'})[0]);
-            inputs.push($('<input>', {'name': 'onlyAdmin[]','value': visibility[i],'type': 'hidden'})[0]);
         }
         form.append(inputs);
-        form.appendTo(document.body).submit();
-        
+        form
+            .appendTo(document.body)
+            .submit()
+        ;
         return false;
     };
-    
-    var deleteGroup = function(elt) {
+
+    var deleteGroup = function (elt) {
         var name = $(elt.currentTarget).attr("data-name");
-        var href= $(elt.currentTarget).attr("href");
-        
-        if(!confirm("Delete group \"" + name + "\" ?\nAll history will be erased.")){
+        var href = $(elt.currentTarget).attr("href");
+
+        if (!confirm("Delete group \"" + name + "\" ?\nAll history will be erased.")) {
             return false;
         }
-        
+
         $('<form>', {
             'action': href,
             'method': 'post',
@@ -356,22 +445,22 @@ serposcope.googleGroupController = function () {
             'value': $('#_xsrf').attr("data-value"),
             'type': 'hidden'
         })).appendTo(document.body).submit();
-        
+
         return false;
     };
-    
-    var toggleEvent = function(elt) {
+
+    var toggleEvent = function (elt) {
         $('#event-description-' + $(elt.currentTarget).attr('data-id')).toggleClass("hidden");
     };
-    
-    var deleteEvent = function(elt){
+
+    var deleteEvent = function (elt) {
         var day = $(elt.currentTarget).attr("data-day");
-        var href= $(elt.currentTarget).attr("href");
-        
-        if(!confirm("Delete event \"" + day + "\" ?")){
+        var href = $(elt.currentTarget).attr("href");
+
+        if (!confirm("Delete event \"" + day + "\" ?")) {
             return false;
         }
-        
+
         $('<form>', {
             'action': href,
             'method': 'post',
@@ -385,14 +474,14 @@ serposcope.googleGroupController = function () {
             'value': $('#_xsrf').attr("data-value"),
             'type': 'hidden'
         })).appendTo(document.body).submit();
-        
-        return false;        
+
+        return false;
     };
-    
-    var renameGroup = function(elt){
+
+    var renameGroup = function (elt) {
         var href = $(elt.currentTarget).attr("href");
         var name = prompt("new group name");
-        
+
         $('<form>', {
             'action': href,
             'method': 'post',
@@ -406,15 +495,15 @@ serposcope.googleGroupController = function () {
             'value': $('#_xsrf').attr("data-value"),
             'type': 'hidden'
         })).appendTo(document.body).submit();
-        
+
         return false;
     };
-    
-    var renameTarget = function(elt){
+
+    var renameTarget = function (elt) {
         var href = $(elt.currentTarget).attr("href");
         var id = $(elt.currentTarget).attr("data-id");
         var name = prompt("new name");
-        
+
         $('<form>', {
             'action': href,
             'method': 'post',
@@ -432,27 +521,27 @@ serposcope.googleGroupController = function () {
             'value': $('#_xsrf').attr("data-value"),
             'type': 'hidden'
         })).appendTo(document.body).submit();
-        
+
         return false;
-    };    
-    
-    var onRadioTargetChange = function(){
+    };
+
+    var onRadioTargetChange = function () {
         $("#pattern").attr('placeholder', $(this).attr("data-help"));
     };
-    
+
     var searchChecked = false;
-    var checksearch = function(){
-        $('.chk-search').prop('checked',searchChecked=!searchChecked ? 'checked' : '');
+    var checksearch = function () {
+        $('.chk-search').prop('checked', searchChecked = !searchChecked ? 'checked' : '');
         return false;
     };
-    
+
     var targetChecked = false;
-    var checkTarget = function(){
-        $('.chk-target').prop('checked',targetChecked=!targetChecked ? 'checked' : '');
+    var checkTarget = function () {
+        $('.chk-target').prop('checked', targetChecked = !targetChecked ? 'checked' : '');
         return false;
-    };    
-    
-    var exportSearches = function(elt){
+    };
+
+    var exportSearches = function (elt) {
         var $form = $('<form>', {
             'action': $(elt.currentTarget).attr("data-action"),
             'method': 'post',
@@ -462,10 +551,10 @@ serposcope.googleGroupController = function () {
             'value': $('#_xsrf').attr("data-value"),
             'type': 'hidden'
         }));
-        
+
         var ids = serposcope.googleGroupControllerGrid.getSelection();
-        for(var i=0; i <ids.length; i++){
-           $form.append($('<input>', {
+        for (var i = 0; i < ids.length; i++) {
+            $form.append($('<input>', {
                 'name': 'id[]',
                 'value': ids[i],
                 'type': 'hidden'
@@ -474,8 +563,8 @@ serposcope.googleGroupController = function () {
         $form.appendTo(document.body).submit();
         return false;
     };
-    
-    var loadAsyncCanonical = function() {
+
+    var loadAsyncCanonical = function () {
         $.ajax({
             url: '/assets/js/canonical-location.js',
             dataType: 'script',
@@ -485,46 +574,48 @@ serposcope.googleGroupController = function () {
             }
         });
     };
-    
-    var configureSearchLocal = function(){
+
+    var configureSearchLocal = function () {
         $('.search-local').typeahead({
             source: canonLoc,
             minLength: 2,
             items: 100,
-            matcher: function(arg){
+            matcher: function (arg) {
                 var item = arg;
                 var array = this.query.split(" ");
-                for(var i=0; i<array.length; i++){
-                    if( item.indexOf(array[i].toLowerCase()) == -1){
+                for (var i = 0; i < array.length; i++) {
+                    if (item.indexOf(array[i].toLowerCase()) == -1) {
                         return false;
                     }
                 }
                 return true;
             },
-            highlighter: function (item) {return item;}
+            highlighter: function (item) {
+                return item;
+            }
         });
     };
-    
-    var renderScoreHistory = function() {
-        $('.score-history-inline').sparkline("html", {tagValuesAttribute: "data-values"});        
+
+    var renderScoreHistory = function () {
+        $('.score-history-inline').sparkline("html", {tagValuesAttribute: "data-values"});
     };
-    
-    var configureTabs = function() {
+
+    var configureTabs = function () {
         $('.nav-tabs a').on('shown.bs.tab', function (e) {
             window.location.hash = e.target.hash;
             window.scrollTo(0, 0);
-            if(e.target.hash == "#tab-searches"){
+            if (e.target.hash == "#tab-searches") {
                 serposcope.googleGroupControllerGrid.resize();
             }
         });
-        
+
         var url = document.location.toString();
         if (url.match('#')) {
             $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
-        } 
+        }
     };
-    
-    var view = function() {
+
+    var view = function () {
         $(window).bind("load resize", onResize);
         $('input[name="day"]').daterangepicker({
             singleDatePicker: true,
@@ -540,7 +631,7 @@ serposcope.googleGroupController = function () {
         $('.toggle-event').click(toggleEvent);
         $('.btn-add-event').click(showNewEventModal);
         $('.btn-delete-event').click(deleteEvent);
-        
+
         $('.btn-delete-group').click(deleteGroup);
         $('.btn-add-target').click(showNewTargetModal);
         $('.btn-add-report').click(showNewReportModal);
@@ -549,7 +640,7 @@ serposcope.googleGroupController = function () {
         $('.btn-add-search-bulk').click(showNewBulkSearchModal);
         $('#bulk-search-import').click(bulkSearchSubmit);
         $('#bulk-target-import').click(bulkTargetSubmit);
-        
+
         $('.btn-delete-target').click(deleteTarget);
         $('.btn-delete-report').click(deleteReport);
 
@@ -566,10 +657,10 @@ serposcope.googleGroupController = function () {
         serposcope.googleGroupControllerGrid.render();
         loadAsyncCanonical();
     };
-    
+
     var oPublic = {
         view: view
     };
-    
+
     return oPublic;
 }();

@@ -5,6 +5,7 @@ import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.dml.SQLDeleteClause;
 import com.querydsl.sql.dml.SQLInsertClause;
 import com.serphacker.serposcope.db.AbstractDB;
+import com.serphacker.serposcope.querybuilder.QIsReports;
 
 import javax.inject.Singleton;
 import java.sql.Connection;
@@ -15,7 +16,7 @@ import java.util.List;
 
 @Singleton
 public class ReportsDB extends AbstractDB {
-    QReport t_report = QReport.t_report;
+    private QIsReports t_report = QIsReports.isReports;
 
     public ReportsDB() {
     }

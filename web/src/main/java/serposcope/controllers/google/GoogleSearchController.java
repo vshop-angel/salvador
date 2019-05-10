@@ -64,6 +64,11 @@ public class GoogleSearchController extends GoogleController {
     @Inject
     SearchSettingsDB searchSettingsDB;
 
+    private static final int VOLUME = 1;
+    private static final int CPC = 2;
+    private static final int COMPETITION = 3;
+    private static final int TAG = 4;
+    private static final int CATEGORY = 5;
 
     public Result search(Context context,
                          @PathParam("searchId") Integer searchId,
@@ -112,6 +117,7 @@ public class GoogleSearchController extends GoogleController {
         Run lastRun = baseDB.run.findLast(Module.GOOGLE, STATUSES_DONE, endDate);
 
         if (firstRun == null || lastRun == null || firstRun.getDay().isAfter(lastRun.getDay())) {
+            User user = context.getAttribute("user", User.class);
             return Results.ok()
                     .render("f_warning", msg.get("error.noDataForThisPeriod", context, Optional.absent()).or(""))
                     .render("startDate", startDate)
@@ -119,7 +125,8 @@ public class GoogleSearchController extends GoogleController {
                     .render("minDate", minDay)
                     .render("maxDate", maxDay)
                     .render("search", search)
-                    .render("categories", settingsDB.getCategories(context.getAttribute("user", User.class)))
+                    .render("categories", settingsDB.listCategories(user))
+                    .render("tags", settingsDB.listTags(user))
                     ;
         }
 
@@ -150,7 +157,8 @@ public class GoogleSearchController extends GoogleController {
         Config config = baseDB.config.getConfig();
 
         User user = context.getAttribute("user", User.class);
-        List<String> categories = settingsDB.getCategories(user);
+        List<String> categories = settingsDB.listCategories(user);
+        List<String> tags = settingsDB.listTags(user);
         return Results.ok()
                 .render("displayMode", config.getDisplayGoogleSearch())
                 .render("events", user.isAdmin() ? jsonEvents : "[]")
@@ -164,6 +172,7 @@ public class GoogleSearchController extends GoogleController {
                 .render("maxDate", maxDay)
                 .render("bestRankings", bestRankings)
                 .render("categories", categories)
+                .render("tags", tags)
                 ;
     }
 
@@ -360,32 +369,76 @@ public class GoogleSearchController extends GoogleController {
     public Result setVisibility(Context context,
                                 @Param("id") Integer searchId,
                                 @Param("visible") Boolean visible) {
-        FlashScope flash = context.getFlashScope();
         Group group = context.getAttribute("group", Group.class);
         if (searchSettingsDB.setVisibleForAll(searchId, group.getId(), visible)) {
-            flash.success("inteligenciaseo.visibilityChanged");
-            return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()) + "#tab-searches");
+            return Results.ok().text();
         } else {
-            flash.error("error.changeVisibilityFailed");
-            return Results.text();
+            return Results.internalServerError().text();
         }
     }
 
-    @FilterWith({
-            XSRFFilter.class,
-            AdminFilter.class
-    })
-    public Result setVolume(Context context,
-                            @Param("id") Integer searchId,
-                            @Param("volume") Integer volume) {
+    private Result setValue(Context context, Integer searchId, int type, Object value) {
         FlashScope flash = context.getFlashScope();
         Group group = context.getAttribute("group", Group.class);
-        if (searchSettingsDB.setVolume(searchId, group.getId(), volume)) {
+        boolean result = false;
+        switch (type) {
+            case VOLUME:
+                result = searchSettingsDB.setVolume(searchId, group.getId(), (Integer) value);
+                break;
+            case CPC:
+                result = searchSettingsDB.setCPC(searchId, group.getId(), (Double) value);
+                break;
+            case CATEGORY:
+                result = searchSettingsDB.setCategory(searchId, group.getId(), (String) value);
+                break;
+            case COMPETITION:
+                result = searchSettingsDB.setCompetition(searchId, group.getId(), (Integer) value);
+                break;
+            case TAG:
+                result = searchSettingsDB.setTag(searchId, group.getId(), (String) value);
+                break;
+        }
+        if (result) {
             flash.success("inteligenciaseo.volumeUpdated");
             return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()) + "#tab-searches");
         } else {
             flash.error("error.volumeUpdateFailed");
             return Results.text();
         }
+    }
+
+    @FilterWith({XSRFFilter.class, AdminFilter.class})
+    public Result setCPC(Context context,
+                         @Param("id") Integer searchId,
+                         @Param("value") Double value) {
+        return setValue(context, searchId, CPC, value);
+    }
+
+    @FilterWith({XSRFFilter.class, AdminFilter.class})
+    public Result setCompetition(Context context,
+                            @Param("id") Integer searchId,
+                            @Param("value") Integer value) {
+        return setValue(context, searchId, COMPETITION, value);
+    }
+
+    @FilterWith({XSRFFilter.class, AdminFilter.class})
+    public Result setCategory(Context context,
+                         @Param("id") Integer searchId,
+                         @Param("value") String value) {
+        return setValue(context, searchId, CATEGORY, value);
+    }
+
+    @FilterWith({XSRFFilter.class, AdminFilter.class})
+    public Result setTag(Context context,
+                         @Param("id") Integer searchId,
+                         @Param("value") String value) {
+        return setValue(context, searchId, TAG, value);
+    }
+
+    @FilterWith({XSRFFilter.class, AdminFilter.class})
+    public Result setVolume(Context context,
+                            @Param("id") Integer searchId,
+                            @Param("value") Integer value) {
+        return setValue(context, searchId, VOLUME, value);
     }
 }

@@ -1,6 +1,6 @@
 /*
  * Serposcope - SEO rank checker https://serposcope.serphacker.com/
- * 
+ *
  * Copyright (c) 2016 SERP Hacker
  * @author Pierre Nogues <support@serphacker.com>
  * @license https://opensource.org/licenses/MIT MIT License
@@ -20,32 +20,31 @@ import java.util.zip.GZIPOutputStream;
 import static com.serphacker.serposcope.db.base.MigrationDB.TABLES;
 
 public class ExportDB extends AbstractDB {
-    
+
     @Inject
     MigrationDB migrationDB;
-    
-    public final static int DEFAULT_MAX_ALLOWED_PACKET = 4194304/2;
-//    public final static int DEFAULT_MAX_ALLOWED_PACKET = 4194304;
+
+    public final static int DEFAULT_MAX_ALLOWED_PACKET = 4194304 / 2;
 
     public boolean export(String path) throws Exception {
         OutputStream os = new FileOutputStream(path, false);
-        if(path.endsWith(".gz")){
+        if (path.endsWith(".gz")) {
             os = new GZIPOutputStream(os);
         }
         try (
-            OutputStreamWriter osw = new OutputStreamWriter(os, Charset.forName("UTF-8"));
-            PrintWriter writer = new PrintWriter(osw);
-        ){
+                OutputStreamWriter osw = new OutputStreamWriter(os, Charset.forName("UTF-8"));
+                PrintWriter writer = new PrintWriter(osw);
+        ) {
             return export(writer);
         }
     }
-    
-    public boolean importStream(BufferedReader reader) throws SQLException, IOException, Exception{
+
+    public boolean importStream(BufferedReader reader) throws SQLException, IOException, Exception {
         String line = null;
         try (Connection con = ds.getConnection()) {
-            while((line=reader.readLine()) != null){
-                try(Statement stmt = con.createStatement()){
-                    if(line.isEmpty() || line.startsWith("--") || line.startsWith("#")){
+            while ((line = reader.readLine()) != null) {
+                try (Statement stmt = con.createStatement()) {
+                    if (line.isEmpty() || line.startsWith("--") || line.startsWith("#")) {
                         continue;
                     }
                     stmt.executeUpdate(line);
@@ -66,7 +65,7 @@ public class ExportDB extends AbstractDB {
             writer.append(sql);
             writer.append("\n");
         }
-        
+
         writer.append("\nSET FOREIGN_KEY_CHECKS=0;\n");
         try (Connection con = ds.getConnection()) {
             for (String table : TABLES) {
@@ -74,18 +73,18 @@ public class ExportDB extends AbstractDB {
                 try (Statement stmt = con.createStatement()) {
                     LOG.info("exporting table {}", table);
                     long _start = System.currentTimeMillis();
-                    
-                    stmt.setQueryTimeout(3600*24);
+
+                    stmt.setQueryTimeout(3600 * 24);
                     ResultSet rs = stmt.executeQuery("SELECT * FROM `" + table + "`");
                     ResultSetMetaData metaData = rs.getMetaData();
                     int columns = metaData.getColumnCount();
-                    
+
                     String insertStatement = "INSERT INTO `" + table + "` VALUES ";
-                    
+
                     StringBuilder stmtBuilder = new StringBuilder(insertStatement);
                     while (rs.next()) {
-                        
-                        StringBuilder entryBuilder= new StringBuilder("(");
+
+                        StringBuilder entryBuilder = new StringBuilder("(");
                         for (int colIndex = 1; colIndex <= columns; colIndex++) {
                             Object object = rs.getObject(colIndex);
                             String colName = metaData.getColumnName(colIndex);
@@ -97,25 +96,25 @@ public class ExportDB extends AbstractDB {
                             }
                         }
                         entryBuilder.append("),");
-                        
-                        if(
-                            stmtBuilder.length() != insertStatement.length() && 
-                            stmtBuilder.length() + entryBuilder.length() > DEFAULT_MAX_ALLOWED_PACKET
-                        ){
-                            stmtBuilder.setCharAt(stmtBuilder.length()-1, ';');
+
+                        if (
+                                stmtBuilder.length() != insertStatement.length() &&
+                                        stmtBuilder.length() + entryBuilder.length() > DEFAULT_MAX_ALLOWED_PACKET
+                        ) {
+                            stmtBuilder.setCharAt(stmtBuilder.length() - 1, ';');
                             writer.append(stmtBuilder).append('\n');
                             stmtBuilder = new StringBuilder(insertStatement);
                         }
-                        
+
                         stmtBuilder.append(entryBuilder);
                     }
-                    
-                    if(stmtBuilder.length() != insertStatement.length()){
-                        stmtBuilder.setCharAt(stmtBuilder.length()-1, ';');
+
+                    if (stmtBuilder.length() != insertStatement.length()) {
+                        stmtBuilder.setCharAt(stmtBuilder.length() - 1, ';');
                         writer.append(stmtBuilder).append('\n');
                     }
-                    
-                    LOG.info("exported table {} in {}", table, DurationFormatUtils.formatDurationHMS(System.currentTimeMillis()-_start));
+
+                    LOG.info("exported table {} in {}", table, DurationFormatUtils.formatDurationHMS(System.currentTimeMillis() - _start));
                 }
             }
             writer.append("SET FOREIGN_KEY_CHECKS=1;\n");
@@ -133,10 +132,10 @@ public class ExportDB extends AbstractDB {
         }
         switch (className) {
             case "java.lang.String":
-                return "'" + escapeString((String)colVal) + "'";
+                return "'" + escapeString((String) colVal) + "'";
             case "java.sql.Clob":
                 return "'" + clobToStringEscaped((Clob) colVal) + "'";
-                
+
             case "java.sql.Blob":
                 return blobToString((Blob) colVal);
             case "[B":
@@ -144,23 +143,23 @@ public class ExportDB extends AbstractDB {
 
             case "java.lang.Boolean":
                 return (Boolean) colVal ? "1" : "0";
-                
+
             case "java.lang.Integer":
             case "java.lang.Short":
             case "java.lang.Long":
             case "java.lang.Byte":
                 return colVal.toString();
-                
+
             case "java.sql.Date":
             case "java.sql.Timestamp":
                 return "'" + colVal.toString() + "'";
-                
+
             default:
                 throw new UnsupportedOperationException("escaping not implemented for class " + className + " of column " + colName);
         }
     }
-    
-    protected String escapeString(String str){
+
+    protected String escapeString(String str) {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < str.length(); i++) {
             sbEscape(builder, str.charAt(i));
@@ -172,19 +171,19 @@ public class ExportDB extends AbstractDB {
         final StringBuilder builder = new StringBuilder();
 
         try (
-            final Reader reader = data.getCharacterStream();
-            final BufferedReader br = new BufferedReader(reader);
-        ){
+                final Reader reader = data.getCharacterStream();
+                final BufferedReader br = new BufferedReader(reader);
+        ) {
             int b;
             while (-1 != (b = br.read())) {
-                sbEscape(builder, (char)b);
+                sbEscape(builder, (char) b);
             }
         }
         return builder.toString();
     }
-    
-    protected StringBuilder sbEscape(StringBuilder builder, char c){
-        switch(c){
+
+    protected StringBuilder sbEscape(StringBuilder builder, char c) {
+        switch (c) {
             case '\'':
                 builder.append('\'');
                 builder.append(c);

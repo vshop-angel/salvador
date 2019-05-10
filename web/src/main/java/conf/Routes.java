@@ -106,9 +106,7 @@ public class Routes implements ApplicationRoutes {
         router.POST().route("/google/{groupId: [0-9]+}/rename").with(GoogleGroupController.class, "rename");
         router.POST().route("/google/{groupId: [0-9]+}/delete").with(GoogleGroupController.class, "delete");        
         router.POST().route("/google/{groupId: [0-9]+}/search/add").with(GoogleGroupController.class, "addSearch");
-        router.POST().route("/google/{groupId: [0-9]+}/search/edit").with(GoogleGroupController.class, "editSearch");
         router.POST().route("/google/{groupId: [0-9]+}/search/delete").with(GoogleGroupController.class, "delSearch");
-        router.POST().route("/google/{groupId: [0-9]+}/refresh-volumes").with(GoogleGroupController.class, "refreshVolumes");
         router.POST().route("/google/{groupId: [0-9]+}/search/export-searches").with(GoogleGroupController.class, "exportSearches");
         router.GET().route("/google/{groupId: [0-9]+}/search/suggest").with(GoogleGroupController.class, "jsonSearchSuggest");
         router.GET().route("/google/{groupId: [0-9]+}/search/list").with(GoogleGroupController.class, "jsonSearches");
@@ -129,6 +127,10 @@ public class Routes implements ApplicationRoutes {
         router.GET().route("/google/{groupId: [0-9]+}/search/{searchId: [0-9]+}/url-ranks").with(GoogleSearchController.class, "urlRanks");
         router.GET().route("/google/{groupId: [0-9]+}/search/{searchId: [0-9]+}/export-serp").with(GoogleSearchController.class, "exportSerp");
         router.POST().route("/google/{groupId: [0-9]+}/search/{searchId: [0-9]+}/set-volume").with(GoogleSearchController.class, "setVolume");
+        router.POST().route("/google/{groupId: [0-9]+}/search/{searchId: [0-9]+}/set-cpc").with(GoogleSearchController.class, "setCPC");
+        router.POST().route("/google/{groupId: [0-9]+}/search/{searchId: [0-9]+}/set-competition").with(GoogleSearchController.class, "setCompetition");
+        router.POST().route("/google/{groupId: [0-9]+}/search/{searchId: [0-9]+}/set-tag").with(GoogleSearchController.class, "setTag");
+        router.POST().route("/google/{groupId: [0-9]+}/search/{searchId: [0-9]+}/set-category").with(GoogleSearchController.class, "setCategory");
 
         router.GET().route("/google/{groupId: [0-9]+}/target/{targetId: [0-9]+}/ranks").with(GoogleTargetController.class, "jsonRanks");
         router.GET().route("/google/{groupId: [0-9]+}/target/{targetId: [0-9]+}/variation").with(GoogleTargetController.class, "jsonVariation");

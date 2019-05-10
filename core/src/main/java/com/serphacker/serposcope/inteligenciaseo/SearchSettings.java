@@ -1,52 +1,57 @@
 package com.serphacker.serposcope.inteligenciaseo;
 
+import com.serphacker.serposcope.models.google.GoogleSearch;
+
 public class SearchSettings {
     private final int id;
-    private final int groupId;
-    private final int searchId;
+    private final GoogleSearch search;
     private final String category;
-    private final String volume;
+    private final Integer volume;
+    private final Integer competition;
     private final boolean adminsOnly;
+    private final Double cpc;
+    private final String tag;
 
-    SearchSettings(int id, int groupId, int searchId, String category, String volume, boolean adminsOnly) {
-        this.id = id;
-        this.groupId = groupId;
-        this.searchId = searchId;
-        this.category = category;
-        this.volume = volume;
-        this.adminsOnly = adminsOnly;
-    }
-
-    public SearchSettings(Integer groupId, Integer searchId, String category, String volume, Boolean adminsOnly) {
+    public SearchSettings(GoogleSearch search, String category, Integer competition, Integer volume, Boolean adminsOnly, Double cpc, String tag) {
         this.id = -1;
-        this.groupId = groupId;
-        this.searchId = searchId;
+        this.search = search;
         this.category = category;
         this.volume = volume;
         this.adminsOnly = adminsOnly;
+        this.cpc = cpc;
+        this.tag = tag;
+        this.competition = competition;
     }
 
     public int getId() {
         return id;
     }
 
-    public int getGroupId() {
-        return groupId;
-    }
-
     public int getSearchId() {
-        return searchId;
+        return search.getId();
     }
 
     public String getCategory() {
         return category;
     }
 
-    public String getVolume() {
+    public Integer getVolume() {
         return volume;
     }
 
     public boolean isAdminsOnly() {
         return adminsOnly;
+    }
+
+    public Integer getCompetition() {
+        return competition;
+    }
+
+    public Double getCPC() {
+        return cpc;
+    }
+
+    public String getTag() {
+        return tag;
     }
 }

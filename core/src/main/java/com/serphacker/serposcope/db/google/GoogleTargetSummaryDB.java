@@ -13,12 +13,12 @@ import com.querydsl.sql.SQLQuery;
 import com.querydsl.sql.dml.SQLDeleteClause;
 import com.querydsl.sql.dml.SQLMergeClause;
 import com.serphacker.serposcope.db.AbstractDB;
-import com.serphacker.serposcope.inteligenciaseo.QSearchSettings;
 import com.serphacker.serposcope.models.base.User;
 import com.serphacker.serposcope.models.google.GoogleRank;
 import com.serphacker.serposcope.models.google.GoogleTargetSummary;
 import com.serphacker.serposcope.querybuilder.QGoogleRank;
 import com.serphacker.serposcope.querybuilder.QGoogleTargetSummary;
+import com.serphacker.serposcope.querybuilder.QIsSearchSettings;
 
 import javax.inject.Singleton;
 import java.sql.Connection;
@@ -29,7 +29,7 @@ public class GoogleTargetSummaryDB extends AbstractDB {
 
     QGoogleTargetSummary t_summary = QGoogleTargetSummary.googleTargetSummary;
     QGoogleRank t_rank = QGoogleRank.googleRank;
-    QSearchSettings t_search_settings = QSearchSettings.searchSettings;
+    QIsSearchSettings t_search_settings = QIsSearchSettings.isSearchSettings;
 
     public int insert(Collection<GoogleTargetSummary> summaries){
         int inserted = 0;

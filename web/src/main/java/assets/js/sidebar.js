@@ -9,13 +9,13 @@
 /* global serposcope */
 
 serposcope.sidebar = function () {
-    
-    var groupSuggest = function(query, cb){
+
+    var groupSuggest = function (query, cb) {
         $.getJSON('/groups/suggest?query=' + encodeURIComponent(query)).success(cb);
     };
-    
-    var groupSelected = function(group){
-        switch(group.module){
+
+    var groupSelected = function (group) {
+        switch (group.module) {
             case 0:
             case "GOOGLE":
                 window.location = "/google/" + group.id;
@@ -27,16 +27,16 @@ serposcope.sidebar = function () {
             case 2:
             case "GITHUB":
                 window.location = "/github/" + group.id;
-                break;                
+                break;
         }
     };
-    
-    var groupHighlighted = function(group){
-        var icon = "fa-google-plus-square";
-        switch(group.module){
+
+    var groupHighlighted = function (group) {
+        var icon = "fa-google";
+        switch (group.module) {
             case 0:
             case "GOOGLE":
-                icon = "fa-google-plus-square";
+                icon = "fa-google";
                 break;
             case 1:
             case "TWITTER":
@@ -47,9 +47,9 @@ serposcope.sidebar = function () {
                 icon = "fa-github-square";
                 break;
         }
-        return "<i class=\"fa " + icon + " fa-lg fa-fw\"></i> " + group.name;
-    };      
-    
+        return "<i class=\"fab " + icon + " fa-sm fa-fw\"></i> " + group.name;
+    };
+
     var oPublic = {
         groupSelected: groupSelected,
         groupHighlighted: groupHighlighted,

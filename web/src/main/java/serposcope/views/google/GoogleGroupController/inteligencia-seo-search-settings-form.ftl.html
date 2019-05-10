@@ -1,0 +1,34 @@
+<fieldset>
+    <legend class="col-form-legend"></legend>
+    <div class="col-xs-6">
+        <div class="form-group">
+            <label for="searchCompetition">${i18n("label.competition")}</label>
+            <input id="searchCompetition" class="form-control number" name="competition[]" data-numeric-input="0">
+        </div>
+        <div class="form-group">
+            <label for="searchEditCategory">${i18n("label.searchCategory")}</label>
+            <input id="searchEditCategory" class="form-control search-category" name="category[]" autocomplete="off"/>
+        </div>
+        <div class="form-group">
+            <label for="searchEditTag">${i18n("label.searchTag")}</label>
+            <input id="searchEditTag" class="form-control" name="tag[]" autocomplete="off">
+        </div>
+    </div>
+    <div class="col-xs-6">
+        <div class="form-group">
+            <label for="searchEditVolume">${i18n("label.searchVolume")}</label>
+            <input id="searchEditVolume" class="form-control number" name="volume[]" data-numeric-input="0" autocomplete="off">
+        </div>
+        <div class="form-group">
+            <label for="searchEditCPC">${i18n("label.searchCPC")}</label>
+            <input id="searchEditCPC" class="form-control number" name="cpc[]" data-numeric-input="2" autocomplete="off">
+        </div>
+        <div class="form-group">
+            <label class="control-label">${i18n("label.readAccess")}</label>
+            <div>
+                <label class="radio-inline"><input name="invisible[]" value="true" type="radio" checked> ${i18n("label.adminOnly")} </label>
+                <label class="radio-inline"><input name="invisible[]" value="false" type="radio"> ${i18n("label.adminAndUser")} </label>
+            </div>
+        </div>
+    </div>
+</fieldset>

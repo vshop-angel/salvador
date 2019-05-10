@@ -10,9 +10,7 @@ package com.serphacker.serposcope.db.google;
 import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.sql.SQLQuery;
-import com.querydsl.sql.dml.SQLDeleteClause;
-import com.querydsl.sql.dml.SQLInsertClause;
-import com.querydsl.sql.dml.SQLMergeClause;
+import com.querydsl.sql.dml.*;
 import com.serphacker.serposcope.db.AbstractDB;
 import com.serphacker.serposcope.models.google.GoogleSearch;
 import com.serphacker.serposcope.querybuilder.QGoogleSearch;
@@ -22,6 +20,7 @@ import com.serphacker.serposcope.scraper.google.GoogleDevice;
 
 import javax.inject.Singleton;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.*;
 
 @Singleton
@@ -65,7 +64,19 @@ public class GoogleSearchDB extends AbstractDB {
         
         return inserted;
     }
-    
+
+    public boolean updateCustom(int id, Integer value) {
+        try(Connection con = ds.getConnection()) {
+            SQLUpdateClause clause = new SQLUpdateClause(con, dbTplConf, t_gsearch)
+                    .set(t_gsearch.customParameters, value != null ? value.toString() : null)
+                    .where(t_gsearch.id.eq(id));
+            return clause.execute() == 1;
+        } catch (SQLException e) {
+            LOG.warn("SQLException", e);
+        }
+        return false;
+    }
+
     public int getId(GoogleSearch search){
         int id = 0;
         

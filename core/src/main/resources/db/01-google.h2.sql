@@ -114,13 +114,15 @@ create table `IS_REPORTS` (
 
 drop table if exists `IS_SEARCH_SETTINGS`;
 create table `IS_SEARCH_SETTINGS` (
-    group_id int not null,
     search_id int not null,
     category varchar(100) not null,
-    volume varchar(100) not null,
+    volume int not null,
     admins_only boolean not null default true,
-    primary key (search_id, group_id),
+    cpc float not null,
+    tag varchar(200) not null,
+    competition int not null,
+    primary key (search_id),
     foreign key (search_id) references `GOOGLE_SEARCH`(id) ON DELETE CASCADE ON UPDATE CASCADE,
-    foreign key (group_id) references `GROUP`(id) ON DELETE CASCADE ON UPDATE CASCADE
 ) engine = innodb default charset=utf8 /*! collate utf8_bin */;
+
 SET FOREIGN_KEY_CHECKS=1;

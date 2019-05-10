@@ -21,7 +21,6 @@ serposcope.googleTargetControllerGrid = function () {
     var COL_SEARCH_LOCAL = 3;
     var COL_SEARCH_DATACENTER = 4;
     var COL_SEARCH_CUSTOM = 5;
-    var COL_SEARCH_CATEGORY = 6;
     var COL_BEST = 2;
     var COL_BEST_RANK = 0;
     var COL_BEST_DAY = 1;
@@ -37,16 +36,7 @@ serposcope.googleTargetControllerGrid = function () {
 
     var grid = null;
     var dataView = null;
-
-    var filter = {
-        keyword: '',
-        country: '',
-        device: '',
-        local: '',
-        datacenter: '',
-        custom: '',
-        category: -1
-    };
+    var filter = new KeywordFilter();
 
     // provided by API
     var days = [];
@@ -64,12 +54,33 @@ serposcope.googleTargetControllerGrid = function () {
     };
 
     var render = function () {
-        if (document.getElementById("google-target-table-container") == null) {
+        if (document.getElementById("google-target-table-container") == null)
             return;
-        }
-        $('#filter-apply').click(applyFilter);
-        $('#filter-reset').click(resetFilter);
+        $('#filter-apply').click(function () {
+            applyFilter(filter, dataView);
+        });
+        $('#filter-reset').click(function () {
+            resetFilter(filter, dataView);
+        });
         fetchData();
+    };
+
+    var filterGrid = function (item) {
+        var search = item[COL_SEARCH];
+        if (search === 0)
+            return true;
+        var settings = item[COL_SEARCH_SETTINGS];
+        var mapping = {
+            keyword: search[COL_SEARCH_KEYWORD],
+            device: search[COL_SEARCH_DEVICE],
+            country: search[COL_SEARCH_COUNTRY],
+            local: search[COL_SEARCH_LOCAL],
+            datacenter: search[COL_SEARCH_DATACENTER],
+            competition: settings.competition,
+            tag: settings ? settings.tag : -1,
+            category: settings ? settings.category : -1
+        };
+        return matchesAtLeastOneFilter(filter, mapping);
     };
 
     var fetchData = function () {
@@ -99,7 +110,10 @@ serposcope.googleTargetControllerGrid = function () {
         var options = {
             explicitInitialization: true,
             enableColumnReorder: false,
-            enableTextSelectionOnCells: true
+            enableTextSelectionOnCells: true,
+            forceFitColumns: true,
+            forceSyncScrolling: true
+        };
         };
 
         var columns = [{
@@ -108,21 +122,49 @@ serposcope.googleTargetControllerGrid = function () {
             width: COL_WIDTH,
             formatter: formatVisibilityCell,
             sortable: false,
-            toolTip: 'Visible only to administrators?'
+            toolTip: 'Visible a todos los usuarios?'
         }, {
             id: "search",
-            name: '<div class="header-search" >&nbsp;&nbsp;Searches <i class="glyphicon glyphicon-sort" ></i></div>',
+            name: 'Búsquedas',
             field: "id",
             width: 250,
             formatter: formatSearchCell,
             sortable: true
         }, {
             id: "volume",
-            name: '<div class="header-search" >&nbsp;&nbsp;<b>Volume</b></div>',
+            name: 'Volumen',
             field: "volume",
             width: 90,
             sortable: true,
             formatter: formatVolumeCell
+        }, {
+            id: "category",
+            name: 'Categoría',
+            field: "category",
+            width: 110,
+            sortable: true,
+            formatter: formatCategory
+        }, {
+            id: "competition",
+            name: 'Competencia',
+            field: "competition",
+            width: 130,
+            sortable: true,
+            formatter: formatCompetition
+        }, {
+            id: "cpc",
+            name: 'CPC',
+            field: "cpc",
+            width: 70,
+            sortable: true,
+            formatter: formatCPC
+        }, {
+            id: "tag",
+            name: 'Etiqueta',
+            field: "tag",
+            width: 110,
+            sortable: true,
+            formatter: formatTag
         }];
         for (var i = 0; i < days.length; i++) {
             var day = days[i];
@@ -137,8 +179,11 @@ serposcope.googleTargetControllerGrid = function () {
         }
         columns.push({
             id: "best",
-            name: '<i class="fa fa-trophy" data-toggle="tooltip" title="Best" style="color: gold;" ></i>',
-            field: "best", width: COL_WIDTH, formatter: formatBestCell, sortable: true
+            name: '<i class="fa fa-trophy" data-toggle="tooltip" title="Best"></i>',
+            field: "best",
+            width: COL_WIDTH,
+            formatter: formatBestCell,
+            sortable: true,
         });
 
         dataView = new Slick.Data.DataView();
@@ -163,16 +208,40 @@ serposcope.googleTargetControllerGrid = function () {
         dataView.endUpdate();
     };
 
-    var compareVolumes = function (a, b) {
-        var A = parseInt(a[COL_SEARCH_SETTINGS].volume);
-        var B = parseInt(b[COL_SEARCH_SETTINGS].volume);
+    var compareAsNumbers = function (a, b) {
+        var A = Number(a);
+        var B = Number(b);
         if (isNaN(A)) {
             return isNaN(B) ? 0 : 1;
         } else if (isNaN(B)) {
-            return isNaN(A) ? 0 : -1;
+            return -1;
         } else {
             return A - B;
         }
+    };
+
+    var compareVolumes = function (a, b) {
+        return compareAsNumbers(a[COL_SEARCH_SETTINGS].volume, b[COL_SEARCH_SETTINGS].volume);
+    };
+
+    var compareTags = function (a, b) {
+        var A = a[COL_SEARCH_SETTINGS].tag;
+        var B = b[COL_SEARCH_SETTINGS].tag;
+        if (A === null) {
+            return B === null ? 0 : 1;
+        } else if (B === null) {
+            return -1;
+        } else {
+            return A > B ? 1 : -1;
+        }
+    };
+
+    var compareCpcs = function (a, b) {
+        return compareAsNumbers(a[COL_SEARCH_SETTINGS].cpc, b[COL_SEARCH_SETTINGS].cpc);
+    };
+
+    var compareCustom = function (a, b) {
+        return compareAsNumbers(a[COL_SEARCH_SETTINGS].competition, b[COL_SEARCH_SETTINGS].competition);
     };
 
     var gridSort = function (e, args) {
@@ -188,6 +257,12 @@ serposcope.googleTargetControllerGrid = function () {
                     return a[COL_SEARCH][COL_SEARCH_KEYWORD] > b[COL_SEARCH][COL_SEARCH_KEYWORD] ? 1 : -1;
                 case "volume":
                     return compareVolumes(a, b);
+                case "tag":
+                    return compareTags(a, b);
+                case "cpc":
+                    return compareCpcs(a, b);
+                case "competition":
+                    return compareCustom(a, b);
                 case "best":
                     return a[COL_BEST][COL_BEST_RANK] - b[COL_BEST][COL_BEST_RANK];
                 default:
@@ -199,117 +274,6 @@ serposcope.googleTargetControllerGrid = function () {
         dataView.sort(comparer, args.sortAsc);
     };
 
-    var applyFilter = function () {
-        var category = $('#filter-category').val() || '-1';
-
-        filter.keyword = $('#filter-keyword').val().toLowerCase();
-        filter.country = $('#filter-country').val().toLowerCase();
-        filter.device = $('#filter-device').val();
-        filter.local = $('#filter-local').val().toLowerCase();
-        filter.datacenter = $('#filter-datacenter').val().toLowerCase();
-        filter.custom = $('#filter-custom').val().toLowerCase();
-        filter.category = category.toLowerCase();
-        dataView.refresh();
-    };
-
-    var resetFilter = function () {
-        $('#filter-keyword').val('');
-        $('#filter-country').val('');
-        $('#filter-device').val('');
-        $('#filter-local').val('');
-        $('#filter-datacenter').val('');
-        $('#filter-custom').val('');
-        $('#filter-category').val(-1);
-        applyFilter();
-    };
-
-    var filterGrid = function (item) {
-        var search = item[COL_SEARCH];
-        if (search === 0) {
-            return true;
-        }
-
-        if (filter.keyword !== '' && search[COL_SEARCH_KEYWORD].toLowerCase().indexOf(filter.keyword) === -1) {
-            return false;
-        }
-
-        if (filter.device !== '' && search[COL_SEARCH_DEVICE] != filter.device) {
-            return false;
-        }
-
-        if (filter.country !== '' && search[COL_SEARCH_COUNTRY].toLowerCase() != filter.country.toLowerCase()) {
-            return false;
-        }
-
-        if (filter.local !== '' && search[COL_SEARCH_LOCAL].toLowerCase().indexOf(filter.local) === -1) {
-            return false;
-        }
-
-        if (filter.datacenter !== '' && search[COL_SEARCH_DATACENTER] != filter.datacenter) {
-            return false;
-        }
-
-        if (filter.custom !== '' && search[COL_SEARCH_CUSTOM].toLowerCase().indexOf(filter.custom) === -1) {
-            return false;
-        }
-
-        return !(filter.category != -1 && search[COL_SEARCH_CATEGORY].toLowerCase().indexOf(filter.category) === -1);
-    };
-
-    var toQueryString = function (obj) {
-        var params = [];
-        for (var key in obj) {
-            if (obj.hasOwnProperty(key)) {
-                params.push(key + '=' + obj[key])
-            }
-        }
-        return params.join('&');
-    };
-
-    window.setVolume = function (input, searchId, volume, error, ok) {
-        var variables = $('#csp-vars');
-        var request = {
-            id: searchId,
-            volume: volume,
-            _xsrf: variables.attr('data-xsrf')
-        };
-        var xhr = new XMLHttpRequest();
-        var groupId = variables.attr('data-group-id');
-        xhr.open('POST', '/google/' + groupId + '/search/' + searchId + '/set-volume', true);
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState !== 4)
-                return;
-            if (xhr.status !== 200) {
-                error();
-            } else {
-                ok();
-            }
-        };
-        xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
-        xhr.send(toQueryString(request));
-    };
-
-    window.setKeywordVisibility = function (checkbox, id) {
-        var variables = $('#csp-vars');
-        var request = {
-            id: id,
-            visible: checkbox.checked,
-            _xsrf: variables.attr('data-xsrf')
-        };
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', "/google/" + variables.attr('data-group-id') + "/search/set-visibility", true);
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState !== 4)
-                return;
-            if (xhr.status !== 200) {
-                checkbox.checked = !checkbox.checked;
-                alert("Unexpected Error");
-            }
-        };
-        xhr.setRequestHeader('content-type', 'application/x-www-form-urlencoded');
-        xhr.send(toQueryString(request))
-    };
-
     var formatVisibilityCell = function (row, col, unk, colDef, rowData) {
         if (row == 0) {
             return null;
@@ -317,19 +281,64 @@ serposcope.googleTargetControllerGrid = function () {
         var cell = rowData[COL_SEARCH_SETTINGS];
         if (!cell)
             return null;
-        if (!cell.is_admins_only) {
-            return '<input type="checkbox" checked onchange="setKeywordVisibility(this, ' + rowData[COL_ID] + ')">'
+        if (!cell.isAdminOnly) {
+            return '<input type="checkbox" checked onclick="return false;">'
         } else {
-            return '<input type="checkbox" onchange="setKeywordVisibility(this, ' + rowData[COL_ID] + ')">'
+            return '<input type="checkbox" onclick="return false;">'
+        }
+    };
+
+    var formatCompetition = function (row, col, unk, colDef, rowData) {
+        if (row === 0) {
+            return '';
+        } else {
+            var value = Number(rowData[COL_SEARCH_SETTINGS].competition);
+            if (isNaN(value) || value === 0)
+                value = '-';
+            return '<div class="text-right" style="padding:0 5px">' + value + '</div>';
+        }
+    };
+
+    var formatCPC = function (row, col, unk, colDef, rowData) {
+        if (row === 0) {
+            return '';
+        } else {
+            var value = Number(rowData[COL_SEARCH_SETTINGS].cpc);
+            if (isNaN(value) || value === 0)
+                value = '-';
+            value = value.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
+            return '<div class="text-right" style="padding:0 5px">' + value + '</div>';
+        }
+    };
+
+    var formatCategory = function (row, col, unk, colDef, rowData) {
+        if (row === 0) {
+            return '';
+        } else {
+            var value = rowData[COL_SEARCH_SETTINGS].category;
+            if (value === null)
+                value = '';
+            return '<div style="padding:0 5px;text-align:left">' + value + '</div>';
+        }
+    };
+
+    var formatTag = function (row, col, unk, colDef, rowData) {
+        if (row === 0) {
+            return '';
+        } else {
+            var value = rowData[COL_SEARCH_SETTINGS].tag;
+            if (value === null)
+                value = '';
+            return '<div style="padding:0 5px;text-align:left">' + value + '</div>';
         }
     };
 
     var formatVolumeCell = function (row, col, unk, colDef, rowData) {
         if (row === 0) {
-            return '-';
+            return '';
         } else {
             var value = parseInt(rowData[COL_SEARCH_SETTINGS].volume);
-            return isNaN(value) ? '-' : value;
+            return '<div class="text-right" style="padding:0 5px;">' + (isNaN(value) ? '-' : value) + '</div>';
         }
     };
 
@@ -338,19 +347,18 @@ serposcope.googleTargetControllerGrid = function () {
         if (search === 0) {
             return "<div class=\"text-left\">&nbsp;&nbsp;Calendar</div>";
         }
-
         var ret = "<div class=\"text-left\">";
         ret += "<i data-toggle=\"tooltip\" title=\"Country : " + search[COL_SEARCH_COUNTRY] + "\" class=\"fa fa-globe\" ></i>";
         if (search[COL_SEARCH_DEVICE] === "M") {
             ret += "<i data-toggle=\"tooltip\" title=\"mobile\" class=\"fa fa-mobile fa-fw\" ></i>";
         }
-        if (search[COL_SEARCH_LOCAL] != "") {
+        if (search[COL_SEARCH_LOCAL] !== "") {
             ret += "<i data-toggle=\"tooltip\" title=\"" + search[COL_SEARCH_LOCAL] + "\" class=\"fa fa-map-marker fa-fw\" ></i>";
         }
-        if (search[COL_SEARCH_DATACENTER] != "") {
+        if (search[COL_SEARCH_DATACENTER] !== "") {
             ret += "<i data-toggle=\"tooltip\" title=\"Datacenter: " + search[COL_SEARCH_DATACENTER] + "\" class=\"fa fa-building fa-fw\" ></i>";
         }
-        if (search[COL_SEARCH_CUSTOM] != "") {
+        if (search[COL_SEARCH_CUSTOM] !== "") {
             ret += "<i data-toggle=\"tooltip\" title=\"" + search[COL_SEARCH_CUSTOM] + "\" class=\"fa fa-question-circle fa-fw\" ></i>";
         }
         ret += " <a href=\"/google/" + groupId + "/search/" + rowData[COL_ID] + "\" >" + search[COL_SEARCH_KEYWORD] + "</a>";
@@ -360,9 +368,9 @@ serposcope.googleTargetControllerGrid = function () {
 
     var formatGridCell = function (row, col, unk, colDef, rowData) {
         if (row === 0) {
-            return formatCalendarCell(row, col - 2, unk, colDef, rowData);
+            return formatCalendarCell(row, col - 6, unk, colDef, rowData);
         } else {
-            return formatRankCell(row, col - 2, unk, colDef, rowData);
+            return formatRankCell(row, col - 6, unk, colDef, rowData);
         }
     };
 

@@ -254,10 +254,10 @@
                                         <jsSourceFile>/assets/js/views/admin/UsersController.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/admin/DebugController.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/admin/BackupController.js</jsSourceFile>
-                                        <jsSourceFile>/assets/js/views/admin/AdminFunctions.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/admin/GoogleSettingsController.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/admin/TaskController.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/admin/ProxyController.js</jsSourceFile>
+                                        <jsSourceFile>/assets/js/views/admin/Methods.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/google/GoogleSidebar.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/google/GoogleGroupController.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/google/GoogleGroupControllerGrid.admin.js</jsSourceFile>
@@ -313,7 +313,6 @@
                                         <jsSourceFile>/assets/js/views/admin/UsersController.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/admin/DebugController.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/admin/BackupController.js</jsSourceFile>
-                                        <jsSourceFile>/assets/js/views/admin/AdminFunctions.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/admin/GoogleSettingsController.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/admin/TaskController.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/admin/ProxyController.js</jsSourceFile>

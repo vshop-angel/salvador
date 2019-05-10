@@ -23,29 +23,23 @@ MIT License (MIT) - Copyright (c) 2015 SERP Hacker https://serphacker.com/
 }
 
 #group-searches-grid .slick-sort-indicator {
-    display: none;
-    visibility: hidden;
 }
 
 #group-searches-grid .slick-cell {
-    padding: 0px;
-    height: 25px;
+    padding: 0;
 }
 
 #group-searches-grid .slick-header-column {
-    /*height: 25px;*/
     text-align: center;
-    background-color: #3c8dbc;
+    background-color: #1c8dFc;
     font-weight: bold;
     cursor: pointer;
 }
 
 #group-searches-grid .slick-row {
-    height: 25px;
 }
 
 #group-searches-grid .slick-cell div {
-    height: 25px;
 }
 
 #group-searches-grid .slick-cell-checkboxsel {
@@ -285,99 +279,4 @@ MIT License (MIT) - Copyright (c) 2015 SERP Hacker https://serphacker.com/
     cursor: pointer;
 }
 
-.search-options {
-    display: block;
-    text-align: center;
-    width: 22px;
-    margin: 0 auto;
-}
 
-.search-options a {
-    display: inline-block;
-    vertical-align: middle;
-
-    width: 22px;
-    line-height: 25px;
-    height: 22px;
-
-    box-sizing: border-box;
-}
-
-.search-options a.edit {
-    cursor: pointer;
-}
-
-.search-options a.refresh {
-    color: #00aa00;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0);
-    }
-    100% {
-        transform: rotate(359deg);
-    }
-}
-
-.simple-spinner {
-    display: inline-block;
-    vertical-align: middle;
-    position: relative;
-    line-height: 12px;
-    width: 16px;
-    height: 16px;
-    box-sizing: content-box;
-}
-
-.simple-spinner::before {
-    content: '';
-    position: absolute;
-
-    width: 16px;
-    height: 16px;
-    top: 0;
-    left: 0;
-
-    animation: spin 1s linear infinite;
-    border: 3px solid #ddd;
-    border-top-color: dodgerblue;
-    border-radius: 8px;
-}
-
-a.inactive {
-    color: #808080;
-    text-decoration: none;
-    cursor: not-allowed;
-}
-
-.green {
-    color: #00aa00;
-}
-
-label.compact {
-    padding: 0;
-    font-weight: normal;
-    margin: 0;
-}
-
-.slick-cell {
-    padding: 0;
-}
-
-.slick-cell input.volume {
-    text-align: right;
-    padding: 0 4px;
-    border: 1px solid transparent;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    width: 100%;
-    height: 100%;
-    display: block;
-    outline: none;
-}
-
-.slick-cell input.volume:focus {
-    border-color: dodgerblue;
-}

@@ -116,7 +116,8 @@ public class GoogleGroupController extends GoogleController {
                 .render("targets", context.getAttribute("targets"))
                 .render("summaries", summaryByTagetId)
                 .render("histories", scoreHistoryByTagetId)
-                .render("categories", settingsDB.getCategories(user));
+                .render("categories", settingsDB.listCategories(user))
+                .render("tags", settingsDB.listTags(user));
     }
 
     public Result jsonSearches(Context context) {
@@ -149,7 +150,10 @@ public class GoogleGroupController extends GoogleController {
                             GoogleSearch search = searches.get(i);
                             String category = settingsDB.getCategory(search.getId());
                             boolean isAdminOnly = settingsDB.getIsOnlyAdmins(search.getId());
-                            String volume = settingsDB.getVolume(search.getId());
+                            Integer volume = settingsDB.getVolume(search.getId());
+                            Double cpc = settingsDB.getCPC(search.getId());
+                            Integer competition = settingsDB.getCompetition(search.getId());
+                            String tag = settingsDB.getTag(search.getId());
                             writer
                                     .append("{")
                                     .append("\"id\":")
@@ -170,18 +174,23 @@ public class GoogleGroupController extends GoogleController {
                                     .append("\"datacenter\":\"")
                                     .append(search.getDatacenter() == null ? "" : StringEscapeUtils.escapeJson(search.getDatacenter()))
                                     .append("\",")
-                                    .append("\"custom\":\"")
-                                    .append(search.getCustomParameters() == null ? "" : StringEscapeUtils.escapeJson(search.getCustomParameters()))
+                                    .append("\"competition\":\"")
+                                    .append(competition == null ? "0" : competition.toString())
                                     .append("\",")
                                     .append("\"volume\":")
-                                    .append(getAsInteger(volume))
+                                    .append(volume == null ? "0" : volume.toString())
                                     .append(",")
                                     .append("\"isAdminOnly\":")
                                     .append(isAdminOnly ? "true" : "false")
                                     .append(",")
-                                    .append("\"category\":\"")
-                                    .append(category == null ? "" : StringEscapeUtils.escapeJson(category))
-                                    .append("\"")
+                                    .append("\"cpc\":")
+                                    .append(cpc == null ? "0.0" : cpc.toString())
+                                    .append(",")
+                                    .append("\"tag\":")
+                                    .append(tag == null ? "null" : String.format("\"%s\"", StringEscapeUtils.escapeJson(tag)))
+                                    .append(",")
+                                    .append("\"category\":")
+                                    .append(category == null ? "null" : String.format("\"%s\"", StringEscapeUtils.escapeJson(category)))
                                     .append("}")
                             ;
                             if (i != searches.size() - 1) {
@@ -204,31 +213,26 @@ public class GoogleGroupController extends GoogleController {
 
     }
 
-    private String getAsInteger(String volume) {
-        if ((volume == null) || (volume.isEmpty())) {
-            return "0";
+    private boolean validateAddParameters(String[] keywords, Object[]... arrays) {
+        if (keywords == null)
+            return false;
+        for (Object[] array : arrays) {
+            if (array == null || array.length != keywords.length) {
+                return false;
+            }
         }
-        Integer value = Integer.valueOf(volume);
-        return value.toString();
+        return true;
     }
 
-    @FilterWith({
-            XSRFFilter.class,
-            AdminFilter.class
-    })
-    public Result editSearch(Context context,
-                             @Param("id") Integer searchId,
-                             @Param("categories") String category,
-                             @Param("volumes") String volume,
-                             @Param("onlyAdmin") Boolean onlyAdmin) {
-        FlashScope flash = context.getFlashScope();
-        Group group = context.getAttribute("group", Group.class);
-        if (settingsDB.update(searchId, group.getId(), category, volume, onlyAdmin)) {
-            flash.success("inteligenciaseo.searchEdited");
-        } else {
-            flash.error("error.searchEditError");
+    private Double getAsDouble(String input) {
+        int decimalSeparatorPosition = input.indexOf('.');
+        if (decimalSeparatorPosition == -1) {
+            decimalSeparatorPosition = input.indexOf(',');
         }
-        return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()) + "#tab-searches");
+        if (decimalSeparatorPosition == -1)
+            return Double.parseDouble(input);
+        input = input.substring(0, decimalSeparatorPosition) + input.substring(decimalSeparatorPosition + 1);
+        return Double.parseDouble(input) / Math.pow(10.0, input.length() - decimalSeparatorPosition);
     }
 
     @FilterWith({
@@ -238,37 +242,57 @@ public class GoogleGroupController extends GoogleController {
     public Result addSearch(
             Context context,
             @Params("keyword[]") String[] keywords,
-            @Params("country[]") String country[], @Params("datacenter[]") String[] datacenters,
+            @Params("country[]") String[] country,
+            @Params("datacenter[]") String[] datacenters,
             @Params("device[]") Integer[] devices,
-            @Params("local[]") String[] locals, @Params("custom[]") String[] customs,
-            @Params("categories[]") String[] categories, @Params("volumes[]") String[] volumes,
-            @Params("onlyAdmin[]") Boolean[] onlyAdmin
+            @Params("local[]") String[] locals,
+            @Params("custom[]") String[] customs,
+            @Params("competition[]") Integer[] competitions,
+            @Params("category[]") String[] categories,
+            @Params("tag[]") String[] tags,
+            @Params("volume[]") Integer[] volumes,
+            @Params("cpc[]") String[] cpcs,
+            @Params("invisible[]") Boolean[] invisible
     ) {
         FlashScope flash = context.getFlashScope();
         Group group = context.getAttribute("group", Group.class);
 
-        if (keywords == null || country == null || datacenters == null || devices == null || locals == null || customs == null
-                || keywords.length != country.length || keywords.length != datacenters.length || keywords.length != devices.length
-                || keywords.length != locals.length || keywords.length != customs.length) {
-            flash.error("error.invalidParameters");
-            return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()));
+        Map<String,Object> map = new HashMap<>();
+        map.put("keyword", keywords);
+        map.put("country", country);
+        map.put("datacenter", datacenters);
+        map.put("device", keywords);
+        map.put("local", keywords);
+        map.put("custom", keywords);
+        map.put("competition", keywords);
+        map.put("category", keywords);
+        map.put("tag", keywords);
+        map.put("volume", keywords);
+        map.put("cpc", keywords);
+        map.put("invisible", keywords);
+        for (Map.Entry<String, Object> entry: map.entrySet()) {
+            if (entry.getValue() == null) {
+                flash.error("error.invalidParameters");
+                LOG.warn(String.format("`%s' is `null'", entry.getKey()));
+                return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()));
+            }
         }
 
+        Set<SearchSettings> settings = new HashSet<>();
         Set<GoogleSearch> searches = new HashSet<>();
         for (int i = 0; i < keywords.length; i++) {
             GoogleSearch search = new GoogleSearch();
-
             if (keywords[i].isEmpty()) {
                 flash.error("admin.google.keywordEmpty");
                 return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()));
             }
             search.setKeyword(keywords[i]);
-
             GoogleCountryCode countryCode = null;
             if (country[i] != null) {
                 try {
                     countryCode = GoogleCountryCode.valueOf(country[i].toUpperCase());
                 } catch (Exception ex) {
+                    LOG.warn("Country Code", ex);
                 }
             }
             if (countryCode == null) {
@@ -276,7 +300,6 @@ public class GoogleGroupController extends GoogleController {
                 return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()));
             }
             search.setCountry(countryCode);
-
             if (!datacenters[i].isEmpty()) {
                 if (!Validator.isIPv4(datacenters[i])) {
                     flash.error("error.invalidIP");
@@ -284,20 +307,27 @@ public class GoogleGroupController extends GoogleController {
                 }
                 search.setDatacenter(datacenters[i]);
             }
-
             if (devices[i] != null && devices[i] >= 0 && devices[i] < GoogleDevice.values().length) {
                 search.setDevice(GoogleDevice.values()[devices[i]]);
             } else {
                 search.setDevice(GoogleDevice.DESKTOP);
             }
-
             if (!Validator.isEmpty(locals[i])) {
                 search.setLocal(locals[i]);
             }
-
             if (!Validator.isEmpty(customs[i])) {
                 search.setCustomParameters(customs[i]);
             }
+            Double cpc = getAsDouble(cpcs[i]);
+            settings.add(new SearchSettings(
+                    search,
+                    categories[i],
+                    competitions[i],
+                    volumes[i],
+                    invisible[i],
+                    cpc,
+                    tags[i]
+            ));
             searches.add(search);
         }
 
@@ -311,19 +341,11 @@ public class GoogleGroupController extends GoogleController {
                 }
             }
             googleDB.search.insert(searches, group.getId());
-        }
-        int i = 0;
-        Set<SearchSettings> settings = new HashSet<>();
-        // Go through all searches and create associated settings
-        for (GoogleSearch search : searches) {
-            // Create the settings
-            settings.add(new SearchSettings(group.getId(), search.getId(), categories[i], volumes[i], onlyAdmin[i]));
-            i++;
+            settingsDB.insert(settings);
         }
         googleDB.serpRescan.rescan(null, getTargets(context), knownSearches, false);
         flash.success("google.group.searchInserted");
 
-        settingsDB.insert(settings);
         return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()) + "#tab-searches");
     }
 
@@ -498,7 +520,7 @@ public class GoogleGroupController extends GoogleController {
         }
         // List<Keyword> keywords = new ArrayList<Keyword>();
         System.out.println("refreshing keyword search volumes");
-        for (String id: ids) {
+        for (String id : ids) {
             GoogleSearch search = googleDB.search.find(Integer.valueOf(id));
             System.out.printf("\t%s\n", search.getKeyword());
         }
