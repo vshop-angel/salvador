@@ -278,11 +278,11 @@ serposcope.googleGroupController = function () {
         var CPC_COLUMN = 10;
         var VISIBILITY_COLUMN = 11;
 
-        var ident = function (value) {
+        var identity = function (value) {
             return value;
         };
 
-        var integer = function (value) {
+        var integerValidator = function (value) {
             var number = Number(value);
             if (isNaN(number)) {
                 return null;
@@ -292,7 +292,7 @@ serposcope.googleGroupController = function () {
             return number;
         };
 
-        var float = function (value) {
+        var floatValidator = function (value) {
             var fixed = value.replace(getDecimalSeparator(), '.');
             var number = Number(fixed);
             if (isNaN(number)) {
@@ -301,24 +301,34 @@ serposcope.googleGroupController = function () {
             return number;
         };
 
-        var truth = function (value) {
+        var booleanValidator = function (value) {
             return value.toLowerCase() === 'true';
+        };
 
+        var deviceValidator = function (value) {
+            switch (value.toLowerCase()) {
+                case "desktop":
+                    return 0;
+                case "mobile":
+                    return 1;
+                default:
+                    return null;
+            }
         };
 
         var collectedData = {
-            keyword: {data: [], column: KEYWORD_COLUMN, validate: ident},
-            country: {data: [], column: COUNTRY_COLUMN, validate: ident},
-            datacenter: {data: [], column: DATACENTER_COLUMN, validate: ident},
-            device: {data: [], column: DEVICE_COLUMN, validate: ident},
-            local: {data: [], column: LOCAL_COLUMN, validate: ident},
-            competition: {data: [], column: COMPETITION_COLUMN, validate: integer},
-            category: {data: [], column: CATEGORY_COLUMN, validate: ident},
-            invisible: {data: [], column: VISIBILITY_COLUMN, validate: truth},
-            volume: {data: [], column: VOLUME_COLUMN, validate: integer},
-            cpc: {data: [], column: CPC_COLUMN, validate: float},
-            tag: {data: [], column: TAG_COLUMN, validate: ident},
-            custom: {data: [], column: CUSTOM_COLUMN, validate: ident}
+            keyword: {data: [], column: KEYWORD_COLUMN, validate: identity},
+            country: {data: [], column: COUNTRY_COLUMN, validate: identity},
+            datacenter: {data: [], column: DATACENTER_COLUMN, validate: identity},
+            device: {data: [], column: DEVICE_COLUMN, validate: deviceValidator},
+            local: {data: [], column: LOCAL_COLUMN, validate: identity},
+            competition: {data: [], column: COMPETITION_COLUMN, validate: integerValidator},
+            category: {data: [], column: CATEGORY_COLUMN, validate: identity},
+            invisible: {data: [], column: VISIBILITY_COLUMN, validate: booleanValidator},
+            volume: {data: [], column: VOLUME_COLUMN, validate: integerValidator},
+            cpc: {data: [], column: CPC_COLUMN, validate: floatValidator},
+            tag: {data: [], column: TAG_COLUMN, validate: identity},
+            custom: {data: [], column: CUSTOM_COLUMN, validate: identity}
         };
 
         if (content.length === 0) {
@@ -349,14 +359,17 @@ serposcope.googleGroupController = function () {
                 var value = item.validate(raw || cspVars.attr('data-default-' + key));
                 if (value === null) {
                     switch (item.validate) {
-                        case ident:
+                        case identity:
                             alert('Tipo incorrecto para `' + key + '\': `' + raw + '\' what the fuck?');
                             break;
-                        case float:
+                        case floatValidator:
                             alert('Tipo incorrecto para `' + key + '\': `' + raw + '\', se esperaba número');
                             break;
-                        case integer:
+                        case integerValidator:
                             alert('Tipo incorrecto para `' + key + '\': `' + raw + '\', se esperaba entero');
+                            break;
+                        case deviceValidator:
+                            alert('Tipo desconocido de dispositivo, error muy inesperado');
                             break;
                     }
                     return false;
@@ -383,16 +396,7 @@ serposcope.googleGroupController = function () {
             datacenter[j] = params[DATACENTER_COLUMN] || cspVars.attr('data-default-datacenter');
             custom[j] = params[CUSTOM_COLUMN];
             if (params[DEVICE_COLUMN]) {
-                switch (params[DEVICE_COLUMN].toLowerCase()) {
-                    case "desktop":
-                        device[j] = 0;
-                        break;
-                    case "mobile":
-                        device[j] = 1;
-                        break;
-                    default:
-                        alert(params[3] + " is an invalid device type, valid values : desktop, mobile");
-                        return false;
+
                 }
             } else {
                 device[j] = parseInt(cspVars.attr('data-default-device'));
