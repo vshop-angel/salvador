@@ -71,6 +71,8 @@ serposcope.googleGroupControllerGrid = function () {
         var columns = [{
             id: "keyword", field: "keyword", minWidth: 200, sortable: true, name: 'Keyword', formatter: formatKeyword
         },{
+            id: "volume", field: "volume", minWidth: 50, sortable: true, name: 'Volume', formatter: formatVolume
+        },{
             id: "device", field: "device", minWidth: 100, sortable: true, name: 'Device', formatter: formatDevice
         },{
             id: "country", field: "country", minWidth: 60, sortable: true, name: 'Country', formatter: formatCountry
@@ -78,12 +80,6 @@ serposcope.googleGroupControllerGrid = function () {
             id: "datacenter", field: "datacenter", minWidth: 100, sortable: true, name: 'Datacenter'/*, formatter: formatDatacenter,*/
         },{
             id: "local", field: "local", minWidth: 200, sortable: true, name: 'Local'/*, formatter: formatLocal,*/
-        },{
-            id: "custom", field: "custom", minWidth: 200, sortable: true, name: 'Custom'/*, formatter: formatCustom*/
-        },{
-            id: "category", field: "category", minWidth: 150, sortable: true, name: 'Category'/*, formatter: formatCustom*/
-        },{
-            id: "volume", field: "volume", minWidth: 50, sortable: true, name: 'Volume', formatter: formatVolume
         }];
         
         dataView = new Slick.Data.DataView();
@@ -125,7 +121,6 @@ serposcope.googleGroupControllerGrid = function () {
         filter.device = $('#filter-device').val();
         filter.local = $('#filter-local').val().toLowerCase();
         filter.datacenter = $('#filter-datacenter').val().toLowerCase();
-        filter.custom = $('#filter-custom').val().toLowerCase();
         filter.category = category.toLowerCase();
 
         dataView.refresh();
@@ -137,7 +132,6 @@ serposcope.googleGroupControllerGrid = function () {
         $('#filter-device').val('');
         $('#filter-local').val('');
         $('#filter-datacenter').val('');
-        $('#filter-custom').val('');
         $('#filter-category').val(-1);
         applyFilter();
     };

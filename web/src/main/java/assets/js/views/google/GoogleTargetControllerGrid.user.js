@@ -104,14 +104,14 @@ serposcope.googleTargetControllerGrid = function () {
 
         var columns = [{
             id: "search",
-            name: '<div class="header-search" >&nbsp;&nbsp;Searches <i class="glyphicon glyphicon-sort" ></i></div>',
+            name: 'Palabra Clave',
             field: "id",
             width: 250,
             formatter: formatSearchCell,
             sortable: true
         }, {
             id: "volume",
-            name: '<div class="header-search" >&nbsp;&nbsp;<b>Volume</b></div>',
+            name: 'Volumen',
             field: "volume",
             width: 90,
             sortable: true,
@@ -157,8 +157,8 @@ serposcope.googleTargetControllerGrid = function () {
     };
 
     var compareVolumes = function (a, b) {
-        var A = parseInt(a[COL_SEARCH_SETTINGS][0]);
-        var B = parseInt(b[COL_SEARCH_SETTINGS][0]);
+        var A = Number(a[COL_SEARCH_SETTINGS].volume);
+        var B = Number(b[COL_SEARCH_SETTINGS].volume);
         if (isNaN(A)) {
             return isNaN(B) ? 0 : 1;
         } else if (isNaN(B)) {
@@ -200,7 +200,6 @@ serposcope.googleTargetControllerGrid = function () {
         filter.device = $('#filter-device').val();
         filter.local = $('#filter-local').val().toLowerCase();
         filter.datacenter = $('#filter-datacenter').val().toLowerCase();
-        filter.custom = $('#filter-custom').val().toLowerCase();
         filter.category = category.toLowerCase();
         dataView.refresh();
     };
@@ -211,7 +210,6 @@ serposcope.googleTargetControllerGrid = function () {
         $('#filter-device').val('');
         $('#filter-local').val('');
         $('#filter-datacenter').val('');
-        $('#filter-custom').val('');
         $('#filter-category').val(-1);
         applyFilter();
     };
@@ -250,8 +248,8 @@ serposcope.googleTargetControllerGrid = function () {
     };
 
     var formatVolumeCell = function (row, col, unk, colDef, rowData) {
-        var value = parseInt(rowData[COL_SEARCH_SETTINGS].volume);
-        return isNaN(value) ? '-' : value;
+        var value = Number(rowData[COL_SEARCH_SETTINGS].volume);
+        return '<div class="text-right" style="padding:0 5px;">' + (isNaN(value) ? '-' : value) + '</div>';
     };
 
     var formatSearchCell = function (row, col, unk, colDef, rowData) {

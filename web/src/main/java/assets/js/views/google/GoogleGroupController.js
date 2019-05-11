@@ -377,34 +377,6 @@ serposcope.googleGroupController = function () {
                 array[index] = value;
             }
             index += 1;
-            /*// Extract the values now
-            keyword[j] = params[KEYWORD_COLUMN];
-            category[j] = params[CATEGORY_COLUMN];
-            volume[j] = parseInt(params[VOLUME_COLUMN]);
-            console.log(parsed);
-            if (isNaN(volume[j])) {
-                alert("`volume' must be a number");
-                return false;
-            }
-            if (params[VISIBILITY_COLUMN] === 'true') {
-                visibility[j] = false;
-            } else {
-                visibility[j] = false;
-                return false;
-            }
-            country[j] = params[COUNTRY_COLUMN] || cspVars.attr('data-default-country');
-            datacenter[j] = params[DATACENTER_COLUMN] || cspVars.attr('data-default-datacenter');
-            custom[j] = params[CUSTOM_COLUMN];
-            if (params[DEVICE_COLUMN]) {
-
-                }
-            } else {
-                device[j] = parseInt(cspVars.attr('data-default-device'));
-            }
-            local[j] = params[LOCAL_COLUMN] || cspVars.attr('data-default-local');
-            competition[j] = params[COMPETITION_COLUMN] || cspVars.attr('data-default-custom');
-            cpc[j] = params[CPC_COLUMN];
-            tag[j] = params[TAG_COLUMN];*/
         }
 
         var form = $('<form>', {

@@ -247,8 +247,8 @@ serposcope.googleGroupControllerGrid = function () {
         }
     };
 
-    var setSearchVisibility = function (searchId, visibility) {
-        var item = null;
+    var setFieldValue = function (searchId, field, value) {
+         var item = null;
         var seek = Number(searchId);
         for (var i = 0; i < data.length && item === null; ++i) {
             if (data[i].id === seek) {
@@ -258,13 +258,18 @@ serposcope.googleGroupControllerGrid = function () {
         // We should probably not ignore this error
         if (item === null)
             return;
-        item.isAdminOnly = !visibility;
+        item[field] = value;
+    };
+
+    var setSearchVisibility = function (searchId, invisible) {
+        setFieldValue(searchId, 'isAdminOnly', !invisible);
     };
 
     return {
         resize: resize,
         render: render,
         setSearchVisibility: setSearchVisibility,
+        setFieldValue: setFieldValue,
         getSelection: getSelection
     };
 }();

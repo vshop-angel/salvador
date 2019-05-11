@@ -36,8 +36,8 @@
                                     <form class="inline" method="post" action="${reverseRoute("admin.UsersController","delete")}" >
                                           <input type="hidden" name="user-id" value="${user.getId()}" />
                                         <@authenticityForm/>
-                                        <a href="#" class="del-user-btn">
-                                            <i class="fa fa-remove fa-lg" title="${i18n("admin.users.deleteUser")}" ></i>
+                                        <a href="#" class="del-user-btn" style="color:crimson;">
+                                            <i class="fas fa-times" title="${i18n("admin.users.deleteUser")}" ></i>
                                         </a>
                                     </form>
                                 </td>

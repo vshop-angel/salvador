@@ -84,14 +84,15 @@ serposcope.googleTargetControllerGrid = function () {
     };
 
     var fetchData = function () {
-        groupId = $('#csp-vars').attr('data-group-id');
-        startDate = $('#csp-vars').data('start-date');
-        endDate = $('#csp-vars').data('end-date');
+        var cspVars = $('#csp-vars');
+        var groupId = cspVars.attr('data-group-id');
+        var startDate = cspVars.data('start-date');
+        var endDate = cspVars.data('end-date');
         if (startDate == "" || endDate == "") {
             $("#google-target-table-container").html("no data");
             return;
         }
-        var targetId = $('#csp-vars').data('target-id');
+        var targetId = cspVars.data('target-id');
         var url = "/google/" + groupId + "/target/" + targetId + "/ranks?startDate=" + startDate + "&endDate=" + endDate;
         $.getJSON(url)
             .done(function (json) {
@@ -114,22 +115,21 @@ serposcope.googleTargetControllerGrid = function () {
             forceFitColumns: true,
             forceSyncScrolling: true
         };
-        };
 
         var columns = [{
             id: "visibility",
             name: '<i class="fa fa-eye"></i>',
             width: COL_WIDTH,
-            formatter: formatVisibilityCell,
             sortable: false,
+            formatter: formatVisibilityCell,
             toolTip: 'Visible a todos los usuarios?'
         }, {
             id: "search",
             name: 'Búsquedas',
             field: "id",
             width: 250,
-            formatter: formatSearchCell,
-            sortable: true
+            sortable: true,
+            formatter: formatSearchCell
         }, {
             id: "volume",
             name: 'Volumen',
@@ -220,39 +220,48 @@ serposcope.googleTargetControllerGrid = function () {
         }
     };
 
+    var compareAsStrings = function (A, B) {
+        if (A === null || A === '') {
+            return (B === null || B === '') ? 0 : 1;
+        } else if (B === null || B === '') {
+            return -1;
+        } else if (A === B) {
+            return 0;
+        } else {
+            return A > B ? 1 : -1;
+        }
+    };
+
     var compareVolumes = function (a, b) {
         return compareAsNumbers(a[COL_SEARCH_SETTINGS].volume, b[COL_SEARCH_SETTINGS].volume);
     };
 
     var compareTags = function (a, b) {
-        var A = a[COL_SEARCH_SETTINGS].tag;
-        var B = b[COL_SEARCH_SETTINGS].tag;
-        if (A === null) {
-            return B === null ? 0 : 1;
-        } else if (B === null) {
-            return -1;
-        } else {
-            return A > B ? 1 : -1;
-        }
+        return compareAsStrings(a[COL_SEARCH_SETTINGS].tag, b[COL_SEARCH_SETTINGS].tag);
+    };
+
+    var compareCategories = function (a, b) {
+        return compareAsStrings(a[COL_SEARCH_SETTINGS].category, b[COL_SEARCH_SETTINGS].category);
     };
 
     var compareCpcs = function (a, b) {
         return compareAsNumbers(a[COL_SEARCH_SETTINGS].cpc, b[COL_SEARCH_SETTINGS].cpc);
     };
 
-    var compareCustom = function (a, b) {
+    var compareCompetitions = function (a, b) {
         return compareAsNumbers(a[COL_SEARCH_SETTINGS].competition, b[COL_SEARCH_SETTINGS].competition);
     };
 
     var gridSort = function (e, args) {
         var comparer = function (a, b) {
-            if (a[COL_ID] == -1) {
+            var column = args.sortCol;
+            if (a[COL_ID] === -1) {
                 return args.sortAsc ? -1 : 1;
             }
-            if (b[COL_ID] == -1) {
+            if (b[COL_ID] === -1) {
                 return args.sortAsc ? 1 : -1;
             }
-            switch (args.sortCol.field) {
+            switch (column.field) {
                 case "id":
                     return a[COL_SEARCH][COL_SEARCH_KEYWORD] > b[COL_SEARCH][COL_SEARCH_KEYWORD] ? 1 : -1;
                 case "volume":
@@ -262,7 +271,9 @@ serposcope.googleTargetControllerGrid = function () {
                 case "cpc":
                     return compareCpcs(a, b);
                 case "competition":
-                    return compareCustom(a, b);
+                    return compareCompetitions(a, b);
+                case 'category':
+                    return compareCategories(a, b);
                 case "best":
                     return a[COL_BEST][COL_BEST_RANK] - b[COL_BEST][COL_BEST_RANK];
                 default:
@@ -275,7 +286,7 @@ serposcope.googleTargetControllerGrid = function () {
     };
 
     var formatVisibilityCell = function (row, col, unk, colDef, rowData) {
-        if (row == 0) {
+        if (row === 0) {
             return null;
         }
         var cell = rowData[COL_SEARCH_SETTINGS];

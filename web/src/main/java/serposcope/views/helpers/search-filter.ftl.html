@@ -9,7 +9,7 @@
     <input id="filter-local" class="form-control inline width120 input-sm" placeholder="${i18n("label.local")}"/>
     <input id="filter-datacenter" class="form-control inline width120 input-sm"
            placeholder="${i18n("label.datacenter")}"/>
-    <input id="filter-competition" class="form-control inline width120 input-sm" placeholder="${i18n("label.custom")}"/>
+    <#if user.isAdmin()>
     <select id="filter-category" class="form-control inline width150 input-sm">
         <option value="-1" selected disabled>${i18n("label.searchCategory")}</option>
         <#list categories![] as category>
@@ -22,6 +22,7 @@
             <option value="${tag!"empty"}">${tag!"empty"}</option>
         </#list>
     </select>
+   </#if>
     <button id="filter-apply" class="btn btn-primary btn-sm">${i18n("label.filter")}</button>
     <button id="filter-reset" class="btn btn-default btn-sm">${i18n("label.reset")}</button>
 </div>

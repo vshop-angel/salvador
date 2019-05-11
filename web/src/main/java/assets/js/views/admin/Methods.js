@@ -27,7 +27,7 @@ var getDecimalSeparator = function () {
 
 var loadFile = function (input) {
     var reader = new FileReader();
-    reader.onload = function(event) {
+    reader.onload = function (event) {
         var target = event.target;
         var text = target.result;
         $('#bulk-search').val(text);
@@ -106,6 +106,9 @@ var setValue = function (input, searchId, value, endpoint, error, ok) {
         if (xhr.status !== 200) {
             error();
         } else {
+            const grid = serposcope.googleGroupControllerGrid;
+            // Update the grid data
+            grid.setFieldValue(searchId, endpoint, value);
             ok();
         }
     };
@@ -316,7 +319,7 @@ var applyFilter = function (filter, dataView) {
     filter.device = $('#filter-device').val();
     filter.local = $('#filter-local').val();
     filter.datacenter = $('#filter-datacenter').val();
-    filter.competition = $('#filter-competition').val();
+    filter.custom = $('#filter-custom').val();
     filter.category = $('#filter-category').val() || -1;
     filter.tag = $('#filter-tag').val() || -1;
 
@@ -329,7 +332,7 @@ var resetFilter = function (filter, dataView) {
     $('#filter-device').val('');
     $('#filter-local').val('');
     $('#filter-datacenter').val('');
-    $('#filter-competition').val('');
+    $('#filter-custom').val('');
     $('#filter-category').val(-1);
     $('#filter-tag').val(-1);
     applyFilter(filter, dataView);
@@ -345,8 +348,6 @@ var matchesAtLeastOneFilter = function (filter, row) {
     if (!matchesFilter(filter, row, 'datacenter', ''))
         return false;
     if (!matchesFilter(filter, row, 'local', ''))
-        return false;
-    if (!matchesFilter(filter, row, 'competition', ''))
         return false;
     if (!matchesFilter(filter, row, 'tag', -1))
         return false;
