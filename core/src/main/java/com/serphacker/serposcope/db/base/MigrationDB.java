@@ -196,7 +196,7 @@ public class MigrationDB extends AbstractDB {
         stmt.executeUpdate("alter table `IS_SEARCH_SETTINGS` add column `volume` int");
         stmt.executeUpdate("delete from `IS_SEARCH_SETTINGS`");
         stmt.executeUpdate("alter table `IS_SEARCH_SETTINGS` drop column `group_id`");
-        stmt.executeUpdate("insert into `IS_SEARCH_SETTINGS` (`search_id`) select `id` from `GOOGLE_SEARCH` where not exists (select * from `IS_SEARCH_SETTINGS` where `search_id` = `id`)");
+        stmt.executeUpdate("insert into `IS_SEARCH_SETTINGS` (`search_id`, `admins_only`) select `id`, false from `GOOGLE_SEARCH` where not exists (select * from `IS_SEARCH_SETTINGS` where `search_id` = `id`)");
         stmt.executeUpdate("update `IS_SEARCH_SETTINGS` set `competition` = (select cast(regexp_replace(regexp_replace(`custom_parameters`, '[^0-9]*', ''), '^$', '0') as int) from `GOOGLE_SEARCH` where `id` = `search_id`) where exists (select * from `GOOGLE_SEARCH` where `id` = `search_id`)");
         stmt.executeUpdate("update `GOOGLE_SEARCH` SET `custom_parameters` = NULL");
         stmt.executeUpdate("insert into `CONFIG` values ('app.dbversion','9') on duplicate key update `value` = '9'");

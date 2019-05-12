@@ -17,7 +17,7 @@ var inteligenciaSEOEditKeyword = function (event, id, category, volume, isAdminO
 };
 
 var confirmRemoveDeadKeywords = function () {
-    return confirm('You will remove all dead keywords and this cannot be undone, all data will be lost.\n\nAre you sure?');
+    return confirm("El sistema va a buscar las keywords que nunca hayan tenido actividad y eliminarlas para así optimizar los análisis.\n\n¿Esto es irreversible y perderá los datos de todas aquellas keywords que sean elegidas por el algoritmo, está seguro?");
 };
 
 var getDecimalSeparator = function () {

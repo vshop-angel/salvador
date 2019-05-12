@@ -127,6 +127,13 @@ label.compact {
     color: white;
 }
 
+#google-target-table-container .slick-cell div {
+    padding: 0 5px;
+    line-height: 25px;
+    height: 25px;
+    margin: -1px 0 0 -1px;
+}
+
 #google-target-table-container .slick-header .slick-header-column span,
 #group-searches-grid .slick-header .slick-header-column span {
     font-weight: bold;
@@ -167,12 +174,16 @@ label.compact {
     content: '\f0de';
 }
 
-.btn, .btn span {
+.btn:not(.toolbar), .btn:not(.toolbar) span {
     border: none;
     border-radius: 0;
     font-weight: 600;
     text-transform: uppercase;
     font-size: 13px;
+}
+
+.btn.toolbar {
+    border-radius: 0px;
 }
 
 .btn-primary {
@@ -193,7 +204,7 @@ label.compact {
     margin: 0 0 8px 0;
 }
 
-input.form-control,
+input:not(#daterange).form-control,
 select.form-control {
     background-color: #f1f1f1;
     border: 1px solid transparent;
@@ -202,12 +213,12 @@ select.form-control {
     box-shadow: none;
 }
 
-input.form-control:focus,
+input:not(#daterange).form-control:focus,
 select.form-control:focus {
     box-shadow: none;
 }
 
-input.form-control.number {
+input:not(#daterange).form-control.number {
     text-align: right;
 }
 

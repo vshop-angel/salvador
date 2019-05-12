@@ -13,10 +13,7 @@ import com.google.inject.Singleton;
 import com.serphacker.serposcope.db.base.BaseDB;
 import com.serphacker.serposcope.db.base.RunDB;
 import com.serphacker.serposcope.db.google.GoogleDB;
-import com.serphacker.serposcope.inteligenciaseo.Report;
-import com.serphacker.serposcope.inteligenciaseo.ReportsDB;
-import com.serphacker.serposcope.inteligenciaseo.SearchSettings;
-import com.serphacker.serposcope.inteligenciaseo.SearchSettingsDB;
+import com.serphacker.serposcope.inteligenciaseo.*;
 import com.serphacker.serposcope.models.base.Event;
 import com.serphacker.serposcope.models.base.Group;
 import com.serphacker.serposcope.models.base.Run;
@@ -53,10 +50,17 @@ import java.util.zip.GZIPOutputStream;
 
 import static com.serphacker.serposcope.scraper.google.GoogleDevice.SMARTPHONE;
 
+@SuppressWarnings("Guava")
 @Singleton
 public class GoogleGroupController extends GoogleController {
 
     private static final Logger LOG = LoggerFactory.getLogger(GoogleGroupController.class);
+    private Messages messages;
+
+    @Inject
+    GoogleGroupController(Messages messages) {
+        this.messages = messages;
+    }
 
     @Inject
     Router router;
@@ -77,10 +81,19 @@ public class GoogleGroupController extends GoogleController {
     SearchSettingsDB settingsDB;
 
     @Inject
+    InactiveKeywordsDB inactiveKeywordsDB;
+
+    @Inject
     Messages msg;
 
     @Inject
     final Object searchLock = new Object();
+
+    private interface GroupSearchVisitor {
+        void visit(Group group, GoogleSearch search);
+        Result onFinished(Group group);
+        Result onError(Group group);
+    }
 
     public Result view(Context context) {
 
@@ -257,7 +270,7 @@ public class GoogleGroupController extends GoogleController {
         FlashScope flash = context.getFlashScope();
         Group group = context.getAttribute("group", Group.class);
 
-        Map<String,Object> map = new HashMap<>();
+        Map<String, Object> map = new HashMap<>();
         map.put("keyword", keywords);
         map.put("country", country);
         map.put("datacenter", datacenters);
@@ -270,7 +283,7 @@ public class GoogleGroupController extends GoogleController {
         map.put("volume", keywords);
         map.put("cpc", keywords);
         map.put("invisible", keywords);
-        for (Map.Entry<String, Object> entry: map.entrySet()) {
+        for (Map.Entry<String, Object> entry : map.entrySet()) {
             if (entry.getValue() == null) {
                 flash.error("error.invalidParameters");
                 LOG.warn(String.format("`%s' is `null'", entry.getKey()));
@@ -527,6 +540,89 @@ public class GoogleGroupController extends GoogleController {
         return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()) + "#tab-searches");
     }
 
+    private Result forEachSearch(Context context, String[] ids, GroupSearchVisitor visitor) {
+        FlashScope flash = context.getFlashScope();
+        Group group = context.getAttribute("group", Group.class);
+        if (ids == null || ids.length == 0) {
+            flash.error("error.noSearchSelected");
+            return visitor.onError(group);
+        }
+        List<GoogleSearch> searches = new ArrayList<>();
+        for (String id : ids) {
+            GoogleSearch search = null;
+            try {
+                search = getSearch(context, Integer.parseInt(id));
+            } catch (Exception ignored) {
+            }
+            if (search == null) {
+                flash.error("error.invalidSearch");
+                return visitor.onError(group);
+            }
+            searches.add(search);
+        }
+        // TODO FIX ME locking until database modification done
+        if (taskManager.isGoogleRunning()) {
+            flash.error("admin.google.errorTaskRunning");
+        }
+        for (GoogleSearch search : searches) {
+            visitor.visit(group, search);
+        }
+        return visitor.onFinished(group);
+    }
+
+
+    @FilterWith({
+            XSRFFilter.class,
+            AdminFilter.class
+    })
+    public Result deleteInactiveKeywords(Context context) {
+        FlashScope flash = context.getFlashScope();
+        Group group = context.getAttribute("group", Group.class);
+        List<Integer> list = inactiveKeywordsDB.getInactiveSearchIdsForGroup(group);
+        Optional<String> language = Optional.of("es");
+        InactiveKeywordsDB.Deleter<Result> deleter = new InactiveKeywordsDB.Deleter<Result>() {
+            @Override
+            public Result onAlreadyClean() {
+                flash.success("message.yourHouseIsClean");
+                return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()) + "#tab-searches");
+            }
+
+            @Override
+            public Result onError(int count) {
+                Object[] parameters = {Integer.toString(count)};
+                Optional<String> message = messages.get("message.noKeywordsDeleted", language, parameters);
+                // Display success message
+                if (message.isPresent()) {
+                    flash.success(message.get());
+                }
+                return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()) + "#tab-searches");
+            }
+
+            @Override
+            public Result onPartialSuccess(int actualCount, int expectedCount) {
+                Object[] parameters = {Integer.toString(actualCount), Integer.toString(expectedCount)};
+                Optional<String> message = messages.get("message.someKeywordsDeleted", language, parameters);
+                // Display success message
+                if (message.isPresent()) {
+                    flash.success(message.get());
+                }
+                return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()) + "#tab-searches");
+            }
+
+            @Override
+            public Result onSuccess(int count) {
+                Object[] parameters = {Integer.toString(count)};
+                Optional<String> message = messages.get("message.allKeywordsDeleted", language, parameters);
+                // Display success message
+                if (message.isPresent()) {
+                    flash.success(message.get());
+                }
+                return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()) + "#tab-searches");
+            }
+        };
+        return inactiveKeywordsDB.removeFromList(list, deleter);
+    }
+
     @FilterWith({
             XSRFFilter.class,
             AdminFilter.class
@@ -535,43 +631,23 @@ public class GoogleGroupController extends GoogleController {
             Context context,
             @Params("id[]") String[] ids
     ) {
-
-        FlashScope flash = context.getFlashScope();
-        Group group = context.getAttribute("group", Group.class);
-
-        if (ids == null || ids.length == 0) {
-            flash.error("error.noSearchSelected");
-            return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()));
-        }
-
-        List<GoogleSearch> searches = new ArrayList<>();
-        for (String id : ids) {
-            GoogleSearch search = null;
-            try {
-                search = getSearch(context, Integer.parseInt(id));
-            } catch (Exception ex) {
-                search = null;
+        GroupSearchVisitor visitor = new GroupSearchVisitor() {
+            @Override
+            public void visit(Group group, GoogleSearch search) {
+                deleteSearch(group, search);
             }
 
-            if (search == null) {
-                flash.error("error.invalidSearch");
+            @Override
+            public Result onFinished(Group group) {
+                return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()) + "#tab-searches");
+            }
+
+            @Override
+            public Result onError(Group group) {
                 return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()));
             }
-
-            searches.add(search);
-        }
-
-        // TODO FIX ME locking until database modification done
-        if (taskManager.isGoogleRunning()) {
-            flash.error("admin.google.errorTaskRunning");
-            return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()));
-        }
-
-        for (GoogleSearch search : searches) {
-            deleteSearch(group, search);
-        }
-
-        return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()) + "#tab-searches");
+        };
+        return forEachSearch(context, ids, visitor);
     }
 
     public Result deleteReport(
@@ -680,42 +756,33 @@ public class GoogleGroupController extends GoogleController {
             Context context,
             @Params("id[]") String[] ids
     ) {
-        FlashScope flash = context.getFlashScope();
-        Group group = context.getAttribute("group", Group.class);
+        GroupSearchVisitor visitor = new GroupSearchVisitor() {
+            private StringBuilder builder = new StringBuilder();
 
-        if (ids == null || ids.length == 0) {
-            flash.error("error.noSearchSelected");
-            return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()));
-        }
-
-        List<GoogleSearch> searches = new ArrayList<>();
-        for (String id : ids) {
-            GoogleSearch search = null;
-            try {
-                search = getSearch(context, Integer.parseInt(id));
-            } catch (Exception ex) {
-                search = null;
+            @Override
+            public void visit(Group group, GoogleSearch search) {
+                builder.append(StringEscapeUtils.escapeCsv(search.getKeyword())).append(",");
+                builder.append(search.getCountry()).append(",");
+                builder.append(search.getDatacenter() != null ? search.getDatacenter() : "").append(",");
+                builder.append(search.getDevice() != null ? (search.getDevice() == GoogleDevice.DESKTOP ? "desktop" : "mobile") : "").append(",");
+                builder.append(StringEscapeUtils.escapeCsv(search.getLocal() != null ? search.getLocal() : "")).append(",");
+                builder.append(StringEscapeUtils.escapeCsv(search.getCustomParameters() != null ? search.getCustomParameters() : "")).append("\n");
             }
 
-            if (search == null) {
-                flash.error("error.invalidSearch");
-                return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()));
+            @Override
+            public Result onFinished(Group group) {
+                return Results.ok()
+                        .text()
+                        .render(builder.toString())
+                        ;
             }
 
-            searches.add(search);
-        }
-
-        StringBuilder builder = new StringBuilder();
-        for (GoogleSearch search : searches) {
-            builder.append(StringEscapeUtils.escapeCsv(search.getKeyword())).append(",");
-            builder.append(search.getCountry()).append(",");
-            builder.append(search.getDatacenter() != null ? search.getDatacenter() : "").append(",");
-            builder.append(search.getDevice() != null ? (search.getDevice() == GoogleDevice.DESKTOP ? "desktop" : "mobile") : "").append(",");
-            builder.append(StringEscapeUtils.escapeCsv(search.getLocal() != null ? search.getLocal() : "")).append(",");
-            builder.append(StringEscapeUtils.escapeCsv(search.getCustomParameters() != null ? search.getCustomParameters() : "")).append("\n");
-        }
-
-        return Results.ok().text().render(builder.toString());
+            @Override
+            public Result onError(Group group) {
+                return null;
+            }
+        };
+        return forEachSearch(context, ids, visitor);
     }
 
     protected void deleteSearch(Group group, GoogleSearch search) {

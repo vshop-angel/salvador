@@ -187,11 +187,8 @@ serposcope.googleGroupController = function () {
         $form.appendTo(document.body).submit();
         return false;
     };
-    var deleteSearches = function (elt) {
-        if (!confirm("Delete searches ?\nAll history will be erased.")) {
-            return false;
-        }
 
+    var executeButtonAction = function (elt) {
         var $form = $('<form>', {
             'action': $(elt.currentTarget).attr("data-action"),
             'method': 'post',
@@ -212,6 +209,20 @@ serposcope.googleGroupController = function () {
         }
         $form.appendTo(document.body).submit();
         return false;
+    };
+
+    var deleteDeadKeywords = function (elt) {
+        if (!confirmRemoveDeadKeywords()) {
+            return false;
+        }
+        executeButtonAction(elt);
+    };
+
+    var deleteSearches = function (elt) {
+        if (!confirm("Eliminar keywords\n\n¿Esto es irreversible, está seguro?")) {
+            return false;
+        }
+        executeButtonAction(elt);
     };
 
     var bulkTargetSubmit = function () {
@@ -624,6 +635,7 @@ serposcope.googleGroupController = function () {
         $('#btn-chk-target').click(checkTarget);
         $('#btn-export-searches').click(exportSearches);
         $('#btn-delete-searches').click(deleteSearches);
+        $('#btn-delete-dead-keywords').click(deleteDeadKeywords);
         $('#btn-refresh-volumes').click(refreshVolumes);
         $('#btn-delete-targets').click(deleteTargets);
         $('#btn-delete-reports').click(deleteReports);

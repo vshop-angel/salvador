@@ -134,14 +134,14 @@ serposcope.googleTargetControllerGrid = function () {
             id: "volume",
             name: 'Volumen',
             field: "volume",
-            width: 90,
+            width: 120,
             sortable: true,
             formatter: formatVolumeCell
         }, {
             id: "category",
             name: 'Categoría',
             field: "category",
-            width: 110,
+            width: 150,
             sortable: true,
             formatter: formatCategory
         }, {
@@ -162,7 +162,7 @@ serposcope.googleTargetControllerGrid = function () {
             id: "tag",
             name: 'Etiqueta',
             field: "tag",
-            width: 110,
+            width: 150,
             sortable: true,
             formatter: formatTag
         }];
@@ -306,7 +306,7 @@ serposcope.googleTargetControllerGrid = function () {
             var value = Number(rowData[COL_SEARCH_SETTINGS].competition);
             if (isNaN(value) || value === 0)
                 value = '-';
-            return '<div class="text-right" style="padding:0 5px">' + value + '</div>';
+            return '<div class="text-right">' + value + '</div>';
         }
     };
 
@@ -318,7 +318,7 @@ serposcope.googleTargetControllerGrid = function () {
             if (isNaN(value) || value === 0)
                 value = '-';
             value = value.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2});
-            return '<div class="text-right" style="padding:0 5px">' + value + '</div>';
+            return '<div class="text-right">' + value + '</div>';
         }
     };
 
@@ -329,7 +329,7 @@ serposcope.googleTargetControllerGrid = function () {
             var value = rowData[COL_SEARCH_SETTINGS].category;
             if (value === null)
                 value = '';
-            return '<div style="padding:0 5px;text-align:left">' + value + '</div>';
+            return '<div style="text-align:left">' + value + '</div>';
         }
     };
 
@@ -340,7 +340,7 @@ serposcope.googleTargetControllerGrid = function () {
             var value = rowData[COL_SEARCH_SETTINGS].tag;
             if (value === null)
                 value = '';
-            return '<div style="padding:0 5px;text-align:left">' + value + '</div>';
+            return '<div style="text-align:left">' + value + '</div>';
         }
     };
 
@@ -349,7 +349,7 @@ serposcope.googleTargetControllerGrid = function () {
             return '';
         } else {
             var value = parseInt(rowData[COL_SEARCH_SETTINGS].volume);
-            return '<div class="text-right" style="padding:0 5px;">' + (isNaN(value) ? '-' : value) + '</div>';
+            return '<div class="text-right">' + (isNaN(value) ? '-' : value) + '</div>';
         }
     };
 
@@ -442,7 +442,7 @@ serposcope.googleTargetControllerGrid = function () {
             return "";
         }
         var best = rowData[COL_BEST];
-        var rankText = (best[COL_BEST_RANK] == UNRANKED ? "-" : best[COL_BEST_RANK]);
+        var rankText = (best[COL_BEST_RANK] === UNRANKED ? "-" : best[COL_BEST_RANK]);
         return '<div class="pointer best-cell" ' +
             'rel="popover" data-toggle="tooltip" ' +
             'title="' + best[COL_BEST_DAY] + '" ' +

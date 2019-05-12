@@ -59,7 +59,7 @@ serposcope.googleGroupControllerGrid = function () {
             enableColumnReorder: false,
             enableTextSelectionOnCells: true,
             forceFitColumns: true,
-            forceSyncScrolling: true
+            forceSyncScrolling: true,
         };
 
         var toString = function (value) {
@@ -103,7 +103,7 @@ serposcope.googleGroupControllerGrid = function () {
         }, {
             id: "category",
             field: "category",
-            minWidth: 100,
+            width: 150,
             sortable: true,
             name: 'Categoría',
             formatter: formatCategory,
@@ -117,7 +117,7 @@ serposcope.googleGroupControllerGrid = function () {
         }, {
             id: "cpc", field: "cpc", minWidth: 80, sortable: true, name: 'CPC', formatter: formatCPC,
         }, {
-            id: "tag", field: "tag", minWidth: 80, sortable: true, name: 'Etiqueta', formatter: formatTag,
+            id: "tag", field: "tag", width: 150, sortable: true, name: 'Etiqueta', formatter: formatTag,
         }, {
             id: "device", field: "device", minWidth: 100, sortable: true, name: 'Dispositivo', formatter: formatDevice
         }, {

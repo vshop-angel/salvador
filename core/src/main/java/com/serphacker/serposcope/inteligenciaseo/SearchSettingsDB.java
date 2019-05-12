@@ -3,10 +3,12 @@ package com.serphacker.serposcope.inteligenciaseo;
 import com.querydsl.core.types.Path;
 import com.querydsl.core.types.dsl.StringPath;
 import com.querydsl.sql.SQLQuery;
+import com.querydsl.sql.dml.SQLDeleteClause;
 import com.querydsl.sql.dml.SQLInsertClause;
 import com.querydsl.sql.dml.SQLUpdateClause;
 import com.serphacker.serposcope.db.AbstractDB;
 import com.serphacker.serposcope.models.base.User;
+import com.serphacker.serposcope.models.google.GoogleSearch;
 import com.serphacker.serposcope.querybuilder.QIsSearchSettings;
 
 import javax.inject.Singleton;
@@ -34,8 +36,7 @@ public class SearchSettingsDB extends AbstractDB {
                         .set(t_search_settings.adminsOnly, item.isAdminsOnly())
                         .set(t_search_settings.competition, item.getCompetition())
                         .set(t_search_settings.cpc, item.getCPC())
-                        .set(t_search_settings.tag, item.getTag())
-                        ;
+                        .set(t_search_settings.tag, item.getTag());
                 count += clause.execute();
             }
         } catch (SQLException exception) {
@@ -261,5 +262,18 @@ public class SearchSettingsDB extends AbstractDB {
 
     public boolean setVolume(Integer searchId, int groupId, Integer volume) {
         return setField(searchId, groupId, t_search_settings.volume, volume);
+    }
+
+    public boolean deleteEntry(GoogleSearch search) {
+        try (Connection con = ds.getConnection()) {
+            long result;
+            result = new SQLDeleteClause(con, dbTplConf, t_search_settings)
+                    .where(t_search_settings.searchId.eq(search.getId()))
+                    .execute();
+            return result == 1L;
+        } catch (Exception ex) {
+            LOG.error("SQLError ex", ex);
+        }
+        return false;
     }
 }

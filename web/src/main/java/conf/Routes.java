@@ -19,6 +19,7 @@ import serposcope.controllers.admin.*;
 import serposcope.controllers.google.GoogleGroupController;
 import serposcope.controllers.google.GoogleSearchController;
 import serposcope.controllers.google.GoogleTargetController;
+import serposcope.controllers.admin.HouseKeepingController;
 import serposcope.controllers.inteligenciaseo.ReportsController;
 
 public class Routes implements ApplicationRoutes {
@@ -107,6 +108,7 @@ public class Routes implements ApplicationRoutes {
         router.POST().route("/google/{groupId: [0-9]+}/delete").with(GoogleGroupController.class, "delete");        
         router.POST().route("/google/{groupId: [0-9]+}/search/add").with(GoogleGroupController.class, "addSearch");
         router.POST().route("/google/{groupId: [0-9]+}/search/delete").with(GoogleGroupController.class, "delSearch");
+        router.POST().route("/google/{groupId: [0-9]+}/clean").with(GoogleGroupController.class, "deleteInactiveKeywords");
         router.POST().route("/google/{groupId: [0-9]+}/search/export-searches").with(GoogleGroupController.class, "exportSearches");
         router.GET().route("/google/{groupId: [0-9]+}/search/suggest").with(GoogleGroupController.class, "jsonSearchSuggest");
         router.GET().route("/google/{groupId: [0-9]+}/search/list").with(GoogleGroupController.class, "jsonSearches");
