@@ -99,7 +99,8 @@ serposcope.googleTargetControllerGrid = function () {
         var options = {
             explicitInitialization: true,
             enableColumnReorder: false,
-            enableTextSelectionOnCells: true
+            enableTextSelectionOnCells: true,
+            forceFitColumns: true
         };
 
         var columns = [{
@@ -117,22 +118,34 @@ serposcope.googleTargetControllerGrid = function () {
             sortable: true,
             formatter: formatVolumeCell
         }];
-        for (var i = 0; i < days.length; i++) {
-            var day = days[i];
+        if (window.innerWidth > 778) {
+            for (var i = 0; i < days.length; i++) {
+                var day = days[i];
+                columns.push({
+                    id: day,
+                    name: "<span data-toggle='tooltip' title='" + day + "' >" + day.split("-")[2] + "</span>",
+                    field: i,
+                    sortable: true,
+                    width: COL_WIDTH,
+                    formatter: formatGridCell
+                });
+            }
+            columns.push({
+                id: "best",
+                name: '<i class="fa fa-trophy" data-toggle="tooltip" title="Best" style="color: gold;" ></i>',
+                field: "best", width: COL_WIDTH, formatter: formatBestCell, sortable: true
+            });
+        } else {
+            day = days[days.length - 1];
             columns.push({
                 id: day,
                 name: "<span data-toggle='tooltip' title='" + day + "' >" + day.split("-")[2] + "</span>",
-                field: i,
+                field: days.length - 1,
                 sortable: true,
                 width: COL_WIDTH,
                 formatter: formatGridCell
             });
         }
-        columns.push({
-            id: "best",
-            name: '<i class="fa fa-trophy" data-toggle="tooltip" title="Best" style="color: gold;" ></i>',
-            field: "best", width: COL_WIDTH, formatter: formatBestCell, sortable: true
-        });
 
         dataView = new Slick.Data.DataView();
         grid = new Slick.Grid("#google-target-table-container", dataView, columns, options);
@@ -322,9 +335,6 @@ serposcope.googleTargetControllerGrid = function () {
     };
 
     var formatBestCell = function (row, col, unk, colDef, rowData) {
-        if (row === 0) {
-            return "";
-        }
         var best = rowData[COL_BEST];
         var rankText = (best[COL_BEST_RANK] == UNRANKED ? "-" : best[COL_BEST_RANK]);
         return '<div class="pointer best-cell" ' +

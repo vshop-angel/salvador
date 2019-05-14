@@ -42,9 +42,6 @@ serposcope.googleTargetControllerGrid = function () {
     var days = [];
     var data = [];
     var groupId = 1;
-    var startDate;
-    var endDate;
-    // end    
 
     var resize = function (height) {
         $('#google-target-table-container').css("min-height", (height) + "px");
@@ -113,7 +110,8 @@ serposcope.googleTargetControllerGrid = function () {
             enableColumnReorder: false,
             enableTextSelectionOnCells: true,
             forceFitColumns: true,
-            forceSyncScrolling: true
+            forceSyncScrolling: true,
+            autoExpandColumns: true
         };
 
         var columns = [{
@@ -130,7 +128,9 @@ serposcope.googleTargetControllerGrid = function () {
             width: 250,
             sortable: true,
             formatter: formatSearchCell
-        }, {
+        }];
+
+        var wideColumns = [{
             id: "volume",
             name: 'Volumen',
             field: "volume",
@@ -166,27 +166,50 @@ serposcope.googleTargetControllerGrid = function () {
             sortable: true,
             formatter: formatTag
         }];
-        for (var i = 0; i < days.length; i++) {
-            var day = days[i];
+        var day = null;
+        if (window.innerWidth > 778) {
+            for (var k = 0; k < wideColumns.length; ++k) {
+                columns.push(wideColumns[k]);
+            }
+            for (var i = 0; i < days.length; i++) {
+                day = days[i];
+                columns.push({
+                    id: day,
+                    name: "<span data-toggle='tooltip' title='" + day + "' >" + day.split("-")[2] + "</span>",
+                    field: i,
+                    sortable: true,
+                    width: COL_WIDTH,
+                    formatter: formatGridCell
+                });
+            }
+            columns.push({
+                id: "best",
+                name: '<i class="fa fa-trophy" data-toggle="tooltip" title="Best"></i>',
+                field: "best",
+                width: COL_WIDTH,
+                formatter: formatBestCell,
+                sortable: true,
+            });
+        } else {
+            day = days[days.length - 1];
             columns.push({
                 id: day,
                 name: "<span data-toggle='tooltip' title='" + day + "' >" + day.split("-")[2] + "</span>",
-                field: i,
+                field: days.length - 1,
                 sortable: true,
                 width: COL_WIDTH,
                 formatter: formatGridCell
             });
         }
-        columns.push({
-            id: "best",
-            name: '<i class="fa fa-trophy" data-toggle="tooltip" title="Best"></i>',
-            field: "best",
-            width: COL_WIDTH,
-            formatter: formatBestCell,
-            sortable: true,
-        });
 
         dataView = new Slick.Data.DataView();
+        dataView.getItemMetadata = function (row) {
+            if (row !== 0) {
+                return null;
+            }
+            return {cssClasses: 'sub-header'};
+        };
+
         grid = new Slick.Grid("#google-target-table-container", dataView, columns, options);
 
         grid.onSort.subscribe(gridSort);
@@ -301,7 +324,7 @@ serposcope.googleTargetControllerGrid = function () {
 
     var formatCompetition = function (row, col, unk, colDef, rowData) {
         if (row === 0) {
-            return '';
+            return null;
         } else {
             var value = Number(rowData[COL_SEARCH_SETTINGS].competition);
             if (isNaN(value) || value === 0)
@@ -312,7 +335,7 @@ serposcope.googleTargetControllerGrid = function () {
 
     var formatCPC = function (row, col, unk, colDef, rowData) {
         if (row === 0) {
-            return '';
+            return null;
         } else {
             var value = Number(rowData[COL_SEARCH_SETTINGS].cpc);
             if (isNaN(value) || value === 0)
@@ -324,7 +347,7 @@ serposcope.googleTargetControllerGrid = function () {
 
     var formatCategory = function (row, col, unk, colDef, rowData) {
         if (row === 0) {
-            return '';
+            return null;
         } else {
             var value = rowData[COL_SEARCH_SETTINGS].category;
             if (value === null)
@@ -335,7 +358,7 @@ serposcope.googleTargetControllerGrid = function () {
 
     var formatTag = function (row, col, unk, colDef, rowData) {
         if (row === 0) {
-            return '';
+            return null;
         } else {
             var value = rowData[COL_SEARCH_SETTINGS].tag;
             if (value === null)
@@ -346,7 +369,7 @@ serposcope.googleTargetControllerGrid = function () {
 
     var formatVolumeCell = function (row, col, unk, colDef, rowData) {
         if (row === 0) {
-            return '';
+            return null;
         } else {
             var value = parseInt(rowData[COL_SEARCH_SETTINGS].volume);
             return '<div class="text-right">' + (isNaN(value) ? '-' : value) + '</div>';
@@ -356,7 +379,7 @@ serposcope.googleTargetControllerGrid = function () {
     var formatSearchCell = function (row, col, unk, colDef, rowData) {
         var search = rowData[COL_SEARCH];
         if (search === 0) {
-            return "<div class=\"text-left\">&nbsp;&nbsp;Calendar</div>";
+            return "<div class=\"text-left\">Agenda</div>";
         }
         var ret = "<div class=\"text-left\">";
         ret += "<i data-toggle=\"tooltip\" title=\"Country : " + search[COL_SEARCH_COUNTRY] + "\" class=\"fa fa-globe\" ></i>";
@@ -379,14 +402,14 @@ serposcope.googleTargetControllerGrid = function () {
 
     var formatGridCell = function (row, col, unk, colDef, rowData) {
         if (row === 0) {
-            return formatCalendarCell(row, col - 6, unk, colDef, rowData);
+            return formatCalendarCell(row, null, unk, colDef, rowData);
         } else {
-            return formatRankCell(row, col - 6, unk, colDef, rowData);
+            return formatRankCell(row, null, unk, colDef, rowData);
         }
     };
 
     var formatCalendarCell = function (row, col, unk, colDef, rowData) {
-        var event = rowData[COL_EVENTS][col - 1];
+        var event = rowData[COL_EVENTS][colDef.field];
         if (event === 0) {
             return null;
         }
@@ -398,7 +421,7 @@ serposcope.googleTargetControllerGrid = function () {
     };
 
     var formatRankCell = function (row, col, unk, colDef, rowData) {
-        var rank = rowData[COL_RANK][col - 1];
+        var rank = rowData[COL_RANK][colDef.field];
         var diffText = "", diffClass = "";
         var bestClass = "", bestText = "";
         var rankText = "";
@@ -409,10 +432,10 @@ serposcope.googleTargetControllerGrid = function () {
         } else {
             rankText = rank[COL_RANK_CURRENT];
             var rankDiff = rank[COL_RANK_PREVIOUS] - rank[COL_RANK_CURRENT];
-            if (rank[COL_RANK_PREVIOUS] == UNRANKED && rank[COL_RANK_CURRENT] != UNRANKED) {
+            if (rank[COL_RANK_PREVIOUS] === UNRANKED && rank[COL_RANK_CURRENT] !== UNRANKED) {
                 diffText = "in";
                 diffClass = "plus";
-            } else if (rankDiff == 0) {
+            } else if (Number(rankDiff) === 0) {
                 diffText = "=";
             } else if (rankDiff > 0) {
                 diffText = "+" + rankDiff;
@@ -422,7 +445,7 @@ serposcope.googleTargetControllerGrid = function () {
                 diffClass = "minus";
             }
 
-            if (rowData[COL_BEST] !== 0 && rowData[COL_BEST][COL_BEST_RANK] == rank[COL_RANK_CURRENT]) {
+            if (rowData[COL_BEST] !== 0 && rowData[COL_BEST][COL_BEST_RANK] === rank[COL_RANK_CURRENT]) {
                 bestClass = "best-cell";
                 bestText = " (best)";
             }

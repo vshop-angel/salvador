@@ -1,48 +1,55 @@
-<div class="row top5" >
-    <div class="col-xs-12" >
-        <table class="table table-condensed table-bordered table-striped" id="table-report" >
+<div class="row top5">
+    <div class="col-xs-12">
+        <table class="table table-condensed table-bordered table-striped" id="table-report">
             <thead>
             <tr>
                 <#if user.isAdmin()>
-                <th class="compact-col" ></th>
-                <th>#</th>
+                    <th class="compact-col"></th>
+                    <th>#</th>
                 </#if>
-                <th data-sort="string" >${i18n("label.name")} <i class="fa fa-sort" ></i></th>
+                <th data-sort="string">${i18n("label.name")} <i class="fa fa-sort"></i></th>
                 <th>iframe</th>
             </tr>
             </thead>
             <tbody>
             <#list reports as report>
-            <#if summaries?api.get(report.getId())?? >
-                <#assign summary = summaries?api.get(report.getId()) >
-            </#if>
-            <tr id="report-${report.getId()}">
-                <#if user.isAdmin()>
-                <td><input class="chk-report" type="checkbox" name="id[]" value="${report.getId()}" /></td>
-                <td  class="compact-col">
-                    <#if user.isAdmin()>
-                        <a href="${reverseRoute("google.GoogleGroupController","deleteReport","groupId",group.getId())}"
-                            data-toggle="tooltip" title="${i18n("label.delete")}"
-                            class="btn-delete-report" data-id="${report.getId()}" >
-                            <i class="glyphicon glyphicon-remove text-danger"></i>
-                        </a>
-                    </#if>
-                </td>
+                <#if summaries?api.get(report.getId())?? >
+                    <#assign summary = summaries?api.get(report.getId()) >
                 </#if>
-                <td><a class="report-name" href="${reverseRoute("inteligenciaseo.ReportsController","get","reportId",report.getId())}">${report.getName()}</a></td>
-        		<td><span>${report.getIframe()}</span></td>
-            </tr>
+                <tr id="report-${report.getId()}">
+                    <#if user.isAdmin()>
+                        <td><input class="chk-report" type="checkbox" name="id[]" value="${report.getId()}"/></td>
+                        <td class="compact-col">
+                            <#if user.isAdmin()>
+                                <a href="${reverseRoute("google.GoogleGroupController","deleteReport","groupId",group.getId())}"
+                                   data-toggle="tooltip" title="${i18n("label.delete")}"
+                                   class="btn-delete-report" data-id="${report.getId()}">
+                                    <i class="glyphicon glyphicon-remove text-danger"></i>
+                                </a>
+                            </#if>
+                        </td>
+                    </#if>
+                    <td><a class="report-name"
+                           href="${reverseRoute("inteligenciaseo.ReportsController","get","reportId",report.getId())}">${report.getName()}</a>
+                    </td>
+                    <td><span>${report.getIframe()}</span></td>
+                </tr>
             </#list>
             </tbody>
         </table>
         <#if user.isAdmin()>
-        <div style="margin-bottom: 20px;">
-            <a href="#" class="btn btn-primary btn-add-report" title="${i18n("label.addReport")}" data-toggle="tooltip" >
-               <i class="glyphicon glyphicon-star hidden-lg" ></i><span class="hidden-xs hidden-sm hidden-md" >${i18n("label.addReport")}</span>
-            </a>
-            <input id="btn-delete-reports" type="button" class="btn btn-danger" value="${i18n("label.delReport")}"
-                data-action="${reverseRoute("google.GoogleGroupController","deleteReport","groupId",group.getId())}" />
-        </div>
+            <div style="margin-bottom: 20px;">
+                <a href="#" class="btn btn-primary btn-add-report" title="${i18n("label.addReport")}"
+                   data-toggle="tooltip">
+                    <i class="glyphicon glyphicon-plus hidden-lg"></i><span
+                            class="hidden-xs hidden-sm hidden-md">${i18n("label.addReport")}</span>
+                </a>
+                <a id="btn-delete-reports" type="button" class="btn btn-danger"
+                   data-action="${reverseRoute("google.GoogleGroupController","deleteReport","groupId",group.getId())}">
+                    <i class="glyphicon glyphicon-remove hidden-lg"></i><span
+                            class="hidden-xs hidden-sm hidden-md">${i18n("label.delReport")}</span>
+                </a>
+            </div>
         </#if>
     </div>
 </div>

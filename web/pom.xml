@@ -257,7 +257,8 @@
                                         <jsSourceFile>/assets/js/views/admin/GoogleSettingsController.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/admin/TaskController.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/admin/ProxyController.js</jsSourceFile>
-                                        <jsSourceFile>/assets/js/views/admin/Methods.js</jsSourceFile>
+                                        <jsSourceFile>/assets/js/views/admin/InteligenciaSEO.js</jsSourceFile>
+                                        <jsSourceFile>/assets/js/views/InteligenciaSEOResponsive.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/google/GoogleSidebar.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/google/GoogleGroupController.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/google/GoogleGroupControllerGrid.admin.js</jsSourceFile>
@@ -308,14 +309,7 @@
                                         <jsSourceFile>/assets/js/sidebar.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/HomeController.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/GroupController.js</jsSourceFile>
-                                        <jsSourceFile>/assets/js/views/admin/MenuController.js</jsSourceFile>
-                                        <jsSourceFile>/assets/js/views/admin/SettingsController.js</jsSourceFile>
-                                        <jsSourceFile>/assets/js/views/admin/UsersController.js</jsSourceFile>
-                                        <jsSourceFile>/assets/js/views/admin/DebugController.js</jsSourceFile>
-                                        <jsSourceFile>/assets/js/views/admin/BackupController.js</jsSourceFile>
-                                        <jsSourceFile>/assets/js/views/admin/GoogleSettingsController.js</jsSourceFile>
-                                        <jsSourceFile>/assets/js/views/admin/TaskController.js</jsSourceFile>
-                                        <jsSourceFile>/assets/js/views/admin/ProxyController.js</jsSourceFile>
+                                        <jsSourceFile>/assets/js/views/InteligenciaSEOResponsive.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/google/GoogleSidebar.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/google/GoogleGroupController.js</jsSourceFile>
                                         <jsSourceFile>/assets/js/views/google/GoogleGroupControllerGrid.user.js</jsSourceFile>

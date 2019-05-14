@@ -11,15 +11,13 @@
                     <i class="glyphicon glyphicon-search hidden-lg"></i><span
                             class="hidden-xs hidden-sm hidden-md"> ${i18n("label.addSearch")}</span>
                 </a>
-                <input id="btn-export-searches" type="button" class="btn btn-primary"
-                       value="${i18n("google.group.exportKeywords")}"
-                       data-action="${reverseRoute("google.GoogleGroupController","exportSearches","groupId",group.getId())}"/>
-                <input id="btn-delete-searches" type="button" class="btn btn-danger"
-                       value="${i18n("google.group.deleteKeywords")}"
-                       data-action="${reverseRoute("google.GoogleGroupController","delSearch","groupId",group.getId())}"/>
-                <input id="btn-delete-dead-keywords" type="button" class="btn"
-                       value="${i18n("google.group.autoDeleteKeywords")}"
-                       data-action="${reverseRoute("google.GoogleGroupController","deleteInactiveKeywords","groupId",group.getId())}"/>
+                <a id="btn-export-searches" type="button" class="btn btn-primary" data-action="${reverseRoute("google.GoogleGroupController","exportSearches","groupId",group.getId())}">
+                    <i class="glyphicon glyphicon-export hidden-lg"></i><span class="hidden-xs hidden-sm hidden-md">${i18n("google.group.exportKeywords")}</span>
+                </a>
+                <a id="btn-delete-searches" type="button" class="btn btn-danger" data-action="${reverseRoute("google.GoogleGroupController","delSearch","groupId",group.getId())}">
+                    <i class="glyphicon glyphicon-remove hidden-lg"></i><span class="hidden-xs hidden-sm hidden-md">${i18n("google.group.deleteKeywords")}</span>
+                </a>
+                <input id="btn-delete-dead-keywords" type="button" class="btn" value="${i18n("google.group.autoDeleteKeywords")}" data-action="${reverseRoute("google.GoogleGroupController","deleteInactiveKeywords","groupId",group.getId())}"/>
             </div>
         </#if>
     </div>

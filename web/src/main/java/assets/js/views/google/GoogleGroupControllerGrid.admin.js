@@ -58,14 +58,14 @@ serposcope.googleGroupControllerGrid = function () {
             explicitInitialization: true,
             enableColumnReorder: false,
             enableTextSelectionOnCells: true,
-            forceFitColumns: true,
+            forceFitColumns: false,
             forceSyncScrolling: true,
+            autoExpandColumns: true
         };
 
         var toString = function (value) {
             return '\'' + value + '\'';
         };
-
 
         var visibilityTableOption = function (row, col, unk, colDef, rowData) {
             var onchange = 'setKeywordVisibility(this)';
@@ -98,7 +98,9 @@ serposcope.googleGroupControllerGrid = function () {
             sortable: true,
             name: 'Palabra Clave',
             formatter: formatKeyword
-        }, {
+        }];
+
+        var wideColumns = [{
             id: "volume", field: "volume", minWidth: 50, sortable: true, name: 'Volumen', formatter: formatVolume
         }, {
             id: "category",
@@ -127,6 +129,14 @@ serposcope.googleGroupControllerGrid = function () {
         }, {
             id: "local", field: "local", minWidth: 200, sortable: true, name: 'Local'/*, formatter: formatLocal,*/
         }];
+
+        if (window.innerWidth > 778) {
+            for (var k = 0; k < wideColumns.length; ++k) {
+                columns.push(wideColumns[k]);
+            }
+        } else {
+            options.forceFitColumns = true;
+        }
 
         dataView = new Slick.Data.DataView();
         grid = new Slick.Grid("#group-searches-grid", dataView, columns, options);

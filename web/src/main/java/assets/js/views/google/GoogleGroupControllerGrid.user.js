@@ -41,18 +41,18 @@ serposcope.googleGroupControllerGrid = function () {
         $('#filter-reset').click(resetFilter);
         fetchData();
     };
-    
-    var fetchData = function() {
+
+    var fetchData = function () {
         $.getJSON('/google/' + $('#csp-vars').data('group-id') + '/search/list')
-        .done(function (json) {
-            $(".ajax-loader").remove();
-            data = json;
-            renderGrid();
-        }).fail(function (err) {
+            .done(function (json) {
+                $(".ajax-loader").remove();
+                data = json;
+                renderGrid();
+            }).fail(function (err) {
             $(".ajax-loader").remove();
             console.log("error", err);
             $("#group-searches-grid").html("error");
-        });        
+        });
     };
 
     var renderGrid = function () {
@@ -63,25 +63,31 @@ serposcope.googleGroupControllerGrid = function () {
             forceFitColumns: true
         };
 
-        var toString = function(value) {
+        var toString = function (value) {
             return '\'' + value + '\'';
         };
 
         var checkboxSelector = new Slick.CheckboxSelectColumn({cssClass: "slick-cell-checkboxsel"});
         var columns = [{
             id: "keyword", field: "keyword", minWidth: 200, sortable: true, name: 'Keyword', formatter: formatKeyword
-        },{
+        }, {
             id: "volume", field: "volume", minWidth: 50, sortable: true, name: 'Volume', formatter: formatVolume
-        },{
+        }];
+
+        var wideColumns = [{
             id: "device", field: "device", minWidth: 100, sortable: true, name: 'Device', formatter: formatDevice
-        },{
+        }, {
             id: "country", field: "country", minWidth: 60, sortable: true, name: 'Country', formatter: formatCountry
-        },{
+        }, {
             id: "datacenter", field: "datacenter", minWidth: 100, sortable: true, name: 'Datacenter'/*, formatter: formatDatacenter,*/
-        },{
+        }, {
             id: "local", field: "local", minWidth: 200, sortable: true, name: 'Local'/*, formatter: formatLocal,*/
         }];
-        
+        if (window.innerWidth > 778) {
+            for (var i = 0; i < wideColumns.length; ++i) {
+                columns.push(wideColumns[i]);
+            }
+        }
         dataView = new Slick.Data.DataView();
         grid = new Slick.Grid("#group-searches-grid", dataView, columns, options);
         grid.registerPlugin(checkboxSelector);
@@ -163,21 +169,21 @@ serposcope.googleGroupControllerGrid = function () {
 
         return !(filter.category != -1 && item.category.toLowerCase().indexOf(filter.category) === -1);
     };
-    
+
     var formatKeyword = function (row, col, unk, colDef, rowData) {
         return "&nbsp;<a href=\"/google/" + groupId + "/search/" + rowData.id + "\" >" + rowData.keyword + "</a>";
     };
-    
+
     var formatDevice = function (row, col, unk, colDef, rowData) {
-        if(rowData.device === 'M'){
+        if (rowData.device === 'M') {
             return "<i data-toggle=\"tooltip\" title=\"mobile\" class=\"fa fa-mobile fa-fw\" ></i>";
         } else {
             return "<i data-toggle=\"tooltip\" title=\"desktop\" class=\"fa fa-desktop fa-fw\" ></i>";
         }
     };
-    
+
     var formatCountry = function (row, col, unk, colDef, rowData) {
-        if(rowData.country === '__'){
+        if (rowData.country === '__') {
             return "__ (no country)";
         } else {
             return rowData.country;
@@ -187,11 +193,13 @@ serposcope.googleGroupControllerGrid = function () {
     var formatVolume = function (row, col, unk, colDef, rowData) {
         return '<div style="text-align:right;padding:0 4px;">' + Number(rowData.volume) + '</div>';
     };
-    
-    var getSelection = function() {
-        return grid.getSelectedRows().map(dataView.getItem).map(function(x){ return x.id; });
+
+    var getSelection = function () {
+        return grid.getSelectedRows().map(dataView.getItem).map(function (x) {
+            return x.id;
+        });
     };
-    
+
     var genFakeSearch = function (i) {
         return {
             id: i,

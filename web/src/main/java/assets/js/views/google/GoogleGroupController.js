@@ -317,13 +317,10 @@ serposcope.googleGroupController = function () {
         };
 
         var deviceValidator = function (value) {
-            switch (value.toLowerCase()) {
-                case "desktop":
-                    return 0;
-                case "mobile":
-                    return 1;
-                default:
-                    return null;
+            if (value.toLowerCase() === "mobile") {
+                return 1;
+            } else {
+                return 0;
             }
         };
 

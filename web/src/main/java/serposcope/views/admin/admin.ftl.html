@@ -4,17 +4,17 @@
     <ul class="nav nav-second-level">
         <li>
             <a href="${reverseRoute("admin.SettingsController","settings")}">
-                <i class="fa fa-fw fa-sliders-h"></i> ${i18n("label.general")}
+                <i class="fa fa-wrench"></i> ${i18n("label.general")}
             </a>
         </li>
         <li>
             <a href="${reverseRoute("admin.ProxyController","proxies")}">
-                <i class="fa fa-fw fa-shield-alt"></i> ${i18n("label.proxies")}
+                <i class="fa fa-fw fa-shield"></i> ${i18n("label.proxies")}
             </a>
         </li>
         <li>
             <a href="${reverseRoute("admin.GoogleSettingsController","settings")}">
-               <i class="fab fa-fw fa-google"></i> ${i18n("label.google")}
+               <i class="fa fa-fw fa-google"></i> ${i18n("label.google")}
             </a>
         </li>
         <li>
@@ -29,29 +29,29 @@
         </li>
         <li>
             <a href="${reverseRoute("admin.LogController","logs")}">
-               <i class="fa fa-fw fa-clipboard-list"></i> ${i18n("label.logs")}
+               <i class="fa fa-fw fa-file-text"></i> ${i18n("label.logs")}
             </a>
         </li>
         <li>
             <a href="${reverseRoute("admin.AdminController","sysconfig")}">
-               <i class="fa fa-fw fa-wrench"></i> ${i18n("label.sysconfig")}
+               <i class="fa fa-fw fa-desktop"></i> ${i18n("label.sysconfig")}
             </a>
         </li>
         <li>
             <a href="${reverseRoute("admin.AdminController","stackdump")}">
-               <i class="fa fa-fw fa-layer-group"></i> ${i18n("label.stackdump")}
+               <i class="fa fa-fw fa-support"></i> ${i18n("label.stackdump")}
             </a>
         </li>         
         <#if !global.prod>
         <li>
             <a href="${reverseRoute("admin.DebugController","debug")}">
-               <i class="fas fa-fw fa-bug"></i> ${i18n("label.debug")}
+               <i class="fa fa-fw fa-bug"></i> ${i18n("label.debug")}
             </a>
         </li>      
         </#if>
         <li>
             <a href="${reverseRoute("admin.BackupController","table")}">
-                <i class="fa fa-fw fa-redo"></i> ${i18n("admin.viewBackups")}
+                <i class="fa fa-fw fa-archive"></i> ${i18n("admin.viewBackups")}
             </a>
         </li>
         <li>
@@ -61,7 +61,7 @@
         </li>
         <li>
             <a href="${reverseRoute("admin.HouseKeepingController","removeInactiveKeywords")}" onclick="return confirmRemoveDeadKeywords()">
-                <i class="fas fa-broom"></i> ${i18n("admin.optimizeKeywords")}
+                <i class="fa fa-compress"></i> ${i18n("admin.optimizeKeywords")}
             </a>
         </li>
     </ul>

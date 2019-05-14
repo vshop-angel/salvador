@@ -10,7 +10,7 @@
         <link rel="icon" href="/assets/img/inteligenciaseo.png" type="image/png">
 
         <link rel="stylesheet" href="/assets/lib/bootstrap/dist/css/bootstrap.css?v=${global.version}">
-        <link rel="stylesheet" href="/assets/lib/fontawesome-free/css/all.css?v=${global.version}">
+        <link rel="stylesheet" href="/assets/lib/fontawesome-free/css/font-awesome.css?v=${global.version}">
         <link rel="stylesheet" href="/assets/lib/bootstrap-select/dist/css/bootstrap-select.css?v=${global.version}">
         <link rel="stylesheet" href="/assets/lib/bootstrap-daterangepicker/daterangepicker.css?v=${global.version}">
         <link rel="stylesheet" href="/assets/lib/SlickGrid/slick.grid.css?v=${global.version}">
@@ -42,7 +42,7 @@
                 </a>
             </div>
 
-            <ul class="nav navbar-top-links navbar-left">
+            <ul class="nav navbar-top-links navbar-left <#if user.isAdmin()>admin</#if>">
                 <#if user.isAdmin() >
                     <li>
                         <a href="${reverseRoute("GroupController","groups")}">${i18n("label.groups")}</a>
@@ -95,6 +95,17 @@
                                         class="glyphicon glyphicon-log-out"></i> ${i18n("label.logout")}</a>
                         </li>
                     </ul>
+                </li>
+            </ul>
+
+            <ul class="dropdown-menu dropdown-user hidden-lg hidden-md">
+                <li>
+                    <a href="${reverseRoute("UserPreferences","preferences")}"><i
+                                class="fa fa-cogs"></i> ${i18n("label.preferences")}</a>
+                </li>
+                <li class="divider"></li>
+                <li><a href="${reverseRoute("AuthController","logout","_xsrf", session.___AT)}"><i
+                                class="glyphicon glyphicon-log-out"></i> ${i18n("label.logout")}</a>
                 </li>
             </ul>
         </nav>
@@ -232,8 +243,9 @@
         <script type="text/javascript" src="/assets/js/views/google/GoogleSidebar.js"></script>
         <script type="text/javascript" src="/assets/js/views/google/GoogleGroupController.js"></script>
         <script type="text/javascript" src="/assets/js/views/google/GoogleSearchController.js"></script>
+        <script type="text/javascript" src="/assets/js/views/InteligenciaSEOResponsive.js"></script>
     <#if user.isAdmin()>
-        <script type="text/javascript" src="/assets/js/views/admin/Methods.js"></script>
+        <script type="text/javascript" src="/assets/js/views/admin/InteligenciaSEO.js"></script>
         <script type="text/javascript" src="/assets/js/views/google/GoogleGroupControllerGrid.admin.js"></script>
         <script type="text/javascript" src="/assets/js/views/google/GoogleTargetControllerGrid.admin.js"></script>
     <#else>
