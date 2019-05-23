@@ -15,6 +15,7 @@ import javax.inject.Inject;
 import java.io.*;
 import java.nio.charset.Charset;
 import java.sql.*;
+import java.util.Locale;
 import java.util.zip.GZIPOutputStream;
 
 import static com.serphacker.serposcope.db.base.MigrationDB.TABLES;
@@ -143,6 +144,13 @@ public class ExportDB extends AbstractDB {
 
             case "java.lang.Boolean":
                 return (Boolean) colVal ? "1" : "0";
+
+            case "java.lang.Double":
+                if (((Double) colVal).isNaN()) {
+                    return "NULL";
+                } else {
+                    return String.format(Locale.ROOT, "%.2f", (Double) colVal);
+                }
 
             case "java.lang.Integer":
             case "java.lang.Short":

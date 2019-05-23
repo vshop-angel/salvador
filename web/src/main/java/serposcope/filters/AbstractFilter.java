@@ -14,7 +14,6 @@ import ninja.diagnostics.DiagnosticError;
 
 public abstract class AbstractFilter implements Filter {
     public boolean canRender(Result result){
-        
         if ((result.getContentType() == null || result.getContentType().contains("text/html"))
             && (result.getStatusCode() < 300 || result.getStatusCode() > 399)
             && !(result.getRenderable() instanceof DiagnosticError)

@@ -91,7 +91,9 @@ public class GoogleGroupController extends GoogleController {
 
     private interface GroupSearchVisitor {
         void visit(Group group, GoogleSearch search);
+
         Result onFinished(Group group);
+
         Result onError(Group group);
     }
 
@@ -238,14 +240,19 @@ public class GoogleGroupController extends GoogleController {
     }
 
     private Double getAsDouble(String input) {
-        int decimalSeparatorPosition = input.indexOf('.');
+        if (input == null)
+            return null;
+        String trimmed = input.trim();
+        if (trimmed.length() == 0)
+            return null;
+        int decimalSeparatorPosition = trimmed.indexOf('.');
         if (decimalSeparatorPosition == -1) {
-            decimalSeparatorPosition = input.indexOf(',');
+            decimalSeparatorPosition = trimmed.indexOf(',');
         }
         if (decimalSeparatorPosition == -1)
-            return Double.parseDouble(input);
-        input = input.substring(0, decimalSeparatorPosition) + input.substring(decimalSeparatorPosition + 1);
-        return Double.parseDouble(input) / Math.pow(10.0, input.length() - decimalSeparatorPosition);
+            return Double.parseDouble(trimmed);
+        trimmed = trimmed.substring(0, decimalSeparatorPosition) + trimmed.substring(decimalSeparatorPosition + 1);
+        return Double.parseDouble(trimmed) / Math.pow(10.0, trimmed.length() - decimalSeparatorPosition);
     }
 
     @FilterWith({
@@ -337,7 +344,7 @@ public class GoogleGroupController extends GoogleController {
                     categories[i],
                     competitions[i],
                     volumes[i],
-                    invisible[i],
+                    !invisible[i],
                     cpc,
                     tags[i]
             ));
@@ -363,6 +370,7 @@ public class GoogleGroupController extends GoogleController {
     }
 
     @FilterWith({
+            XSRFFilter.class,
             AdminFilter.class
     })
     public Result addReport(
@@ -650,6 +658,10 @@ public class GoogleGroupController extends GoogleController {
         return forEachSearch(context, ids, visitor);
     }
 
+    @FilterWith({
+            XSRFFilter.class,
+            AdminFilter.class
+    })
     public Result deleteReport(
             Context context,
             @Params("id[]") Integer[] ids
@@ -748,6 +760,21 @@ public class GoogleGroupController extends GoogleController {
 
     }
 
+    public Result downloadSampleCSV() {
+        String content =
+                "sample keyword 1;;;;;;100;2000;sample category 1;new tag 0;0,23;false\n" +
+                "sample keyword 2;;;;;;100;2040;sample category 2;new tag 1;0.41;true\n" +
+                "sample keyword 3;;;;;;100;6103;sample category 2;new tag 1;0,56;false\n" +
+                "sample keyword 4;;;;;;100;1200;sample category 1;new tag 2;0.10;true\n" +
+                "sample keyword 5;;;;;;100;4240;sample category 1;new tag 3;0.23;true"
+        ;
+        return Results.ok()
+                .contentType("text/plain")
+                .addHeader("Content-Disposition", "plantilla.csv")
+                .render(content)
+                ;
+    }
+
     @FilterWith({
             XSRFFilter.class,
             AdminFilter.class
@@ -761,25 +788,52 @@ public class GoogleGroupController extends GoogleController {
 
             @Override
             public void visit(Group group, GoogleSearch search) {
-                builder.append(StringEscapeUtils.escapeCsv(search.getKeyword())).append(",");
-                builder.append(search.getCountry()).append(",");
-                builder.append(search.getDatacenter() != null ? search.getDatacenter() : "").append(",");
-                builder.append(search.getDevice() != null ? (search.getDevice() == GoogleDevice.DESKTOP ? "desktop" : "mobile") : "").append(",");
-                builder.append(StringEscapeUtils.escapeCsv(search.getLocal() != null ? search.getLocal() : "")).append(",");
-                builder.append(StringEscapeUtils.escapeCsv(search.getCustomParameters() != null ? search.getCustomParameters() : "")).append("\n");
+                int searchId = search.getId();
+                Double number;
+                Integer integer;
+                String string;
+                builder.append(StringEscapeUtils.escapeCsv(search.getKeyword())).append(";");
+                builder.append(search.getCountry()).append(";");
+                builder.append(search.getDatacenter() != null ? search.getDatacenter() : "").append(";");
+                builder.append(search.getDevice() != null ? (search.getDevice() == GoogleDevice.DESKTOP ? "desktop" : "mobile") : "").append(";");
+                builder.append(StringEscapeUtils.escapeCsv(search.getLocal() != null ? search.getLocal() : "")).append(";");
+                builder.append(StringEscapeUtils.escapeCsv(search.getCustomParameters() != null ? search.getCustomParameters() : "")).append(";");
+                // Competition
+                integer = settingsDB.getCompetition(searchId);
+                builder.append(integer != null ? integer.toString() : "").append(";");
+                // Volumen
+                integer = settingsDB.getVolume(searchId);
+                builder.append(integer != null ? integer.toString() : "").append(";");
+                // Category
+                string = settingsDB.getCategory(searchId);
+                builder.append(string != null ? string : "").append(";");
+                // Tag
+                string = settingsDB.getTag(searchId);
+                builder.append(string != null ? string : "").append(";");
+                // CPC
+                number = settingsDB.getCPC(searchId);
+                builder.append(number != null ? number.toString() : "").append(";");
+                // Visible
+                if (settingsDB.getIsOnlyAdmins(searchId)) {
+                    builder.append("false").append("\n");
+                } else {
+                    builder.append("true").append("\n");
+                }
             }
 
             @Override
             public Result onFinished(Group group) {
+                String outputFile = String.format("attachment; filename=\"%s.csv\"", group.getName());
                 return Results.ok()
-                        .text()
+                        .contentType("text/plain")
+                        .addHeader("Content-Disposition", outputFile)
                         .render(builder.toString())
                         ;
             }
 
             @Override
             public Result onError(Group group) {
-                return null;
+                return Results.redirect(router.getReverseRoute(GoogleGroupController.class, "view", "groupId", group.getId()));
             }
         };
         return forEachSearch(context, ids, visitor);

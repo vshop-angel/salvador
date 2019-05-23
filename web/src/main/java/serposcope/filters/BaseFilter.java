@@ -112,12 +112,14 @@ public class BaseFilter extends AbstractFilter {
         String id = context.getSession().get("id");
         
         if (id == null || !isInt(id)) {
+            LOG.warn("session id not set");
             return null;
         }
 
         User user = baseDB.user.findById(Integer.parseInt(id));
 
         if (user == null) {
+            LOG.warn(String.format("user `%d' not found in database", Integer.parseInt(id)));
             return null;
         }
 
@@ -128,13 +130,13 @@ public class BaseFilter extends AbstractFilter {
         }
 
         if (lastlogEpochSecond == null || lastlogEpochSecond < 1l) {
+            LOG.warn("inconsistent lastLog value");
             return null;
         }
 
         if (user.loggedOutAfter(lastlogEpochSecond)) {
             return null;
         }
-
         return user;
     }
 

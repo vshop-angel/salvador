@@ -219,7 +219,13 @@
                                     <div><b>visible</b> ${i18n("label.userVisible")}</div>
                                     <div class="help-text">${i18n("admin.google.userVisibleHelp")}</div>
                                 </div>
-                                <input type="file" name="file" onchange="loadFile(this)">
+                                <div>
+                                    <input type="file" name="file" onchange="loadFile(this)">
+                                </div>
+                                <div class="help-text">
+                                    <span>${i18n("admin.google.downloadSampleHelp")}</span><br/>
+                                    <a href="${reverseRoute("google.GoogleGroupController","downloadSampleCSV","groupId",group.getId())}">Descargar Plantilla</a>
+                                </div>
                             </div>
                         </div>
                     </div>

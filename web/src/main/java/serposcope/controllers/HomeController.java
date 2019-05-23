@@ -20,6 +20,8 @@ import com.serphacker.serposcope.models.google.GoogleTarget;
 import com.serphacker.serposcope.models.google.GoogleTargetSummary;
 import ninja.*;
 import ninja.params.PathParam;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import serposcope.filters.AuthFilter;
 import serposcope.lifecycle.DBSizeUtils;
 
@@ -33,7 +35,9 @@ import java.util.stream.Collectors;
 @Singleton
 @FilterWith(AuthFilter.class)
 public class HomeController extends BaseController {
-    
+
+    private static final Logger LOG = LoggerFactory.getLogger(HomeController.class);
+
     @Inject
     Router router;
     
@@ -48,7 +52,7 @@ public class HomeController extends BaseController {
 
     @Inject
     SearchSettingsDB settingsDB;
-    
+
     public static class TargetHomeEntry {
 
         public TargetHomeEntry(String groupName, GoogleTarget target, GoogleTargetSummary summary, List<Integer> scoreHistory) {
@@ -65,7 +69,7 @@ public class HomeController extends BaseController {
 
     
     public Result home(Context context) {
-        
+
         String diskUsage = dbSizeUtils.getDbUsageFormatted();
         String diskFree = dbSizeUtils.getDiskFreeFormatted();
         
@@ -77,6 +81,7 @@ public class HomeController extends BaseController {
         List<Group> groups = (List<Group>) context.getAttribute("groups");
         Run currentRun = baseDB.run.findLast(Module.GOOGLE, RunDB.STATUSES_RUNNING, null);
         Run lastRun = baseDB.run.findLast(Module.GOOGLE, RunDB.STATUSES_DONE, null);
+
         if(lastRun == null){
             return Results
                 .ok()

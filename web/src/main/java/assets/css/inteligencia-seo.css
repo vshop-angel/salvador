@@ -236,7 +236,7 @@ input:not(#daterange).form-control.number {
 }
 
 .nav.nav-tabs li a {
-    padding: 5px 15px;
+    padding: 8px 15px;
     border-radius: 0;
     font-size: 13px;
 }
@@ -337,11 +337,16 @@ input:not(#daterange).form-control.number {
     }
 
     .responsive-table .is-table-row .is-table-entry .is-table-header i.fa {
-       display: none;
+        display: none;
     }
 
     .responsive-table .is-table-row .is-table-entry .is-table-value .target-name {
         display: block;
+    }
+
+    .responsive-table .is-table-row .is-table-entry .is-table-value a:not(.target-name) {
+        display: inline-block;
+        margin: 8px 16px 8px 0;
     }
 
     .responsive-table .is-table-row .is-table-entry .is-table-value .progress {
@@ -360,11 +365,46 @@ input:not(#daterange).form-control.number {
         border-top: 1px solid lightgrey;
     }
 
+    .tab-container .nav.nav-tabs,
+    .tab-container button {
+        display: inline-block;
+        vertical-align: bottom;
+        width: 22px;
+        position: relative;
+    }
+
+    .tab-container {
+        overflow: hidden;
+        position: relative;
+        margin: 8px 0 -2px 0;
+    }
+
+    .tab-container button {
+        margin: 8px 0;
+        font-size: 13px;
+        border: none;
+        z-index: 2;
+        background: #efefef;
+    }
+
+    .tab-container button:disabled {
+        visibility: hidden;
+    }
+
     .nav.nav-tabs {
         white-space: nowrap;
         margin: 8px 0 -2px 0;
         overflow: hidden;
         font-size: 0;
+    }
+
+    .tab-container .nav.nav-tabs {
+        width: 100%;
+        margin: 0 0 0 -44px;
+        padding-left: 44px;
+        z-index: 1;
+        transition: all 0.25s;
+        border: none;
     }
 
     .search-filter input,
@@ -423,6 +463,23 @@ input:not(#daterange).form-control.number {
         padding: 12px;
     }
 
+    .navbar.navbar-default.navbar-static-top .navbar-header .responsive-logout {
+        float: right;
+        margin: 0;
+    }
+
+    .navbar.navbar-default.navbar-static-top .navbar-header .responsive-logout li {
+        list-style: none;
+        display: inline-block;
+        line-height: 50px;
+        width: 30px;
+        text-align: center;
+    }
+
+    .navbar.navbar-default.navbar-static-top .navbar-header .responsive-logout li a {
+        color: white;
+    }
+
     .navbar.navbar-default.navbar-static-top ul.nav.navbar-top-links.navbar-left:not(.admin) {
         display: none;
     }
@@ -450,6 +507,7 @@ input:not(#daterange).form-control.number {
 
     #page-wrapper {
         z-index: 1;
+        padding: 0 4px;
     }
 
     #page-wrapper .container-fluid .home {

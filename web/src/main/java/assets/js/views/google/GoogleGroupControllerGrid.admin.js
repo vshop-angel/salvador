@@ -58,7 +58,7 @@ serposcope.googleGroupControllerGrid = function () {
             explicitInitialization: true,
             enableColumnReorder: false,
             enableTextSelectionOnCells: true,
-            forceFitColumns: false,
+            forceFitColumns: true,
             forceSyncScrolling: true,
             autoExpandColumns: true
         };

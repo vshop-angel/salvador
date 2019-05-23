@@ -40,6 +40,13 @@
                 <a class="navbar-brand" href="/">
                     <img src="/assets/img/inteligenciaseo-brain.png" alt="Logo"><span>inteligenciaseo.com</span>
                 </a>
+                <ul class="responsive-logout hidden-lg hidden-md">
+                    <li>
+                        <a href="${reverseRoute("UserPreferences","preferences")}"><i class="fa fa-cogs"></i></a>
+                    </li>
+                    <li><a href="${reverseRoute("AuthController","logout","_xsrf", session.___AT)}"><i class="glyphicon glyphicon-log-out"></i></a>
+                    </li>
+                </ul>
             </div>
 
             <ul class="nav navbar-top-links navbar-left <#if user.isAdmin()>admin</#if>">
@@ -98,16 +105,6 @@
                 </li>
             </ul>
 
-            <ul class="dropdown-menu dropdown-user hidden-lg hidden-md">
-                <li>
-                    <a href="${reverseRoute("UserPreferences","preferences")}"><i
-                                class="fa fa-cogs"></i> ${i18n("label.preferences")}</a>
-                </li>
-                <li class="divider"></li>
-                <li><a href="${reverseRoute("AuthController","logout","_xsrf", session.___AT)}"><i
-                                class="glyphicon glyphicon-log-out"></i> ${i18n("label.logout")}</a>
-                </li>
-            </ul>
         </nav>
 
         <div id="page-wrapper">
