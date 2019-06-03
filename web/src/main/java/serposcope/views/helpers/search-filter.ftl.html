@@ -1,14 +1,23 @@
-<div class="search-filter">
+<div class="search-filter collapsed">
+    <script type="text/javascript">
+        var toggleFilters = function (filters) {
+            $(filters).toggleClass('collapsed')
+        };
+    </script>
+    <div class="visible-xs activator" onclick="toggleFilters(this.parentNode)">Filtros</div>
     <input id="filter-keyword" class="form-control inline width250 input-sm" placeholder="${i18n("label.keyword")}"/>
-    <select id="filter-device" class="form-control inline width180 input-sm">
+    <select id="filter-device" class="hidden-xs form-control inline width180 input-sm">
         <option value="">${i18n("label.allDevices")}</option>
         <option value="D">${i18n("label.desktop")}</option>
         <option value="M">${i18n("label.mobile")}</option>
     </select>
-    <input id="filter-country" class="form-control inline width120 input-sm" placeholder="Country"/>
-    <input id="filter-local" class="form-control inline width120 input-sm" placeholder="${i18n("label.local")}"/>
-    <input id="filter-datacenter" class="form-control inline width120 input-sm"
+    <input id="filter-country" class="hidden-xs form-control inline width120 input-sm" placeholder="Country"/>
+    <input id="filter-local" class="hidden-xs form-control inline width120 input-sm" placeholder="${i18n("label.local")}"/>
+    <input id="filter-datacenter" class="hidden-xs form-control inline width120 input-sm"
            placeholder="${i18n("label.datacenter")}"/>
+    <#if user.isAdmin()>
+    <input id="filter-volume" class="form-control inline width120 input-sm" placeholder="Volumen"/>
+    </#if>
     <#if user.isAdmin()>
     <select id="filter-category" class="form-control inline width150 input-sm">
         <option value="-1" selected disabled>${i18n("label.searchCategory")}</option>

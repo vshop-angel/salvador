@@ -75,7 +75,8 @@ serposcope.googleTargetControllerGrid = function () {
             datacenter: search[COL_SEARCH_DATACENTER],
             competition: settings.competition,
             tag: settings ? settings.tag : -1,
-            category: settings ? settings.category : -1
+            category: settings ? settings.category : -1,
+            volume: settings ? settings.volume : Number('nan')
         };
         return matchesAtLeastOneFilter(filter, mapping);
     };
@@ -128,16 +129,16 @@ serposcope.googleTargetControllerGrid = function () {
             width: 250,
             sortable: true,
             formatter: formatSearchCell
-        }];
-
-        var wideColumns = [{
+        }, {
             id: "volume",
             name: 'Volumen',
             field: "volume",
             width: 120,
             sortable: true,
             formatter: formatVolumeCell
-        }, {
+        }];
+
+        var wideColumns = [{
             id: "category",
             name: 'Categoría',
             field: "category",

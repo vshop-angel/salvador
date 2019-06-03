@@ -307,6 +307,11 @@ var matchesFilter = function (filters, row, key, unsetValue) {
         return true;
     if (row[key] === null)
         return false;
+    if (typeof filters[key] === 'number') {
+        if (isNaN(filters[key]))
+            return true;
+        return filters[key] === Number(row[key]);
+    }
     var filter = filters[key].toLowerCase();
     var value = row[key].toLowerCase();
     // Now just compare the values
@@ -322,6 +327,7 @@ var applyFilter = function (filter, dataView) {
     filter.custom = $('#filter-custom').val();
     filter.category = $('#filter-category').val() || -1;
     filter.tag = $('#filter-tag').val() || -1;
+    filter.volume = Number($('#filter-volume').val() || 'nan');
 
     dataView.refresh();
 };
@@ -335,6 +341,7 @@ var resetFilter = function (filter, dataView) {
     $('#filter-custom').val('');
     $('#filter-category').val(-1);
     $('#filter-tag').val(-1);
+    $('#filter-volume').val(null);
     applyFilter(filter, dataView);
 };
 
@@ -351,6 +358,8 @@ var matchesAtLeastOneFilter = function (filter, row) {
         return false;
     if (!matchesFilter(filter, row, 'tag', -1))
         return false;
+    if (!matchesFilter(filter, row, 'volume', Number('nan')))
+        return false;
     return matchesFilter(filter, row, 'category', -1);
 };
 
@@ -363,6 +372,7 @@ var KeywordFilter = function () {
     this.competition = '';
     this.category = -1;
     this.tag = -1;
+    this.volume = Number('nan');
 };
 
 

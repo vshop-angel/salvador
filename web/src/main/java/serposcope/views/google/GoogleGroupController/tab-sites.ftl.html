@@ -43,7 +43,7 @@
                        "groupId", group.getId(), "targetId", target.getId())}" >${target.getName()}</a>
                     <a href="${reverseRoute("google.GoogleTargetController","target","groupId",group.getId(), "targetId", target.getId(), "display", "variation")}" data-toggle="tooltip" title="${i18n("google.target.variations")}" ><span class="fa fa-random"></span></a>                    
                     <a href="${reverseRoute("google.GoogleTargetController","target","groupId",group.getId(), "targetId", target.getId(), "display", "chart")}" data-toggle="tooltip" title="${i18n("label.chart")}" ><span class="glyphicon glyphicon-signal"></span></a>
-                    <a href="${reverseRoute("google.GoogleTargetController","target","groupId",group.getId(), "targetId", target.getId(), "display", "table")}" data-toggle="tooltip" title="${i18n("label.table")}" ><span class="fa fa-table"></span></a>                                    
+                    <a class="special" href="${reverseRoute("google.GoogleTargetController","target","groupId",group.getId(), "targetId", target.getId(), "display", "table")}" data-toggle="tooltip" title="${i18n("label.table")}" ><span class="fa fa-table"></span></a>
                 </td>
                 <td>${target.getType().toString()?lower_case}</td>
                 <td>${target.getPattern()}</td>                                

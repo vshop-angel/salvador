@@ -3,6 +3,17 @@
     font-weight: 500;
 }
 
+.summary-header {
+    display: flex;
+    align-items: flex-start;
+}
+
+.summary-header .box-title {
+    flex: 1;
+    min-width: 0;
+    width: auto;
+}
+
 .search-options {
     display: block;
     text-align: center;
@@ -171,7 +182,7 @@ label.compact {
 .slick-sort-indicator::after {
     content: '\f0dc';
     font-style: normal;
-    font-family: 'Font Awesome 5 Free Solid', sans-serif;
+    font-family: 'Font Awesome 5 Free', sans-serif;
 }
 
 .slick-sort-indicator-desc,
@@ -407,14 +418,59 @@ input:not(#daterange).form-control.number {
         border: none;
     }
 
-    .search-filter input,
-    .search-filter select {
+    .search-filter {
+        text-align: right;
+    }
+
+    .search-filter .activator {
+        cursor: pointer;
+        margin: 0 0 10px 0;
+    }
+
+    .search-filter.collapsed .activator {
+        margin: 0;
+    }
+
+    .search-filter.collapsed .activator::before {
+        transform: rotate(270deg);
+    }
+
+    .search-filter .activator::before {
+        display: inline-block;
+        font-family: 'Font Awesome 5 Free', sans-serif;
+        content: '\f078';
+        transition: transform 0.25s;
+        margin: 0 8px 0 4px;
+        transform: rotate(360deg);
+    }
+
+    .search-filter i {
+        font-size: 10px;
+        margin: 0 8px 0 0;
+    }
+
+    .search-filter.collapsed input,
+    .search-filter.collapsed button,
+    .search-filter.collapsed select {
         display: none;
     }
 
-    .search-filter #filter-keyword {
-        display: initial;
-        width: 50%;
+    .search-filter .activator {
+        text-align: left;
+        font-size: 12px;
+        text-transform: uppercase;
+        font-weight: 600;
+    }
+
+    .search-filter .activator i {
+    }
+
+    .search-filter input,
+    .search-filter select {
+        text-align: initial;
+        display: block;
+        width: 100%;
+        margin: 8px 0;
     }
 
     .nav.nav-tabs li {
@@ -465,7 +521,7 @@ input:not(#daterange).form-control.number {
 
     .navbar.navbar-default.navbar-static-top .navbar-header .responsive-logout {
         float: right;
-        margin: 0;
+        margin: 0 12px 0 0;
     }
 
     .navbar.navbar-default.navbar-static-top .navbar-header .responsive-logout li {
@@ -548,15 +604,22 @@ input:not(#daterange).form-control.number {
         font-weight: bold;
     }
 
-    #page-wrapper .container-fluid .home .box.box-primary .box-header .box-title a:last-of-type {
-        color: transparent;
+    #page-wrapper .container-fluid .home .box.box-primary .box-header .box-title .block {
+        display: block;
+        overflow: hidden;
+        -ms-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        padding: 0 16px 0 0;
+        margin: 4px 0;
     }
 
-    #page-wrapper .container-fluid .home .box.box-primary .box-header .box-title a:last-of-type::before {
-        content: '\f35d';
-        font-family: 'Font Awesome 5 Free Solid', sans-serif;
-        font-size: smaller;
-        color: #337ab7;
+    #page-wrapper .container-fluid .home .box.box-primary .box-header .box-title .block i,
+    #page-wrapper .container-fluid .home .box.box-primary .box-header .box-title .block span {
+        visibility: hidden;
+    }
+
+    #page-wrapper .container-fluid .home .box.box-primary .box-header .box-title .block a {
+        font-weight: 500;
     }
 
     #page-wrapper .container-fluid .home .box.box-primary .box-body .hb-left-container {
@@ -565,9 +628,42 @@ input:not(#daterange).form-control.number {
         justify-content: center;
     }
 
+    a.special {
+        padding: 4px 12px;
+        background-color: #1B67AD;
+        color: white;
+    }
+
     .target-breadcrumbs,
     .target-view-options {
         display: none;
+    }
+
+    .group-list {
+        padding: 0;
+        margin: 0;
+    }
+
+    .group-list li {
+        display: flex;
+        align-items: center;
+        list-style: none;
+        padding: 8px;
+        border: 1px solid #aaa;
+        margin: -1px 0 0 0;
+    }
+
+    .group-list li i {
+        margin: 0 4px 0 0;
+    }
+
+    .group-list li i.question {
+        opacity: 0.25;
+    }
+
+    .group-list li .buttons {
+        display: block;
+        margin: 0 0 0 auto;
     }
 }
 

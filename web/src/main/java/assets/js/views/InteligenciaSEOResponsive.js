@@ -42,6 +42,8 @@ var toArray = function (nodes) {
 var transposeTable = function (table) {
     var array = [];
     var parent = table.parentNode;
+    if ($(table).hasClass('hidden-xs'))
+        return;
     // Ignore this specific table
     if ($(parent).hasClass('hb-body'))
         return;
