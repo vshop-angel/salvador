@@ -110,7 +110,7 @@ serposcope.googleTargetControllerGrid = function () {
             explicitInitialization: true,
             enableColumnReorder: false,
             enableTextSelectionOnCells: true,
-            forceFitColumns: true,
+            forceFitColumns: false,
             forceSyncScrolling: true,
             autoExpandColumns: true
         };
@@ -168,7 +168,7 @@ serposcope.googleTargetControllerGrid = function () {
             formatter: formatTag
         }];
         var day = null;
-        if (window.innerWidth > 778) {
+        if (window.innerWidth > 1280) {
             for (var k = 0; k < wideColumns.length; ++k) {
                 columns.push(wideColumns[k]);
             }
